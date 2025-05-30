@@ -1,0 +1,24 @@
+{
+  "name": "parallax",
+  "version": "1.0.0",
+  "description": "Creates inferences from a knowledge graph",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/google.maps": "^3.58.1",
+    "@types/n3": "^1.25.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "n3": "^1.25.2",
+    "uuid": "^11.1.0"
+  }
+}

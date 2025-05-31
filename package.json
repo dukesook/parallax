@@ -15,5 +15,8 @@
     "@types/google.maps": "^3.58.1",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "n3": "^1.25.2"
   }
 }

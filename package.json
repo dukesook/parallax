@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/google.maps": "^3.58.1",
+    "@types/n3": "^1.25.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },

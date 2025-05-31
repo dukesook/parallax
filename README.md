@@ -11,3 +11,5 @@ Creates inferences from a knowledge graph
 ### Optional
 - Linked Data Object (LDO)
   - Provides type-safe, schema-driven RDF data access in TypeScript.
+
+  TODO: use environment variables to hide api key

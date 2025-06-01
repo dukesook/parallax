@@ -1,12 +1,19 @@
 /// <reference types="google.maps" />
 
 export function initMap(): void {
-  const mapDiv = document.getElementById("map") as HTMLElement;
 
-  new google.maps.Map(mapDiv, {
+  const map = new google.maps.Map(mapDiv, {
     center: { lat: 40.7128, lng: -74.006 },
     zoom: 12,
   });
+
+  map.addListener("click", (event: google.maps.MapMouseEvent) => {
+  if (event.latLng) {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+    console.log(`Clicked at latitude: ${lat}, longitude: ${lng}`);
+  }
+});
 }
 
 export function loadGoogleMapsScript(): void {
@@ -17,3 +24,8 @@ export function loadGoogleMapsScript(): void {
   script.onload = initMap;
   document.head.appendChild(script);
 }
+
+
+const mapDiv = document.getElementById("map") as HTMLElement;
+
+

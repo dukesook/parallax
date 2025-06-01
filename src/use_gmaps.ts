@@ -1,5 +1,8 @@
 /// <reference types="google.maps" />
 
+const mapDiv = document.getElementById("map") as HTMLElement;
+
+
 export function initMap(): void {
 
   const map = new google.maps.Map(mapDiv, {
@@ -26,6 +29,5 @@ export function loadGoogleMapsScript(): void {
 }
 
 
-const mapDiv = document.getElementById("map") as HTMLElement;
 
 

@@ -1,11 +1,11 @@
 /// <reference types="google.maps" />
 
 const mapDiv = document.getElementById("map") as HTMLElement;
-
+let map: google.maps.Map | null = null;
 
 export function initMap(): void {
 
-  const map = new google.maps.Map(mapDiv, {
+  map = new google.maps.Map(mapDiv, {
     center: { lat: 40.7128, lng: -74.006 },
     zoom: 12,
   });

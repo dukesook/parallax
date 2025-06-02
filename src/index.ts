@@ -9,4 +9,6 @@ debugButton?.addEventListener('click', () => {
 
 GMaps.loadGoogleMapsScript();
 
-RdfHandler.runRdfExample();
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Document is ready');
+});

@@ -3,14 +3,18 @@
 const mapDiv = document.getElementById("map") as HTMLElement;
 let map: google.maps.Map | null = null;
 
+type MapMouseEvent = google.maps.MapMouseEvent;
+const Map = google.maps.Map;
+
+
 export function initMap(): void {
 
-  map = new google.maps.Map(mapDiv, {
+  map = new Map(mapDiv, {
     center: { lat: 40.7128, lng: -74.006 },
     zoom: 12,
   });
 
-  map.addListener("click", (event: google.maps.MapMouseEvent) => {
+  map.addListener("click", (event: MapMouseEvent) => {
   if (event.latLng) {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();

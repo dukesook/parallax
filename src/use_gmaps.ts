@@ -4,12 +4,11 @@ const mapDiv = document.getElementById("map") as HTMLElement;
 let map: google.maps.Map | null = null;
 
 type MapMouseEvent = google.maps.MapMouseEvent;
-const Map = google.maps.Map;
 
 
 export function initMap(): void {
 
-  map = new Map(mapDiv, {
+  map = new google.maps.Map(mapDiv, {
     center: { lat: 40.7128, lng: -74.006 },
     zoom: 12,
   });

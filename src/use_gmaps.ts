@@ -5,6 +5,7 @@ let map: google.maps.Map | null = null;
 
 type MapMouseEvent = google.maps.MapMouseEvent;
 
+const mapListeners: Function[] = [];
 
 export function initMap(): void {
 
@@ -19,7 +20,20 @@ export function initMap(): void {
     const lng = event.latLng.lng();
     console.log(`Clicked at latitude: ${lat}, longitude: ${lng}`);
   }
+
+  for (const listener of mapListeners) {
+    map?.addListener('click', listener);
+  }
 });
+}
+
+export function addMapListener(listener: Function): void {
+  if (map) {
+    map.addListener('click', listener);
+  }
+  else {
+    mapListeners.push(listener);
+  }
 }
 
 export function loadGoogleMapsScript(): void {

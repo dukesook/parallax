@@ -3,6 +3,8 @@
 const messageDiv = getElement("message") as HTMLElement;
 const latInput = getElement("lat") as HTMLInputElement;
 const lngInput = getElement("lng") as HTMLInputElement;
+const datetimeInput = getElement("datetime") as HTMLInputElement;
+
 
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -11,6 +13,17 @@ function getElement(id: string): HTMLElement {
   }
   return element;
 }
+
+function initGui(): void {
+  // Initialize datetime input with current date and time:
+  const now = new Date();
+  datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initGui();
+});
 
 export function displayLatLng(lat: number, lng: number): void {
   latInput.value = lat.toFixed(6);

@@ -1,10 +1,8 @@
-
 // HTML Elements
-const messageDiv = getElement("message") as HTMLElement;
-const latInput = getElement("lat") as HTMLInputElement;
-const lngInput = getElement("lng") as HTMLInputElement;
-const datetimeInput = getElement("datetime") as HTMLInputElement;
-
+const messageDiv = getElement('message') as HTMLElement;
+const latInput = getElement('lat') as HTMLInputElement;
+const lngInput = getElement('lng') as HTMLInputElement;
+const datetimeInput = getElement('datetime') as HTMLInputElement;
 
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -18,10 +16,9 @@ function initGui(): void {
   // Initialize datetime input with current date and time:
   const now = new Date();
   datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
-
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   initGui();
 });
 
@@ -34,11 +31,11 @@ export function displayMessage(message: string): void {
   messageDiv.innerHTML = message;
 }
 
-export function getLatLng(): { lat: number; lng: number} {
+export function getLatLng(): { lat: number; lng: number } {
   const lat = parseFloat(latInput.value);
   const lng = parseFloat(lngInput.value);
   if (isNaN(lat) || isNaN(lng)) {
-    throw new Error("Invalid latitude or longitude");
+    throw new Error('Invalid latitude or longitude');
   }
   return { lat, lng };
 }

@@ -11,15 +11,16 @@ debugButton?.addEventListener('click', () => {
 })
 
 GMaps.loadGoogleMapsScript();
-GMaps.addMapListener((event: google.maps.MapMouseEvent) => {
-  if (event.latLng) {
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
-    Gui.displayLatLng(lat, lng);
-  }
-})
+GMaps.addMapListener(onclickMap)
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Document is ready');
 });
 
+function onclickMap(event: google.maps.MapMouseEvent): void {
+  if (event.latLng) {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+    Gui.displayLatLng(lat, lng);
+  }  
+}

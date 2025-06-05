@@ -33,3 +33,12 @@ export function displayLatLng(lat: number, lng: number): void {
 export function displayMessage(message: string): void {
   messageDiv.innerHTML = message;
 }
+
+export function getLatLng(): { lat: number; lng: number} {
+  const lat = parseFloat(latInput.value);
+  const lng = parseFloat(lngInput.value);
+  if (isNaN(lat) || isNaN(lng)) {
+    throw new Error("Invalid latitude or longitude");
+  }
+  return { lat, lng };
+}

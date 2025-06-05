@@ -6,6 +6,8 @@ const debugButton = document.getElementById('debug-button');
 
 debugButton?.addEventListener('click', () => {
   console.log('Debug button clicked');
+  const latLng = Gui.getLatLng();
+  console.log(latLng);
 })
 
 GMaps.loadGoogleMapsScript();

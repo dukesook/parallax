@@ -22,5 +22,11 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
     Gui.displayLatLng(lat, lng);
+    // google.maps.LatLngLiteral
+    const latLngLiteral: google.maps.LatLngLiteral = {
+      lat: lat,
+      lng: lng,
+    };
+    GMaps.moveCurrentMarker(latLngLiteral);
   }
 }

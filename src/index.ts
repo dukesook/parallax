@@ -34,6 +34,8 @@ function onSave(): void {
   const { lat, lng } = Gui.getLatLng();
   console.log(`Saving data for object: ${selectedObject}, lat: ${lat}, lng: ${lng}`);
 
+  RdfHandler.newObject(selectedObject, lat, lng);
+
   // 1. Create uuid for object (foo)
   // 2. Create uuid for observation (bar)
   // 2. foo was-observed-at bar

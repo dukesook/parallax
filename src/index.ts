@@ -11,6 +11,8 @@ GMaps.addMapListener(onclickMap);
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Document is ready');
+
+  Gui.onSave(onSave);
 });
 
 function onclickMap(event: google.maps.MapMouseEvent): void {
@@ -27,8 +29,10 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
   }
 }
 
-function debug() {
-  const objectSelect = document.getElementById('object-select') as HTMLSelectElement;
-  const selectedObject = objectSelect.value;
-  console.log('Selected object:', selectedObject);
+function onSave(): void {
+  const selectedObject = Gui.getSelectedObject();
+  const { lat, lng } = Gui.getLatLng();
+  console.log(`Saving data for object: ${selectedObject}, lat: ${lat}, lng: ${lng}`);
 }
+
+function debug() {}

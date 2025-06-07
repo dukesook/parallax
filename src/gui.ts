@@ -4,6 +4,7 @@ const latInput = getElement('lat') as HTMLInputElement;
 const lngInput = getElement('lng') as HTMLInputElement;
 const datetimeInput = getElement('datetime') as HTMLInputElement;
 const objectSelect = getElement('object-select') as HTMLSelectElement;
+const saveButton = getElement('save-button') as HTMLButtonElement;
 
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -47,4 +48,8 @@ export function getSelectedObject(): string {
     throw new Error('No object selected');
   }
   return selectedObject;
+}
+
+export function onSave(callback: () => void): void {
+  saveButton.addEventListener('click', callback);
 }

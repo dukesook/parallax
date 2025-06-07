@@ -4,11 +4,7 @@ import * as Gui from './gui';
 
 const debugButton = document.getElementById('debug-button');
 
-debugButton?.addEventListener('click', () => {
-  console.log('Debug button clicked');
-  const latLng = Gui.getLatLng();
-  console.log(latLng);
-});
+debugButton?.addEventListener('click', debug);
 
 GMaps.loadGoogleMapsScript();
 GMaps.addMapListener(onclickMap);
@@ -29,4 +25,10 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
     };
     GMaps.moveCurrentMarker(latLngLiteral);
   }
+}
+
+function debug() {
+  const objectSelect = document.getElementById('object-select') as HTMLSelectElement;
+  const selectedObject = objectSelect.value;
+  console.log('Selected object:', selectedObject);
 }

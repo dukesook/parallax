@@ -3,6 +3,7 @@ const messageDiv = getElement('message') as HTMLElement;
 const latInput = getElement('lat') as HTMLInputElement;
 const lngInput = getElement('lng') as HTMLInputElement;
 const datetimeInput = getElement('datetime') as HTMLInputElement;
+const objectSelect = getElement('object-select') as HTMLSelectElement;
 
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -38,4 +39,12 @@ export function getLatLng(): { lat: number; lng: number } {
     throw new Error('Invalid latitude or longitude');
   }
   return { lat, lng };
+}
+
+export function getSelectedObject(): string {
+  const selectedObject = objectSelect.value;
+  if (!selectedObject) {
+    throw new Error('No object selected');
+  }
+  return selectedObject;
 }

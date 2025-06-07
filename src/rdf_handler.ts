@@ -1,4 +1,5 @@
 import { Parser, Store } from 'n3';
+import * as N3 from 'n3';
 
 export function runRdfExample(): void {
   const turtleData = `
@@ -15,14 +16,13 @@ export function runRdfExample(): void {
   const store = new Store(quads);
 
   // Log all triples
-  store.getQuads(null, null, null, null).forEach(quad => {
+  store.getQuads(null, null, null, null).forEach((quad) => {
     console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
   });
 
   // Query example: find what John likes
   const likes = store.getQuads('http://example.org/John', 'http://example.org/likes', null, null);
-  likes.forEach(quad => {
+  likes.forEach((quad) => {
     console.log(`John likes: ${quad.object.value}`);
   });
 }
-

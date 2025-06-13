@@ -1,6 +1,7 @@
 // vite.config.ts
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: '.', // optional if index.html is in the root
-})
+  base: '/parallax/', // Required for GitHub Pages
+});

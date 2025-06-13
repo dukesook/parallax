@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "vite build && gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,7 @@
   "devDependencies": {
     "@types/google.maps": "^3.58.1",
     "@types/n3": "^1.25.3",
+    "gh-pages": "^6.3.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },

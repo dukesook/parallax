@@ -50,4 +50,6 @@ function onSave(): void {
   // 6. bar has-object-type selectedObject
 }
 
-function debug() {}
+function debug() {
+  RdfHandler.testQuery().catch(console.error);
+}

@@ -51,3 +51,38 @@ export function runRdfExample(): void {
     console.log(`John likes: ${quad.object.value}`);
   });
 }
+
+export async function runSparqlQuery(query: string) {
+  const response = await fetch('http://localhost:7200/repositories/parallax', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/sparql-query',
+      Accept: 'application/sparql-results+json',
+    },
+    body: query,
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`SPARQL query failed: ${response.statusText}\n${error}`);
+  }
+
+  const data = await response.json();
+  console.log(data.results.bindings);
+}
+
+export async function testQuery(): Promise<void> {
+  const query = `
+    SELECT *
+    WHERE {
+      ?s ?p ?o
+    }
+    LIMIT 10
+  `;
+
+  try {
+    await runSparqlQuery(query);
+  } catch (error) {
+    console.error('Error running SPARQL query:', error);
+  }
+}

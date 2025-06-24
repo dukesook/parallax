@@ -17,6 +17,10 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
   } else if (objectType === 'boat') {
     objectIRI = 'envo:01000608';
   }
+
+  // TODO: W3C Time Ontoloy
+  // TODO: Observation: http://purl.allotrope.org/ontologies/result#AFR_0000955
+
   const turtleData = `
     @prefix ex: <http://example.org/> .
     @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .

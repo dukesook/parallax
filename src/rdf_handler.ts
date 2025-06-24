@@ -10,16 +10,16 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
   const datetime = new Date().toISOString();
 
   let objectIRI = null;
-  if (objectType === 'Plane') {
+  if (objectType === 'plane') {
     objectIRI = 'envo:03501349';
-  } else if (objectType === 'Car') {
+  } else if (objectType === 'car') {
     objectIRI = 'envo:01000605';
-  } else if (objectType === 'Boat') {
+  } else if (objectType === 'boat') {
     objectIRI = 'envo:01000608';
   }
   const turtleData = `
     @prefix ex: <http://example.org/> .
-    @prefix envo: <http://purl.obolibrary.org/obo/ENVO_>
+    @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .
     @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
     ex:${objectId} a ${objectIRI} ;
@@ -28,7 +28,7 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
     ex:${observationId} a ex:Observation ;
       geo:lat "${lat}" ;
       geo:long "${lng}" ;
-      ex:hasDatetime "${datetime}" .
+      ex:hasDatetime "${datetime}" ;
       ex:hasObjectType "${objectIRI}" .
   `;
 

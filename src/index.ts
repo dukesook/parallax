@@ -39,7 +39,7 @@ function onSave(): void {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  RdfHandler.newObject(selectedObject, lat, lng);
+  RdfHandler.saveObservation(selectedObject, lat, lng);
 
   // 1. Create uuid for object (foo)
   // 2. Create uuid for observation (bar)

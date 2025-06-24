@@ -23,3 +23,13 @@ Creates inferences from a knowledge graph
 
 - Create a parallax/.env file. add:
   - `VITE_GOOGLE_MAPS_API_KEY=(your-api-key)`
+
+### Ontologies
+
+These links can be loaded directly into GraphDB:
+
+- BFO: https://raw.githubusercontent.com/BFO-ontology/BFO-2020/master/src/owl/bfo-core.owl
+  - XML Syntax Error: ~~http://purl.obolibrary.org/obo/bfo.owl~~
+- ENVO: https://raw.githubusercontent.com/EnvironmentOntology/envo/master/subsets/envo-basic.obo
+  - XML Syntax Error: ~~http://purl.obolibrary.org/obo/envo.owl~~
+  - Too compilcated to import: ~~https://raw.githubusercontent.com/EnvironmentOntology/envo/master/envo.owl~~

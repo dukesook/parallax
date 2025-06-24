@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const newId = uuidv4();
 console.log('Generated UUID:', newId);
 
-export function newObject(objectType: string, lat: number, lng: number): void {
+export function saveObservation(objectType: string, lat: number, lng: number): void {
   const objectId = uuidv4();
   const observationId = uuidv4();
   const datetime = new Date().toISOString();

@@ -9,18 +9,27 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
   const observationId = uuidv4();
   const datetime = new Date().toISOString();
 
+  let objectIRI = null;
+  if (objectType === 'Plane') {
+    objectIRI = 'envo:03501349';
+  } else if (objectType === 'Car') {
+    objectIRI = 'envo:01000605';
+  } else if (objectType === 'Boat') {
+    objectIRI = 'envo:01000608';
+  }
   const turtleData = `
     @prefix ex: <http://example.org/> .
+    @prefix envo: <http://purl.obolibrary.org/obo/ENVO_>
     @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
-    ex:${objectId} a ex:${objectType} ;
+    ex:${objectId} a ${objectIRI} ;
       ex:wasObservedAt ex:${observationId} .
 
     ex:${observationId} a ex:Observation ;
       geo:lat "${lat}" ;
       geo:long "${lng}" ;
-      ex:hasDatetime "${datetime}" ;
-      ex:hasObjectType "${objectType}" .
+      ex:hasDatetime "${datetime}" .
+      ex:hasObjectType "${objectIRI}" .
   `;
 
   console.log('Turtle Data:', turtleData);

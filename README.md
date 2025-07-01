@@ -22,7 +22,12 @@ Creates inferences from a knowledge graph
 ### Build
 
 - Create a parallax/.env file. add:
-  - `VITE_GOOGLE_MAPS_API_KEY=(your-api-key)`
+  - `VITE_GOOGLE_MAPS_API_KEY=YOUR-API-KEY`
+- Find your API Key:
+  - https://console.cloud.google.com/
+  - Navigation Menu (.)
+  - APIs & Services
+  - Crednetials
 
 ### Ontologies
 

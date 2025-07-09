@@ -38,3 +38,4 @@ These links can be loaded directly into GraphDB:
 - ENVO: https://raw.githubusercontent.com/EnvironmentOntology/envo/master/subsets/envo-basic.obo
   - XML Syntax Error: ~~http://purl.obolibrary.org/obo/envo.owl~~
   - Too compilcated to import: ~~https://raw.githubusercontent.com/EnvironmentOntology/envo/master/envo.owl~~
+- GeoSPARQL: https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl

@@ -29,7 +29,11 @@ Creates inferences from a knowledge graph
   - APIs & Services
   - Crednetials
 
-### Ontologies
+### Namespace
+
+`@prefix parallax: <http://parallax.edu/ns/>`
+
+### Used Ontologies
 
 These links can be loaded directly into GraphDB:
 

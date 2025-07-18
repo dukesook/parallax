@@ -21,12 +21,23 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
   // TODO: W3C Time Ontoloy
   // TODO: Observation: http://purl.allotrope.org/ontologies/result#AFR_0000955
 
+  // TODO:  wgs84:lat vs geo:lat
+
+  // TODO: SOSA ontology -
+  /*
+  @prefix sosa: <http://www.w3.org/ns/sosa/> .
+  ex:obs1 a sosa:Observation ;
+    sosa:featureOfInterest ex:Boat1 ;
+    sosa:phenomenonTime "2025-07-18T14:30:00Z"^^xsd:dateTime ;
+  */
+
   const turtleData = `
+    @prefix parallax: <http://parallax.edu/ns/>
     @prefix ex: <http://example.org/> .
     @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .
     @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
-    ex:${objectId} a ${objectIRI} ;
+    parallax:${objectId} a ${objectIRI} ;
       ex:wasObservedAt ex:${observationId} .
 
     ex:${observationId} a ex:Observation ;

@@ -40,14 +40,6 @@ function onSave(): void {
   Gui.displayMessage(message);
 
   RdfHandler.saveObservation(selectedObject, lat, lng);
-
-  // 1. Create uuid for object (foo)
-  // 2. Create uuid for observation (bar)
-  // 2. foo was-observed-at bar
-  // 3. bar has-latitude lat
-  // 4. bar has-longitude lng
-  // 5. bar has-datetime datetime
-  // 6. bar has-object-type selectedObject
 }
 
 function debug() {

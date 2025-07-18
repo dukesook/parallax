@@ -45,3 +45,10 @@ These links can be loaded directly into GraphDB:
   - XML Syntax Error: ~~http://purl.obolibrary.org/obo/envo.owl~~
   - Too compilcated to import: ~~https://raw.githubusercontent.com/EnvironmentOntology/envo/master/envo.owl~~
 - GeoSPARQL: https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl
+
+- SOSA
+  - https://github.com/w3c/sdw/blob/gh-pages/ssn/integrated/sosa.ttl
+  - Not BFO based
+  - Stands for `Sensor, Observation, Sample, and Actuator`
+  - SNN (Semantic Sensor Network) is built on top of SOSA
+  - sosa:Observation, sosa:Sensor, sosa:Actuator, sosa:Platform

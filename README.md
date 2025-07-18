@@ -28,6 +28,8 @@ Creates inferences from a knowledge graph
   - Navigation Menu (.)
   - APIs & Services
   - Crednetials
+- `$ npm install`
+- `$ npm run dev`
 
 ### Namespace
 

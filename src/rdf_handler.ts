@@ -9,26 +9,30 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
   const observationId = uuidv4();
   const datetime = new Date().toISOString();
 
-  let objectIRI = null;
+  let objectTypeIRI = null;
   if (objectType === 'plane') {
-    objectIRI = 'envo:03501349';
+    objectTypeIRI = 'envo:03501349';
   } else if (objectType === 'car') {
-    objectIRI = 'envo:01000605';
+    objectTypeIRI = 'envo:01000605';
   } else if (objectType === 'boat') {
-    objectIRI = 'envo:01000608';
+    objectTypeIRI = 'envo:01000608';
   }
 
-  // TODO: W3C Time Ontoloy
-  // TODO: Observation: http://purl.allotrope.org/ontologies/result#AFR_0000955
+  // Example
+  /*  @prefix parallax: <http://parallax.edu/ns/> .
+      @prefix sosa: <http://www.w3.org/ns/sosa/> .
+      @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .
+      @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+      @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-  // TODO:  wgs84:lat vs geo:lat
+      <#boat123> a envo:01000608 ;  # ENVO class for boat
+          rdfs:label "Boat 123" .
 
-  // TODO: SOSA ontology -
-  /*
-  @prefix sosa: <http://www.w3.org/ns/sosa/> .
-  ex:obs1 a sosa:Observation ;
-    sosa:featureOfInterest ex:Boat1 ;
-    sosa:phenomenonTime "2025-07-18T14:30:00Z"^^xsd:dateTime ;
+      <#obs456> a sosa:Observation ;
+          sosa:hasFeatureOfInterest <#boat123> ;
+          sosa:resultTime "2025-07-21T13:00:00Z"^^xsd:dateTime ;
+          geo:lat "38.8977"^^xsd:decimal ;
+          geo:long "-77.0365"^^xsd:decimal .
   */
 
   const turtleData = `
@@ -37,14 +41,14 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
     @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .
     @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
-    parallax:${objectId} a ${objectIRI} ;
+    parallax:${objectId} a ${objectTypeIRI} ;
       ex:wasObservedAt ex:${observationId} .
 
     ex:${observationId} a ex:Observation ;
       geo:lat "${lat}" ;
       geo:long "${lng}" ;
       ex:hasDatetime "${datetime}" ;
-      ex:hasObjectType "${objectIRI}" .
+      ex:hasObjectType "${objectTypeIRI}" .
   `;
 
   console.log('Turtle Data:', turtleData);

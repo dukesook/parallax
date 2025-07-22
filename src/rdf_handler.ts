@@ -24,6 +24,7 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
       @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .
       @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
       @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
       <#boat123> a envo:01000608 ;  # ENVO class for boat
           rdfs:label "Boat 123" .
@@ -37,18 +38,20 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
 
   const turtleData = `
     @prefix parallax: <http://parallax.edu/ns/>
-    @prefix ex: <http://example.org/> .
+    @prefix sosa: <http://www.w3.org/ns/sosa/> .
     @prefix envo: <http://purl.obolibrary.org/obo/ENVO_> .
     @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
     parallax:${objectId} a ${objectTypeIRI} ;
-      ex:wasObservedAt ex:${observationId} .
+      rdfs:label "Object that was observed" .
 
-    ex:${observationId} a ex:Observation ;
+    parallax:${observationId} a sosa:Observation ;
+      sosa:hasFeatureOfInterest parallax:${objectId} ;
       geo:lat "${lat}" ;
       geo:long "${lng}" ;
-      ex:hasDatetime "${datetime}" ;
-      ex:hasObjectType "${objectTypeIRI}" .
+      sosa:resultTime "2025-07-21T13:00:00Z"^^xsd:dateTime .
   `;
 
   console.log('Turtle Data:', turtleData);

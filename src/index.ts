@@ -42,6 +42,22 @@ function onSave(): void {
   RdfHandler.saveObservation(selectedObject, lat, lng);
 }
 
+function example_downloadTextFile(filename: string, text: string): void {
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+
+  // Append to body to make it clickable in all browsers
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+}
+
 function debug() {
-  RdfHandler.testQuery().catch(console.error);
+  example_downloadTextFile('debug.txt', 'Debugging information logged.');
 }

@@ -30,10 +30,10 @@ export function saveObservation(objectType: string, lat: number, lng: number): v
           rdfs:label "Boat 123" .
 
       <#obs456> a sosa:Observation ;
-          sosa:hasFeatureOfInterest <#boat123> ;
-          sosa:resultTime "2025-07-21T13:00:00Z"^^xsd:dateTime ;
-          geo:lat "38.8977"^^xsd:decimal ;
-          geo:long "-77.0365"^^xsd:decimal .
+        sosa:resultTime "2025-07-21T13:00:00Z"^^xsd:dateTime ;
+        geo:lat "38.8977"^^xsd:decimal ;
+        geo:long "-77.0365"^^xsd:decimal .
+        sosa:hasFeatureOfInterest <#boat123> ;
   */
 
   const turtleData = `

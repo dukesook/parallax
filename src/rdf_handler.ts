@@ -2,9 +2,39 @@ import * as N3 from 'n3';
 import { v4 as uuidv4 } from 'uuid';
 
 const newId = uuidv4();
+const g_triple_store = new N3.Store();
 console.log('Generated UUID:', newId);
 
-export function saveObservation(objectType: string, lat: number, lng: number): void {
+function objectTypeToIRI(objectType: string): string {
+  switch (objectType) {
+    case 'plane':
+      return 'envo:03501349';
+    case 'car':
+      return 'envo:01000605';
+    case 'boat':
+      return 'envo:01000608';
+    default:
+      throw new Error(`Unknown object type: ${objectType}`);
+  }
+}
+
+export function addObservationToTripleStore(objectType: string, lat: number, lng: number): void {
+  const objectId = 'parallax:' + uuidv4();
+  const observationId = uuidv4();
+  const datetime = new Date().toISOString();
+
+  const objectTypeIRI = objectTypeToIRI(objectType);
+
+  // add triple: objectId a objectTypeIRI ;
+  g_triple_store.addQuad(objectId, 'a', objectTypeIRI, null);
+
+  // console.log all triples in g_triple_store:
+  g_triple_store.getQuads(null, null, null, null).forEach((quad) => {
+    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
+  });
+}
+
+export function observationToTurtle(objectType: string, lat: number, lng: number): void {
   const objectId = uuidv4();
   const observationId = uuidv4();
   const datetime = new Date().toISOString();

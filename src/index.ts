@@ -12,10 +12,17 @@ GMaps.addMapListener(onclickMap);
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Document is ready');
 
-  Gui.onSave(onSave);
+  // Listeners
+  initialize_listeners();
+
+  // Starting Location
   const { lat, lng } = GMaps.startingLocation;
   Gui.displayLatLng(lat, lng);
 });
+
+function initialize_listeners(): void {
+  Gui.onSave(onAddObservation);
+}
 
 function onclickMap(event: google.maps.MapMouseEvent): void {
   if (event.latLng) {
@@ -31,7 +38,7 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
   }
 }
 
-function onSave(): void {
+function onAddObservation(): void {
   const selectedObject = Gui.getSelectedObject();
   const { lat, lng } = Gui.getLatLng();
   console.log(`Saving data for object: ${selectedObject}, lat: ${lat}, lng: ${lng}`);
@@ -39,7 +46,8 @@ function onSave(): void {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  RdfHandler.saveObservation(selectedObject, lat, lng);
+  // RdfHandler.observationToTurtle(selectedObject, lat, lng);
+  RdfHandler.addObservationToTripleStore(selectedObject, lat, lng);
 }
 
 function example_downloadTextFile(filename: string, text: string): void {

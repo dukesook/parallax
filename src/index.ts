@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initialize_listeners(): void {
   Gui.onSave(onAddObservation);
+
+  Gui.onShowObservations(debug_log_observations);
 }
 
 function onclickMap(event: google.maps.MapMouseEvent): void {
@@ -64,6 +66,10 @@ function example_downloadTextFile(filename: string, text: string): void {
   document.body.removeChild(a);
 
   URL.revokeObjectURL(url);
+}
+
+function debug_log_observations(): void {
+  RdfHandler.debug_dump_observations();
 }
 
 function debug() {

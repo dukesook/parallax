@@ -25,13 +25,8 @@ export function addObservationToTripleStore(objectType: string, lat: number, lng
 
   const objectTypeIRI = objectTypeToIRI(objectType);
 
-  // add triple: objectId a objectTypeIRI ;
+  // Add Triple
   g_triple_store.addQuad(objectId, 'a', objectTypeIRI, null);
-
-  // console.log all triples in g_triple_store:
-  g_triple_store.getQuads(null, null, null, null).forEach((quad) => {
-    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
-  });
 }
 
 export function observationToTurtle(objectType: string, lat: number, lng: number): void {
@@ -146,4 +141,10 @@ export async function testQuery(): Promise<void> {
   } catch (error) {
     console.error('Error running SPARQL query:', error);
   }
+}
+
+export function debug_dump_observations(): void {
+  g_triple_store.getQuads(null, null, null, null).forEach((quad) => {
+    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
+  });
 }

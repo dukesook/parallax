@@ -5,6 +5,7 @@ const lngInput = getElement('lng') as HTMLInputElement;
 const datetimeInput = getElement('datetime') as HTMLInputElement;
 const objectSelect = getElement('object-select') as HTMLSelectElement;
 const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
+const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
 
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -52,4 +53,8 @@ export function getSelectedObject(): string {
 
 export function onSave(callback: () => void): void {
   addObservationButton.addEventListener('click', callback);
+}
+
+export function onShowObservations(callback: () => void): void {
+  showObservationsButton.addEventListener('click', callback);
 }

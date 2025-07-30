@@ -127,6 +127,27 @@ export async function runSparqlQuery(query: string) {
   console.log(data.results.bindings);
 }
 
+export function getTripleStoreAsTurtle(): string {
+  const writer = new N3.Writer({
+    format: 'Turtle',
+    prefixes: {
+      envo: 'http://purl.obolibrary.org/obo/ENVO_',
+      parallax: 'http://example.org/parallax#', // adjust this to match your IRI scheme
+    },
+  });
+  writer.addQuads(g_triple_store.getQuads(null, null, null, null));
+
+  let turtle = '';
+  writer.end((error, result) => {
+    if (error) {
+      throw new Error('Failed to serialize triple store: ' + error.message);
+    }
+    turtle = result;
+  });
+
+  return turtle;
+}
+
 export async function testQuery(): Promise<void> {
   const query = `
     SELECT *

@@ -24,6 +24,8 @@ function initialize_listeners(): void {
   Gui.onSave(onAddObservation);
 
   Gui.onShowObservations(debug_log_observations);
+
+  Gui.onDownloadRdf(downloadRdf);
 }
 
 function onclickMap(event: google.maps.MapMouseEvent): void {
@@ -50,6 +52,11 @@ function onAddObservation(): void {
 
   // RdfHandler.observationToTurtle(selectedObject, lat, lng);
   RdfHandler.addObservationToTripleStore(selectedObject, lat, lng);
+}
+
+function downloadRdf(): void {
+  const turtleData = RdfHandler.getTripleStoreAsTurtle();
+  example_downloadTextFile('observations.ttl', turtleData);
 }
 
 function example_downloadTextFile(filename: string, text: string): void {

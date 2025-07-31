@@ -5,11 +5,24 @@
     <title>Parallax</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/src/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <h1>Parallax</h1>
     <button id="debug-button">Debug</button>
     <br />
+
+    <div class="tabs" id="tab-buttons">
+      <div class="tab active" data-tab="google-maps-tab">Google Maps</div>
+      <div class="tab" data-tab="knowledge-graph-tab">Inspect Knowledge Graph</div>
+      <div class="tab" data-tab="tab3-tab">Tab #3</div>
+    </div>
+
+    <div id="tab-contents">
+      <div class="tab-content active" id="tab1">tab 1 content</div>
+      <div class="tab-content" id="tab2">tab 2 content</div>
+      <div class="tab-content" id="tab3">tab 3 content</div>
+    </div>
 
     <label for="lat">Latitude:</label>
     <input type="number" id="lat" name="lat" step="any" />

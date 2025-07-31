@@ -80,5 +80,19 @@ function debug_log_observations(): void {
 }
 
 function debug() {
-  example_downloadTextFile('debug.txt', 'Debugging information logged.');
+  loadAndLogHTML('/parallax/src/html/tab3.html');
+}
+
+async function loadAndLogHTML(url: string): Promise<void> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    }
+
+    const htmlText = await response.text();
+    console.log(htmlText);
+  } catch (error) {
+    console.error(`Error loading ${url}:`, error);
+  }
 }

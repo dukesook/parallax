@@ -10,6 +10,9 @@ const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement
 const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
 const knowledgeGraphTab = getElement('knowledge-graph-tab') as HTMLElement;
 const tab3Tab = getElement('tab3-tab') as HTMLElement;
+const googleMapsContent = getElement('google-maps-content') as HTMLElement;
+const knowledgeGraphContent = getElement('knowledge-graph-content') as HTMLElement;
+const tab3Content = getElement('tab3-content') as HTMLElement;
 
 let g_currentTab = googleMapsTab;
 
@@ -26,9 +29,26 @@ function initGui(): void {
   const now = new Date();
   datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
 
+  // Tabs
   googleMapsTab.addEventListener('click', () => activateTab(googleMapsTab));
   knowledgeGraphTab.addEventListener('click', () => activateTab(knowledgeGraphTab));
   tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
+
+  loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
+}
+
+async function loadHTMLIntoElement(url: string, container: HTMLElement): Promise<void> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    }
+
+    const htmlText = await response.text();
+    container.innerHTML = htmlText;
+  } catch (error) {
+    console.error(`Error loading ${url}:`, error);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

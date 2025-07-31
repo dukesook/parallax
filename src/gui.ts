@@ -11,6 +11,8 @@ const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
 const knowledgeGraphTab = getElement('knowledge-graph-tab') as HTMLElement;
 const tab3Tab = getElement('tab3-tab') as HTMLElement;
 
+let g_currentTab = googleMapsTab;
+
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
   if (!element) {
@@ -24,13 +26,9 @@ function initGui(): void {
   const now = new Date();
   datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
 
-  // Set up tab listeners
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      activateTab(tab as HTMLElement);
-    });
-  });
+  googleMapsTab.addEventListener('click', () => activateTab(googleMapsTab));
+  knowledgeGraphTab.addEventListener('click', () => activateTab(knowledgeGraphTab));
+  tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,28 +74,20 @@ export function onDownloadRdf(callback: () => void): void {
 }
 
 function activateTab(tab: HTMLElement): void {
-  const tabs = document.querySelectorAll('.tab');
+  // Previous Tab
+  g_currentTab.classList.remove('active');
+  const oldContentId = g_currentTab.getAttribute('content-id')!;
 
-  // Deactivate All Tabs
-  tabs.forEach((t) => {
-    t.classList.remove('active');
-  });
+  // Previous Tab Content
+  const oldTabContent = getElement(oldContentId);
+  oldTabContent.classList.remove('active');
 
-  // Activate Tab
+  // New Tab
+  g_currentTab = tab;
   tab.classList.add('active');
 
-  // Deactivate All Contents
-  const contents = document.querySelectorAll('.tab-content');
-  contents.forEach((c) => {
-    c.classList.remove('active');
-  });
-
   // Activate Content
-  const contentId = tab.getAttribute('content-id');
-  if (contentId) {
-    const content = document.getElementById(contentId);
-    if (content) {
-      content.classList.add('active');
-    }
-  }
+  const tabContentId = tab.getAttribute('content-id')!;
+  const tabContent = getElement(tabContentId);
+  tabContent.classList.add('active');
 }

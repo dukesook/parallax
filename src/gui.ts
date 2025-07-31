@@ -7,6 +7,9 @@ const objectSelect = getElement('object-select') as HTMLSelectElement;
 const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
 const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
 const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
+const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
+const knowledgeGraphTab = getElement('knowledge-graph-tab') as HTMLElement;
+const tab3Tab = getElement('tab3-tab') as HTMLElement;
 
 function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -20,6 +23,14 @@ function initGui(): void {
   // Initialize datetime input with current date and time:
   const now = new Date();
   datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
+
+  // Set up tab listeners
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      activateTab(tab as HTMLElement);
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -62,4 +73,31 @@ export function onShowObservations(callback: () => void): void {
 
 export function onDownloadRdf(callback: () => void): void {
   downloadRdfButton.addEventListener('click', callback);
+}
+
+function activateTab(tab: HTMLElement): void {
+  const tabs = document.querySelectorAll('.tab');
+
+  // Deactivate All Tabs
+  tabs.forEach((t) => {
+    t.classList.remove('active');
+  });
+
+  // Activate Tab
+  tab.classList.add('active');
+
+  // Deactivate All Contents
+  const contents = document.querySelectorAll('.tab-content');
+  contents.forEach((c) => {
+    c.classList.remove('active');
+  });
+
+  // Activate Content
+  const contentId = tab.getAttribute('content-id');
+  if (contentId) {
+    const content = document.getElementById(contentId);
+    if (content) {
+      content.classList.add('active');
+    }
+  }
 }

@@ -165,7 +165,8 @@ export async function testQuery(): Promise<void> {
 }
 
 export function debug_dump_observations(): void {
+  console.log('Observations');
   g_triple_store.getQuads(null, null, null, null).forEach((quad) => {
-    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
+    console.log(` - ${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
   });
 }

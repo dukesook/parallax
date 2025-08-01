@@ -35,6 +35,7 @@ function initGui(): void {
   tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
 
   loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
+  loadHTMLIntoElement('/parallax/src/html/inspect_knowledge_graph.html', knowledgeGraphContent);
 }
 
 async function loadHTMLIntoElement(url: string, container: HTMLElement): Promise<void> {

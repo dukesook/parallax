@@ -9,15 +9,12 @@ debugButton?.addEventListener('click', debug);
 GMaps.loadGoogleMapsScript();
 GMaps.addMapListener(onclickMap);
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('Document is ready');
+  await Gui.initGui();
 
   // Listeners
   initialize_listeners();
-
-  // Starting Location
-  const { lat, lng } = GMaps.startingLocation;
-  Gui.displayLatLng(lat, lng);
 });
 
 function initialize_listeners(): void {

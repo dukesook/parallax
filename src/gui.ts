@@ -1,10 +1,9 @@
-// HTML Elements
+// HTML Elements - index.html
 const messageDiv = getElement('message') as HTMLElement;
-const latInput = getElement('lat') as HTMLInputElement;
-const lngInput = getElement('lng') as HTMLInputElement;
 const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
 const knowledgeGraphTab = getElement('knowledge-graph-tab') as HTMLElement;
 const tab3Tab = getElement('tab3-tab') as HTMLElement;
+
 const googleMapsContent = getElement('google-maps-content') as HTMLElement;
 const knowledgeGraphContent = getElement('knowledge-graph-content') as HTMLElement;
 const tab3Content = getElement('tab3-content') as HTMLElement;
@@ -18,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Public Functions
 
 export function displayLatLng(lat: number, lng: number): void {
+  const latInput = getElement('lat') as HTMLInputElement;
+  const lngInput = getElement('lng') as HTMLInputElement;
   latInput.value = lat.toFixed(6);
   lngInput.value = lng.toFixed(6);
 }
@@ -27,6 +28,8 @@ export function displayMessage(message: string): void {
 }
 
 export function getLatLng(): { lat: number; lng: number } {
+  const latInput = getElement('lat') as HTMLInputElement;
+  const lngInput = getElement('lng') as HTMLInputElement;
   const lat = parseFloat(latInput.value);
   const lng = parseFloat(lngInput.value);
   if (isNaN(lat) || isNaN(lng)) {
@@ -83,7 +86,7 @@ function getElement(id: string): HTMLElement {
   return element;
 }
 
-function initGui(): void {
+export async function initGui(): Promise<void> {
   // Initialize datetime input with current date and time:
   const now = new Date();
 
@@ -93,9 +96,9 @@ function initGui(): void {
   tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
 
   // Tab Content
-  loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
-  loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
-  loadHTMLIntoElement('/parallax/src/html/inspect_knowledge_graph.html', knowledgeGraphContent);
+  await loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
+  await loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
+  await loadHTMLIntoElement('/parallax/src/html/inspect_knowledge_graph.html', knowledgeGraphContent);
 }
 
 function activateTab(tab: HTMLElement): void {

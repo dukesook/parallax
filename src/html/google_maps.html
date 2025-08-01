@@ -1,10 +1,31 @@
 <div>
   <h2>Google Map</h2>
-  <div>It was loaded from google_map.html</div>
-  <ul>
-    <li>Item 1</li>
-    <li>Item 2</li>
-    <li>Item 3</li>
-  </ul>
-  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur distinctio voluptatum ratione laborum sunt assumenda vitae nam quibusdam blanditiis doloribus! Commodi dolor maxime quia deleniti ratione eius cupiditate? Minus, pariatur.</p>
+  <label for="lat">Latitude:</label>
+  <input type="number" id="lat" name="lat" step="any" />
+  <br />
+
+  <label for="lng">Longitude:</label>
+  <input type="number" id="lng" name="lng" step="any" />
+  <br />
+
+  <label for="datetime">Date & Time:</label>
+  <input type="datetime-local" id="datetime" name="datetime" />
+  <br />
+  <br />
+
+  <label for="object-select">Choose an option:</label>
+  <select id="object-select" name="object-select">
+    <option value="boat">Boat</option>
+    <option value="car">Car</option>
+    <option value="plane">Plane</option>
+  </select>
+  <br />
+  <br />
+
+  <!-- <button id="save-button">Save to Knowledge Graph</button> -->
+  <button id="add-observation-button">Add Observation</button>
+  <button id="show-observations-button">Show Observations</button>
+  <button id="download-rdf-button">Download RDF</button>
+  <br />
+  <br />
 </div>

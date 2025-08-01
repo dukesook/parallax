@@ -16,45 +16,11 @@ const tab3Content = getElement('tab3-content') as HTMLElement;
 
 let g_currentTab = googleMapsTab;
 
-function getElement(id: string): HTMLElement {
-  const element = document.getElementById(id);
-  if (!element) {
-    throw new Error(`Element with id ${id} not found`);
-  }
-  return element;
-}
-
-function initGui(): void {
-  // Initialize datetime input with current date and time:
-  const now = new Date();
-  datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
-
-  // Tabs
-  googleMapsTab.addEventListener('click', () => activateTab(googleMapsTab));
-  knowledgeGraphTab.addEventListener('click', () => activateTab(knowledgeGraphTab));
-  tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
-
-  loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
-  loadHTMLIntoElement('/parallax/src/html/inspect_knowledge_graph.html', knowledgeGraphContent);
-}
-
-async function loadHTMLIntoElement(url: string, container: HTMLElement): Promise<void> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
-    }
-
-    const htmlText = await response.text();
-    container.innerHTML = htmlText;
-  } catch (error) {
-    console.error(`Error loading ${url}:`, error);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   initGui();
 });
+
+// Public Functions
 
 export function displayLatLng(lat: number, lng: number): void {
   latInput.value = lat.toFixed(6);
@@ -92,6 +58,46 @@ export function onShowObservations(callback: () => void): void {
 
 export function onDownloadRdf(callback: () => void): void {
   downloadRdfButton.addEventListener('click', callback);
+}
+
+// Private Functions
+
+async function loadHTMLIntoElement(url: string, container: HTMLElement): Promise<void> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    }
+
+    const htmlText = await response.text();
+    container.innerHTML = htmlText;
+  } catch (error) {
+    console.error(`Error loading ${url}:`, error);
+  }
+}
+
+function getElement(id: string): HTMLElement {
+  const element = document.getElementById(id);
+  if (!element) {
+    throw new Error(`Element with id ${id} not found`);
+  }
+  return element;
+}
+
+function initGui(): void {
+  // Initialize datetime input with current date and time:
+  const now = new Date();
+  datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
+
+  // Tabs
+  googleMapsTab.addEventListener('click', () => activateTab(googleMapsTab));
+  knowledgeGraphTab.addEventListener('click', () => activateTab(knowledgeGraphTab));
+  tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
+
+  // Tab Content
+  loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
+  loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
+  loadHTMLIntoElement('/parallax/src/html/inspect_knowledge_graph.html', knowledgeGraphContent);
 }
 
 function activateTab(tab: HTMLElement): void {

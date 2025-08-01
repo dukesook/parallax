@@ -2,10 +2,6 @@
 const messageDiv = getElement('message') as HTMLElement;
 const latInput = getElement('lat') as HTMLInputElement;
 const lngInput = getElement('lng') as HTMLInputElement;
-const objectSelect = getElement('object-select') as HTMLSelectElement;
-const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
-const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
-const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
 const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
 const knowledgeGraphTab = getElement('knowledge-graph-tab') as HTMLElement;
 const tab3Tab = getElement('tab3-tab') as HTMLElement;
@@ -40,6 +36,7 @@ export function getLatLng(): { lat: number; lng: number } {
 }
 
 export function getSelectedObject(): string {
+  const objectSelect = getElement('object-select') as HTMLSelectElement;
   const selectedObject = objectSelect.value;
   if (!selectedObject) {
     throw new Error('No object selected');
@@ -48,14 +45,17 @@ export function getSelectedObject(): string {
 }
 
 export function onSave(callback: () => void): void {
+  const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
   addObservationButton.addEventListener('click', callback);
 }
 
 export function onShowObservations(callback: () => void): void {
+  const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
   showObservationsButton.addEventListener('click', callback);
 }
 
 export function onDownloadRdf(callback: () => void): void {
+  const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
   downloadRdfButton.addEventListener('click', callback);
 }
 

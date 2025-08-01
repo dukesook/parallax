@@ -1,6 +1,6 @@
 /// <reference types="google.maps" />
 
-const mapDiv = document.getElementById('map') as HTMLElement;
+let g_googleMapElement: HTMLElement | null = null;
 let map: google.maps.Map | null = null;
 let currentMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 const newYorkLocation = { lat: 40.7128, lng: -74.006 };
@@ -10,7 +10,10 @@ type MapMouseEvent = google.maps.MapMouseEvent;
 const mapListeners: Function[] = [];
 
 export function initMap(): void {
-  map = new google.maps.Map(mapDiv, {
+  if (!g_googleMapElement) {
+    throw new Error('Gmap element is not initialized');
+  }
+  map = new google.maps.Map(g_googleMapElement, {
     center: newYorkLocation,
     zoom: 12,
     mapId: '4f0f357dc8a7e399f7881230',
@@ -49,7 +52,8 @@ export function addMapListener(listener: Function): void {
   }
 }
 
-export function loadGoogleMapsScript(): void {
+export function loadGoogleMapsScript(googleMapElement: HTMLElement): void {
+  g_googleMapElement = googleMapElement;
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const script = document.createElement('script');
   script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker`;

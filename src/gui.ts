@@ -62,6 +62,14 @@ export function onDownloadRdf(callback: () => void): void {
   downloadRdfButton.addEventListener('click', callback);
 }
 
+export function getGmapElement(): HTMLElement {
+  const gmapElement = getElement('map');
+  if (!gmapElement) {
+    throw new Error('Google Map element not found');
+  }
+  return gmapElement;
+}
+
 // Private Functions
 
 async function loadHTMLIntoElement(url: string, container: HTMLElement): Promise<void> {

@@ -6,24 +6,21 @@ const debugButton = document.getElementById('debug-button');
 
 debugButton?.addEventListener('click', debug);
 
-GMaps.loadGoogleMapsScript();
-GMaps.addMapListener(onclickMap);
-
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Document is ready');
-  await Gui.initGui();
 
-  // Listeners
-  initialize_listeners();
+  Gui.initGui().then(() => {
+    const gmapElement = Gui.getGmapElement();
+    GMaps.loadGoogleMapsScript(gmapElement);
+    Gui.onSave(onAddObservation);
+
+    Gui.onShowObservations(debug_log_observations);
+
+    Gui.onDownloadRdf(downloadRdf);
+  });
+
+  GMaps.addMapListener(onclickMap);
 });
-
-function initialize_listeners(): void {
-  Gui.onSave(onAddObservation);
-
-  Gui.onShowObservations(debug_log_observations);
-
-  Gui.onDownloadRdf(downloadRdf);
-}
 
 function onclickMap(event: google.maps.MapMouseEvent): void {
   if (event.latLng) {

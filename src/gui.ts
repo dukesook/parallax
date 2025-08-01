@@ -2,7 +2,6 @@
 const messageDiv = getElement('message') as HTMLElement;
 const latInput = getElement('lat') as HTMLInputElement;
 const lngInput = getElement('lng') as HTMLInputElement;
-const datetimeInput = getElement('datetime') as HTMLInputElement;
 const objectSelect = getElement('object-select') as HTMLSelectElement;
 const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
 const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
@@ -87,7 +86,6 @@ function getElement(id: string): HTMLElement {
 function initGui(): void {
   // Initialize datetime input with current date and time:
   const now = new Date();
-  datetimeInput.value = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM format
 
   // Tabs
   googleMapsTab.addEventListener('click', () => activateTab(googleMapsTab));

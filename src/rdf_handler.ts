@@ -1,20 +1,23 @@
 import * as N3 from 'n3';
 import { v4 as uuidv4 } from 'uuid';
 
-const newId = uuidv4();
 const g_triple_store = new N3.Store();
-console.log('Generated UUID:', newId);
 
-function objectTypeToIRI(objectType: string): string {
-  switch (objectType) {
-    case 'plane':
-      return 'envo:03501349';
-    case 'car':
-      return 'envo:01000605';
-    case 'boat':
-      return 'envo:01000608';
-    default:
-      throw new Error(`Unknown object type: ${objectType}`);
+// Public Functions
+
+export async function init(url: string): Promise<void> {
+  // Load .ttl files from parallax/rdf/
+}
+
+export async function fetchFile(url: string): Promise<void> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    const ttlText = await res.text();
+    console.log(`📄 Fetched content from ${url}:\n`);
+    console.log(ttlText);
+  } catch (error) {
+    console.error(`Failed to fetch ${url}:`, error);
   }
 }
 
@@ -82,32 +85,6 @@ export function observationToTurtle(objectType: string, lat: number, lng: number
   console.log('Turtle Data:', turtleData);
 }
 
-export function runRdfExample(): void {
-  const turtleData = `
-    @prefix ex: <http://example.org/> .
-    ex:John ex:likes ex:Coffee .
-    ex:John ex:knows ex:Jane .
-  `;
-
-  // Parse RDF
-  const parser = new N3.Parser();
-  const quads = parser.parse(turtleData);
-
-  // Create in-memory RDF store
-  const store = new N3.Store(quads);
-
-  // Log all triples
-  store.getQuads(null, null, null, null).forEach((quad) => {
-    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
-  });
-
-  // Query example: find what John likes
-  const likes = store.getQuads('http://example.org/John', 'http://example.org/likes', null, null);
-  likes.forEach((quad) => {
-    console.log(`John likes: ${quad.object.value}`);
-  });
-}
-
 export async function runSparqlQuery(query: string) {
   const response = await fetch('http://localhost:7200/repositories/parallax', {
     method: 'POST',
@@ -148,6 +125,30 @@ export function getTripleStoreAsTurtle(): string {
   return turtle;
 }
 
+// Private Functions
+
+function objectTypeToIRI(objectType: string): string {
+  switch (objectType) {
+    case 'plane':
+      return 'envo:03501349';
+    case 'car':
+      return 'envo:01000605';
+    case 'boat':
+      return 'envo:01000608';
+    default:
+      throw new Error(`Unknown object type: ${objectType}`);
+  }
+}
+
+// Debugging
+
+export function debug_dump_observations(): void {
+  console.log('Observations');
+  g_triple_store.getQuads(null, null, null, null).forEach((quad) => {
+    console.log(` - ${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
+  });
+}
+
 export async function testQuery(): Promise<void> {
   const query = `
     SELECT *
@@ -164,9 +165,31 @@ export async function testQuery(): Promise<void> {
   }
 }
 
-export function debug_dump_observations(): void {
-  console.log('Observations');
-  g_triple_store.getQuads(null, null, null, null).forEach((quad) => {
-    console.log(` - ${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
+export function runRdfExample(): void {
+  const turtleData = `
+    @prefix ex: <http://example.org/> .
+    ex:John ex:likes ex:Coffee .
+    ex:John ex:knows ex:Jane .
+  `;
+
+  // Parse RDF
+  const parser = new N3.Parser();
+  const quads = parser.parse(turtleData);
+
+  // Create in-memory RDF store
+  const store = new N3.Store(quads);
+
+  // Log all triples
+  store.getQuads(null, null, null, null).forEach((quad) => {
+    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
+  });
+
+  // Query example: find what John likes
+  const likes = store.getQuads('http://example.org/John', 'http://example.org/likes', null, null);
+  likes.forEach((quad) => {
+    console.log(`John likes: ${quad.object.value}`);
   });
 }
+
+const newId = uuidv4();
+console.log('Generated UUID:', newId);

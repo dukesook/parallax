@@ -9,6 +9,7 @@ debugButton?.addEventListener('click', debug);
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Document is ready');
 
+  // Init GUI
   Gui.initGui().then(() => {
     const gmapElement = Gui.getGmapElement();
     GMaps.loadGoogleMapsScript(gmapElement);
@@ -18,6 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     Gui.onDownloadRdf(downloadRdf);
   });
+
+  // Init RDF Handler
+  RdfHandler.init('todo');
 
   GMaps.addMapListener(onclickMap);
 });
@@ -74,7 +78,8 @@ function debug_log_observations(): void {
 }
 
 function debug() {
-  loadAndLogHTML('/parallax/src/html/tab3.html');
+  const geosparql = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
+  RdfHandler.fetchFile(geosparql);
 }
 
 async function loadAndLogHTML(url: string): Promise<void> {

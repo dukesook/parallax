@@ -1,24 +1,17 @@
 import * as N3 from 'n3';
 import { v4 as uuidv4 } from 'uuid';
+import * as Fetcher from './fetcher';
 
 const g_triple_store = new N3.Store();
 
 // Public Functions
 
 export async function init(url: string): Promise<void> {
-  // Load .ttl files from parallax/rdf/
-}
+  // Fetch RDF
+  const geoSpaql = await Fetcher.fetchGeoSparql();
 
-export async function fetchFile(url: string): Promise<void> {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    const ttlText = await res.text();
-    console.log(`📄 Fetched content from ${url}:\n`);
-    console.log(ttlText);
-  } catch (error) {
-    console.error(`Failed to fetch ${url}:`, error);
-  }
+  // Parse RDF
+  addRDFToStore(geoSpaql);
 }
 
 export function addObservationToTripleStore(objectType: string, lat: number, lng: number): void {
@@ -138,6 +131,15 @@ function objectTypeToIRI(objectType: string): string {
     default:
       throw new Error(`Unknown object type: ${objectType}`);
   }
+}
+
+function addRDFToStore(rdfData: string): void {
+  const parser = new N3.Parser();
+  const quads = parser.parse(rdfData);
+
+  quads.forEach((quad) => {
+    g_triple_store.addQuad(quad);
+  });
 }
 
 // Debugging

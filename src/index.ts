@@ -78,8 +78,8 @@ function debug_log_observations(): void {
 }
 
 function debug() {
-  const geosparql = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
-  RdfHandler.fetchFile(geosparql);
+  const triples = RdfHandler.getTripleStoreAsTurtle();
+  console.log(triples);
 }
 
 async function loadAndLogHTML(url: string): Promise<void> {

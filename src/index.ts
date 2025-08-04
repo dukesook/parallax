@@ -1,6 +1,7 @@
 import * as GMaps from './use_gmaps';
 import * as RdfHandler from './rdf_handler';
 import * as Gui from './gui';
+import * as GraphTab from './graph';
 
 const debugButton = document.getElementById('debug-button');
 
@@ -18,6 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.onShowObservations(debug_log_observations);
 
     Gui.onDownloadRdf(downloadRdf);
+
+    GraphTab.init();
   });
 
   // Init RDF Handler

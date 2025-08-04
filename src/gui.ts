@@ -106,7 +106,7 @@ export async function initGui(): Promise<void> {
   // Tab Content
   await loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
   await loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
-  await loadHTMLIntoElement('/parallax/src/html/inspect_knowledge_graph.html', knowledgeGraphContent);
+  await loadHTMLIntoElement('/parallax/src/html/graph.html', knowledgeGraphContent);
 }
 
 function activateTab(tab: HTMLElement): void {

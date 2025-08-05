@@ -1,7 +1,6 @@
 import * as N3 from 'n3';
 import rdfParser from 'rdf-parse';
 import type { Quad } from 'rdf-js';
-import { Readable } from 'streamify-string';
 import { v4 as uuidv4 } from 'uuid';
 import * as Fetcher from './fetcher';
 

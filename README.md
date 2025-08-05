@@ -4,8 +4,9 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 
 ## Libraries
 
-- N3.js
-  - Reads/Writes RDF
+- Parsing RDF
+  - rdf-parse
+  - ~~N3.js~~ - only parses .ttl
 - sparql-engine
   - Queries RDF
 - EYE JS

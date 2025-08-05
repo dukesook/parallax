@@ -1,4 +1,7 @@
 import * as N3 from 'n3';
+import rdfParser from 'rdf-parse';
+import type { Quad } from 'rdf-js';
+import { Readable } from 'streamify-string';
 import { v4 as uuidv4 } from 'uuid';
 import * as Fetcher from './fetcher';
 
@@ -12,8 +15,8 @@ export async function init(url: string): Promise<void> {
   const bfo = await Fetcher.fetchBFO();
 
   // Parse RDF
-  addRDFToStore(geoSpaql);
-  addRDFToStore(bfo);
+  addRDFToStore(geoSpaql, 'text/turtle');
+  addRDFToStore(bfo, 'application/rdf+xml');
 }
 
 export function addObservationToTripleStore(objectType: string, lat: number, lng: number): void {
@@ -135,12 +138,18 @@ function objectTypeToIRI(objectType: string): string {
   }
 }
 
-function addRDFToStore(rdfData: string): void {
-  const parser = new N3.Parser();
-  const quads = parser.parse(rdfData);
+export async function addRDFToStore(rdfData: string, contentType: string, baseIRI: string = ''): Promise<void> {
+  const textStream = Readable.from([rdfData]);
 
-  quads.forEach((quad) => {
-    g_triple_store.addQuad(quad);
+  const quadStream = rdfParser.parse(textStream, {
+    contentType,
+    baseIRI,
+  });
+
+  return new Promise((resolve, reject) => {
+    quadStream.on('data', (quad: Quad) => g_triple_store.addQuad(quad));
+    quadStream.on('end', resolve);
+    quadStream.on('error', reject);
   });
 }
 

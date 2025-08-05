@@ -4,9 +4,12 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 
 ## Libraries
 
+- RDF Structures
+  - rdf-js
 - Parsing RDF
   - rdf-parse
-  - ~~N3.js~~ - only parses .ttl
+- Local Triple Store
+  - N3.js
 - sparql-engine
   - Queries RDF
 - EYE JS

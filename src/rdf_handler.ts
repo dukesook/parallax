@@ -9,9 +9,11 @@ const g_triple_store = new N3.Store();
 export async function init(url: string): Promise<void> {
   // Fetch RDF
   const geoSpaql = await Fetcher.fetchGeoSparql();
+  const bfo = await Fetcher.fetchBFO();
 
   // Parse RDF
   addRDFToStore(geoSpaql);
+  addRDFToStore(bfo);
 }
 
 export function addObservationToTripleStore(objectType: string, lat: number, lng: number): void {

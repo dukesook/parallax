@@ -1,12 +1,29 @@
-import * as N3 from 'n3';
-import rdfParser from 'rdf-parse';
-import type { Quad } from 'rdf-js';
 import { v4 as uuidv4 } from 'uuid';
 import * as Fetcher from './fetcher';
+import * as RDFLib from 'rdflib';
 
-const g_triple_store = new N3.Store();
+const g_triple_store = new RDFLib.Store();
 
 // Public Functions
+
+export async function logEachFile(): Promise<void> {
+  const modules = import.meta.glob('/parallax/rdf/*', { as: 'raw' }); //glob is Vite-specific
+
+  for (const path in modules) {
+    console.log(path);
+    const content = await modules[path]();
+    console.log(content);
+  }
+}
+
+export async function addRDFToStore(rdfData: string, contentType: string, baseIRI: string = ''): Promise<void> {
+  return new Promise((resolve, reject) => {
+    RDFLib.parse(rdfData, g_triple_store, baseIRI, contentType, (err: Error | undefined) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+}
 
 export async function init(url: string): Promise<void> {
   // Fetch RDF
@@ -102,22 +119,23 @@ export async function runSparqlQuery(query: string) {
 }
 
 export function getTripleStoreAsTurtle(): string {
-  const writer = new N3.Writer({
-    format: 'Turtle',
-    prefixes: {
-      envo: 'http://purl.obolibrary.org/obo/ENVO_',
-      parallax: 'http://example.org/parallax#', // adjust this to match your IRI scheme
-    },
-  });
-  writer.addQuads(g_triple_store.getQuads(null, null, null, null));
+  const turtle = 'todo';
+  // const writer = new N3.Writer({
+  //   format: 'Turtle',
+  //   prefixes: {
+  //     envo: 'http://purl.obolibrary.org/obo/ENVO_',
+  //     parallax: 'http://example.org/parallax#', // adjust this to match your IRI scheme
+  //   },
+  // });
+  // writer.addQuads(g_triple_store.getQuads(null, null, null, null));
 
-  let turtle = '';
-  writer.end((error, result) => {
-    if (error) {
-      throw new Error('Failed to serialize triple store: ' + error.message);
-    }
-    turtle = result;
-  });
+  // let turtle = '';
+  // writer.end((error, result) => {
+  //   if (error) {
+  //     throw new Error('Failed to serialize triple store: ' + error.message);
+  //   }
+  //   turtle = result;
+  // });
 
   return turtle;
 }
@@ -135,21 +153,6 @@ function objectTypeToIRI(objectType: string): string {
     default:
       throw new Error(`Unknown object type: ${objectType}`);
   }
-}
-
-export async function addRDFToStore(rdfData: string, contentType: string, baseIRI: string = ''): Promise<void> {
-  const textStream = Readable.from([rdfData]);
-
-  const quadStream = rdfParser.parse(textStream, {
-    contentType,
-    baseIRI,
-  });
-
-  return new Promise((resolve, reject) => {
-    quadStream.on('data', (quad: Quad) => g_triple_store.addQuad(quad));
-    quadStream.on('end', resolve);
-    quadStream.on('error', reject);
-  });
 }
 
 // Debugging
@@ -175,32 +178,6 @@ export async function testQuery(): Promise<void> {
   } catch (error) {
     console.error('Error running SPARQL query:', error);
   }
-}
-
-export function runRdfExample(): void {
-  const turtleData = `
-    @prefix ex: <http://example.org/> .
-    ex:John ex:likes ex:Coffee .
-    ex:John ex:knows ex:Jane .
-  `;
-
-  // Parse RDF
-  const parser = new N3.Parser();
-  const quads = parser.parse(turtleData);
-
-  // Create in-memory RDF store
-  const store = new N3.Store(quads);
-
-  // Log all triples
-  store.getQuads(null, null, null, null).forEach((quad) => {
-    console.log(`${quad.subject.value} ${quad.predicate.value} ${quad.object.value}`);
-  });
-
-  // Query example: find what John likes
-  const likes = store.getQuads('http://example.org/John', 'http://example.org/likes', null, null);
-  likes.forEach((quad) => {
-    console.log(`John likes: ${quad.object.value}`);
-  });
 }
 
 const newId = uuidv4();

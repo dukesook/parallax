@@ -7,9 +7,11 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 - RDF Structures
   - rdf-js
 - Parsing RDF
-  - rdf-parse
+  - rdflib.js
+  - ~~rdf-parse~~ // for node.js!
 - Local Triple Store
-  - N3.js
+  - rdflib.js
+  - ~~N3.js~~ // replaced by rdflib
 - sparql-engine
   - Queries RDF
 - EYE JS

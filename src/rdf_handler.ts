@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as Fetcher from './fetcher';
-import * as RDFLib from 'rdflib';
+import * as $rdf from 'rdflib';
 
-const g_triple_store = new RDFLib.Store();
+const g_triple_store = new $rdf.Store();
 
 // Public Functions
 
@@ -18,7 +18,7 @@ export async function logEachFile(): Promise<void> {
 
 export async function addRDFToStore(rdfData: string, contentType: string, baseIRI: string = ''): Promise<void> {
   return new Promise((resolve, reject) => {
-    RDFLib.parse(rdfData, g_triple_store, baseIRI, contentType, (err: Error | undefined) => {
+    $rdf.parse(rdfData, g_triple_store, baseIRI, contentType, (err: Error | undefined) => {
       if (err) reject(err);
       else resolve();
     });

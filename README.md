@@ -17,15 +17,23 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 - EYE JS
   - Enables inferring new triples based on ontology rules.
 
-### Optional
+### rdf-parse.js
 
-- Linked Data Object (LDO)
+- Is a format router. It doesn’t parse RDF itself, but instead delegates to other parsers under the hood.
+- Ideal for backend. Typically overkill for frontend. (compared to `rdflib.js` and `n3.js`)
 
-  - Provides type-safe, schema-driven RDF data access in TypeScript.
+- Uses: (streaming libraries)
+  - `n3.js`
+  - `rdfxml-streaming-parser.js`
+  - `jsonld-streaming-parser.js`
 
-  TODO: use environment variables to hide api key
+### rdflib.js
 
-### Build
+- in-memory parsing
+- Ideal for front end.
+- Very mature
+
+## Build
 
 - Create a parallax/.env file. add:
   - `VITE_GOOGLE_MAPS_API_KEY=YOUR-API-KEY`
@@ -37,11 +45,11 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 - `$ npm install`
 - `$ npm run dev`
 
-### Namespace
+## Namespace
 
 `@prefix parallax: <http://parallax.edu/ns/>`
 
-### Used Ontologies
+## Used Ontologies
 
 These links can be loaded directly into GraphDB:
 

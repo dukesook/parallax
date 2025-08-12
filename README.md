@@ -33,6 +33,7 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 - Ideal for front end.
 - Very mature
 - See documentation [here](https://linkeddata.github.io/rdflib.js/doc/)
+- See tutorial [here](https://github.com/solidos/solid-tutorial-rdflib.js)
 
 ## Build
 

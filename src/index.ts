@@ -52,6 +52,7 @@ function onAddObservation(): void {
   Gui.displayMessage(message);
 
   // TODO: add observation
+  RdfHandler.addObservation(selectedObject, lat, lng);
 }
 
 function downloadRdf(): void {

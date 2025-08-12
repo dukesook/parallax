@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Init RDF Handler
-  // RdfHandler.init('todo');
+  RdfHandler.init();
 
   GMaps.addMapListener(onclickMap);
 });
@@ -78,7 +78,9 @@ function example_downloadTextFile(filename: string, text: string): void {
   URL.revokeObjectURL(url);
 }
 
-function debug() {}
+function debug() {
+  RdfHandler.debug();
+}
 
 async function loadAndLogHTML(url: string): Promise<void> {
   try {

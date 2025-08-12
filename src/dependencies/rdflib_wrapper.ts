@@ -28,8 +28,6 @@ export function logStore(store: $rdf.Store): void {
 export function debug(): void {
   // Add triple to store
   console.log('creating triple...');
-  // var RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-  // const subject = $rdf.sym('http://parallax.edu/ns/subject1');
   const subject = PARALLAX('subject1');
   const predicate = $rdf.sym('http://parallax.edu/ns/predicate1');
   const object = $rdf.literal('Object1');

@@ -47,9 +47,11 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 - `$ npm install`
 - `$ npm run dev`
 
-## Namespace
+## Namespace IRI
 
 `@prefix parallax: <http://parallax.edu/ns/>`
+`https://parallax.nmsu.edu/ns/` ← vocabulary
+`https://parallax.nmsu.edu/id/` ← instance/data IRIs
 
 ## Used Ontologies
 

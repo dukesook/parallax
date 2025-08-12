@@ -20,7 +20,10 @@ console.log('Generated UUID:', newId);
 export function debug(): void {
   // Add triple to store
   console.log('creating triple...');
-  const subject = $rdf.sym('http://parallax.edu/ns/subject1');
+  // var RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+  const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
+  // const subject = $rdf.sym('http://parallax.edu/ns/subject1');
+  const subject = PARALLAX('subject1');
   const predicate = $rdf.sym('http://parallax.edu/ns/predicate1');
   const object = $rdf.literal('Object1');
 

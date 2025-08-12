@@ -32,6 +32,7 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 - in-memory parsing
 - Ideal for front end.
 - Very mature
+- See documentation [here](https://linkeddata.github.io/rdflib.js/doc/)
 
 ## Build
 

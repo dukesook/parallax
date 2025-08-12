@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     GMaps.loadGoogleMapsScript(gmapElement);
     Gui.onSave(onAddObservation);
 
-    Gui.onShowObservations(debug_log_observations);
+    Gui.onShowObservations(showObservations);
 
     Gui.onDownloadRdf(downloadRdf);
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Init RDF Handler
-  RdfHandler.init('todo');
+  // RdfHandler.init('todo');
 
   GMaps.addMapListener(onclickMap);
 });
@@ -51,13 +51,15 @@ function onAddObservation(): void {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  // RdfHandler.observationToTurtle(selectedObject, lat, lng);
-  RdfHandler.addObservationToTripleStore(selectedObject, lat, lng);
+  // TODO: add observation
 }
 
 function downloadRdf(): void {
-  const turtleData = RdfHandler.getTripleStoreAsTurtle();
-  example_downloadTextFile('observations.ttl', turtleData);
+  console.log('downloadRdf()');
+}
+
+function showObservations(): void {
+  console.log('showObservations()');
 }
 
 function example_downloadTextFile(filename: string, text: string): void {
@@ -76,14 +78,7 @@ function example_downloadTextFile(filename: string, text: string): void {
   URL.revokeObjectURL(url);
 }
 
-function debug_log_observations(): void {
-  RdfHandler.debug_dump_observations();
-}
-
-function debug() {
-  const triples = RdfHandler.getTripleStoreAsTurtle();
-  console.log(triples);
-}
+function debug() {}
 
 async function loadAndLogHTML(url: string): Promise<void> {
   try {

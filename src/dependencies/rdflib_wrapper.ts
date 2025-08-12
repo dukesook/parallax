@@ -13,9 +13,28 @@ export async function addRDFToStore(rdfData: string, contentType: string, baseIR
   });
 }
 
-export function logAllTriples() {
-  const graph = g_triple_store as IndexedFormula;
-  graph.statements.forEach((st: Statement) => {
-    console.log(st.subject.value, st.predicate.value, st.object.value);
+export function logStore(store: $rdf.Store): void {
+  console.log('logStore()');
+  store.statements.forEach((statement: $rdf.Statement) => {
+    const s = statement.subject.value;
+    const p = statement.predicate.value;
+    const o = statement.object.value;
+    console.log(`Statement: ${s} ${p} ${o}`);
   });
+}
+
+export function debug(): void {
+  // Add triple to store
+  console.log('creating triple...');
+  // var RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+  const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
+  // const subject = $rdf.sym('http://parallax.edu/ns/subject1');
+  const subject = PARALLAX('subject1');
+  const predicate = $rdf.sym('http://parallax.edu/ns/predicate1');
+  const object = $rdf.literal('Object1');
+
+  g_triple_store.add(subject, predicate, object);
+  console.log('Added triple to store');
+
+  logStore(g_triple_store);
 }

@@ -29,4 +29,16 @@ export function debug(): void {
 
   g_triple_store.add(subject, predicate, object);
   console.log('Added triple to store');
+
+  logStore(g_triple_store);
+}
+
+function logStore(store: $rdf.Store): void {
+  console.log('logStore()');
+  store.statements.forEach((statement: $rdf.Statement) => {
+    const s = statement.subject.value;
+    const p = statement.predicate.value;
+    const o = statement.object.value;
+    console.log(`Statement: ${s} ${p} ${o}`);
+  });
 }

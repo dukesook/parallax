@@ -6,7 +6,7 @@ const g_triple_store = new $rdf.Store();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 
-export async function addRDFToStore(rdfData: string, contentType: string, baseIRI: string = ''): Promise<void> {
+export async function addRDFToStore(rdfData: string, baseIRI: string, contentType: string): Promise<void> {
   return new Promise((resolve, reject) => {
     $rdf.parse(rdfData, g_triple_store, baseIRI, contentType, (err: Error | undefined) => {
       if (err) reject(err);

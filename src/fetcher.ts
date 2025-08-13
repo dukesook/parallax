@@ -1,8 +1,8 @@
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 
-const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
-
+// const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
+const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10/geo.json';
 const bfoPath = '/parallax/rdf/bfo.owl';
 
 export async function fetchGeoSparql(): Promise<string> {

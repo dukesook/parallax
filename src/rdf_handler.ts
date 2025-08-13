@@ -5,10 +5,14 @@ import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 export async function init(): Promise<void> {
   console.log('rdf_handler: init()');
   // Fetch RDF
-  // const geoSpaql = await Fetcher.fetchGeoSparql();
-  const bfo = await Fetcher.fetchBFO();
+  const geoSparql = await Fetcher.fetchGeoSparql();
+  // const bfo = await Fetcher.fetchBFO();
   console.log(' ');
-  console.log('Fetched BFO:\n', bfo);
+  console.log('Fetched GeoSPARQL:\n', geoSparql);
+
+  // const geosparqlBase = 'http://www.opengis.net/ont/geosparql/';
+  const geosparqlBase = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
+  // RDFLibWrapper.addRDFToStore(geoSparql, 'text/turtle', geosparqlBase);
 }
 
 // Work in progress:

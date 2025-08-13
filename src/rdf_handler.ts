@@ -4,15 +4,22 @@ import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 
 export async function init(): Promise<void> {
   console.log('rdf_handler: init()');
-  // Fetch RDF
-  const geoSparql = await Fetcher.fetchGeoSparql();
-  // const bfo = await Fetcher.fetchBFO();
-  console.log(' ');
-  console.log('Fetched GeoSPARQL:\n', geoSparql);
-
-  const geosparqlBase = 'http://www.opengis.net/ont/geosparql/';
-  // const geosparqlBase = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
   const turtleMime = 'text/turtle';
+
+  // Fetch RDF
+  const bfo = await Fetcher.fetchBFO();
+  const bfoBase = 'http://purl.obolibrary.org/obo/bfo';
+  RDFLibWrapper.addRDFToStore(bfo, bfoBase, turtleMime)
+    .then(() => {
+      console.log('BFO added to RDF store');
+    })
+    .catch((error) => {
+      console.log('Parallax: Error adding BFO to RDF store:');
+      console.error(error);
+    });
+
+  const geoSparql = await Fetcher.fetchGeoSparql();
+  const geosparqlBase = 'http://www.opengis.net/ont/geosparql/';
   const jsonMime = 'application/ld+json';
   RDFLibWrapper.addRDFToStore(geoSparql, geosparqlBase, jsonMime)
     .then(() => {

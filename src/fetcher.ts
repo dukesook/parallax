@@ -3,7 +3,8 @@ import { join } from 'path';
 
 // const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl';
 const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10/geo.json';
-const bfoPath = '/parallax/rdf/bfo.owl';
+// const bfoPath = '/parallax/rdf/bfo.owl';
+const bfoPath = 'https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/heads/master/src/owl/bfo-core.ttl';
 
 export async function fetchGeoSparql(): Promise<string> {
   const geoSparql = await fetchFile(geoSparqlUrl);

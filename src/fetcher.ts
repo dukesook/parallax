@@ -6,13 +6,27 @@ const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10
 // const bfoPath = '/parallax/rdf/bfo.owl';
 const bfoPath = 'https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/heads/master/src/owl/bfo-core.ttl';
 
-export async function fetchGeoSparql(): Promise<string> {
-  const geoSparql = await fetchFile(geoSparqlUrl);
+export type RdfFile = {
+  rdf: string;
+  base: string;
+  mime: string;
+};
+
+export async function fetchGeoSparql(): Promise<RdfFile> {
+  const geoSparql = {
+    rdf: await fetchFile(geoSparqlUrl),
+    base: 'http://www.opengis.net/ont/geosparql/',
+    mime: 'application/ld+json',
+  };
   return geoSparql;
 }
 
-export async function fetchBFO(): Promise<string> {
-  const bfo = await fetchFile(bfoPath);
+export async function fetchBFO(): Promise<RdfFile> {
+  const bfo = {
+    rdf: await fetchFile(bfoPath),
+    base: 'http://purl.obolibrary.org/obo/bfo',
+    mime: 'text/turtle',
+  };
   return bfo;
 }
 

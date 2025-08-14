@@ -8,27 +8,11 @@ export async function init(): Promise<void> {
 
   // Fetch RDF
   const bfo = await Fetcher.fetchBFO();
-  const bfoBase = 'http://purl.obolibrary.org/obo/bfo';
-  RDFLibWrapper.addRDFToStore(bfo, bfoBase, turtleMime)
-    .then(() => {
-      console.log('BFO added to RDF store');
-    })
-    .catch((error) => {
-      console.log('Parallax: Error adding BFO to RDF store:');
-      console.error(error);
-    });
+  RDFLibWrapper.addRDFToStore(bfo.rdf, bfo.base, bfo.mime);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
-  const geosparqlBase = 'http://www.opengis.net/ont/geosparql/';
-  const jsonMime = 'application/ld+json';
-  RDFLibWrapper.addRDFToStore(geoSparql, geosparqlBase, jsonMime)
-    .then(() => {
-      console.log('GeoSPARQL added to RDF store');
-    })
-    .catch((error) => {
-      console.log('Parallax: Error adding GeoSPARQL to RDF store:');
-      console.error(error);
-    });
+
+  RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime);
 }
 
 // Work in progress:

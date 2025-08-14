@@ -9,7 +9,12 @@ export async function init(): Promise<void> {
     })
     .catch((err) => {
       console.error('rdf_handler: initStore() failed', err);
-    });
+    })
+    .then(initTermRegistry);
+}
+
+function initTermRegistry(): void {
+  // todo
 }
 
 async function initStore(): Promise<void> {

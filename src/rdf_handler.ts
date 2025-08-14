@@ -3,15 +3,20 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 
 export async function init(): Promise<void> {
-  console.log('rdf_handler: init()');
-  const turtleMime = 'text/turtle';
+  initStore()
+    .then(() => {
+      console.log('rdf_handler: initStore() completed');
+    })
+    .catch((err) => {
+      console.error('rdf_handler: initStore() failed', err);
+    });
+}
 
-  // Fetch RDF
+async function initStore(): Promise<void> {
   const bfo = await Fetcher.fetchBFO();
   RDFLibWrapper.addRDFToStore(bfo.rdf, bfo.base, bfo.mime);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
-
   RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime);
 }
 

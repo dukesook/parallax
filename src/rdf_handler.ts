@@ -19,11 +19,6 @@ function initTermRegistry(): void {
 
   // print length of subjects
   console.log(`rdf_handler: initTermRegistry() found ${subects.size} subjects in the triple store`);
-
-  // print first 10 subjects
-  subects.forEach((subject) => {
-    console.log(`rdf_handler: initTermRegistry() subject: ${subject}`);
-  });
 }
 
 async function initStore(): Promise<void> {
@@ -54,6 +49,13 @@ export function addObservation(object: string, lat: number, lng: number): void {
 
   // Add RDF data to the store
   // RDFLibWrapper.
+}
+
+// ================== Debugging Functions ==================
+
+export function logStore(): void {
+  console.log('rdf_handler: logStore()');
+  RDFLibWrapper.logStore();
 }
 
 export function debug(): void {

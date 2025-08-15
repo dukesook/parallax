@@ -2,10 +2,13 @@ import * as GMaps from './use_gmaps';
 import * as RdfHandler from './rdf_handler';
 import * as Gui from './gui';
 import * as GraphTab from './graph';
+import { log } from 'console';
 
 const debugButton = document.getElementById('debug-button');
+const logStoreButton = document.getElementById('log-store-button');
 
 debugButton?.addEventListener('click', debug);
+logStoreButton?.addEventListener('click', logStore);
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Document is ready');
@@ -77,6 +80,11 @@ function example_downloadTextFile(filename: string, text: string): void {
   document.body.removeChild(a);
 
   URL.revokeObjectURL(url);
+}
+
+function logStore(): void {
+  console.log('logStore()');
+  RdfHandler.logStore();
 }
 
 function debug() {

@@ -15,16 +15,6 @@ export async function addRDFToStore(rdfData: string, baseIRI: string, contentTyp
   });
 }
 
-export function logStore(store: $rdf.Store): void {
-  console.log('logStore()');
-  store.statements.forEach((statement: $rdf.Statement) => {
-    const s = statement.subject.value;
-    const p = statement.predicate.value;
-    const o = statement.object.value;
-    console.log(`Statement: ${s} ${p} ${o}`);
-  });
-}
-
 export function getSubjects(): Set<string> {
   console.log('getSubjects()');
   const subjects = new Set<string>();
@@ -33,6 +23,23 @@ export function getSubjects(): Set<string> {
   });
   console.log(`Found ${subjects.size} subjects`);
   return subjects;
+}
+
+// ================== Debugging Functions ==================
+export function logStore(): void {
+  const store = g_triple_store as IndexedFormula;
+
+  if (store.statements.length === 0) {
+    console.log('========= Store is empty =========');
+    return;
+  }
+
+  store.statements.forEach((statement: $rdf.Statement) => {
+    const s = statement.subject.value;
+    const p = statement.predicate.value;
+    const o = statement.object.value;
+    console.log(`Statement: ${s} ${p} ${o}`);
+  });
 }
 
 export function debug(): void {

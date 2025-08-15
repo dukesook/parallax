@@ -25,6 +25,16 @@ export function logStore(store: $rdf.Store): void {
   });
 }
 
+export function getSubjects(): Set<string> {
+  console.log('getSubjects()');
+  const subjects = new Set<string>();
+  g_triple_store.statements.forEach((statement: Statement) => {
+    subjects.add(statement.subject.value);
+  });
+  console.log(`Found ${subjects.size} subjects`);
+  return subjects;
+}
+
 export function debug(): void {
   // Add triple to store
   console.log('creating triple...');

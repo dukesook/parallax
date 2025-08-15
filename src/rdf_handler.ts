@@ -14,7 +14,16 @@ export async function init(): Promise<void> {
 }
 
 function initTermRegistry(): void {
-  // todo
+  // `todo - autogenerate terms from Local Triple Store`
+  const subects = RDFLibWrapper.getSubjects();
+
+  // print length of subjects
+  console.log(`rdf_handler: initTermRegistry() found ${subects.size} subjects in the triple store`);
+
+  // print first 10 subjects
+  subects.forEach((subject) => {
+    console.log(`rdf_handler: initTermRegistry() subject: ${subject}`);
+  });
 }
 
 async function initStore(): Promise<void> {

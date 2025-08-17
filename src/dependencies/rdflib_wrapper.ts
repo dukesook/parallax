@@ -1,6 +1,7 @@
 import * as $rdf from 'rdflib';
 import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
+import { DataFactory } from 'rdflib';
 
 const g_triple_store = new $rdf.Store();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
@@ -62,3 +63,26 @@ export function debug(): void {
 
   logStore(g_triple_store);
 }
+
+// ================== RDFLib API ==================
+/*
+Useful links: 
+  1. The library itself - https://vscode.dev/github/linkeddata/rdflib.js
+  2. API - https://linkeddata.github.io/rdflib.js/doc/
+  3. Data Model - https://rdf.js.org/data-model-spec/
+
+
+***** Statement Class *****
+export default class Statement<
+    S extends SubjectType = SubjectType,
+    P extends PredicateType = PredicateType,
+    O extends ObjectType = ObjectType,
+    G extends GraphType = GraphType
+  >
+  implements Quad<S, P, O, G | DefaultGraph> {
+
+***** rdflib: types.ts *****
+export type SubjectType   = RDFlibBlankNode | RDFlibNamedNode | RDFlibVariable
+export type PredicateType = RDFlibNamedNode | RDFlibVariable
+export type ObjectType    = RDFlibNamedNode | RDFlibLiteral | Collection | RDFlibBlankNode | RDFlibVariable | Empty
+*/

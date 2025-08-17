@@ -19,7 +19,15 @@ export function getSubjects(): Set<string> {
   console.log('getSubjects()');
   const subjects = new Set<string>();
   g_triple_store.statements.forEach((statement: Statement) => {
-    subjects.add(statement.subject.value);
+    // If blank node, skip it:
+    const termType = statement.subject.termType;
+    if (termType === 'BlankNode') {
+      return;
+    } else if (termType === 'NamedNode') {
+      subjects.add(statement.subject.value);
+    } else {
+      throw new Error(`Unexpected term type: ${termType}`);
+    }
   });
   console.log(`Found ${subjects.size} subjects`);
   return subjects;

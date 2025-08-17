@@ -23,7 +23,7 @@ function initTermRegistry(): void {
 
   // log the set:
   subjects.forEach((subject) => {
-    console.log(`rdf_handler: initTermRegistry() subject: ${subject}`);
+    // console.log(`rdf_handler: initTermRegistry() subject: ${subject}`);
   });
 }
 

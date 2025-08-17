@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
+import * as TermRegistry from './term_registry';
 
 export async function init(): Promise<void> {
   initStore()
@@ -64,5 +65,5 @@ export function logStore(): void {
 }
 
 export function debug(): void {
-  RDFLibWrapper.debug();
+  TermRegistry.debug();
 }

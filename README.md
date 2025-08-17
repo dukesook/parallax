@@ -16,6 +16,8 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
   - Queries RDF
 - EYE JS
   - Enables inferring new triples based on ontology rules.
+- @rimbu/bimap
+  - Bidiretional Map for Term Registry
 
 ### rdf-parse.js
 

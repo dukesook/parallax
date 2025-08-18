@@ -4,10 +4,7 @@ type Iri = string;
 type Label = string;
 
 // prettier-ignore
-let g_bimap = BiMap.of<Iri, Label>(
-  ['http://x/Person', 'Person'],
-  ['http://x/Name', 'Name'],
-);
+let g_bimap = BiMap.of<Iri, Label>();
 
 export function addTerm(iri: string, label: string): void {
   if (g_bimap.hasKey(iri) || g_bimap.hasValue(label)) {
@@ -51,14 +48,8 @@ export function getNumberOfTerms(): number {
   return g_bimap.size;
 }
 
-export function debug(): void {
-  const newTerms = [
-    { iri: 'http://x/Observation', label: 'Observation' },
-    { iri: 'http://x/Location', label: 'Location' },
-    { iri: 'http://x/Latitude', label: 'Latitude' },
-  ];
-
-  console.log(`Total terms: ${getNumberOfTerms()}`);
-  addTerms(newTerms);
-  console.log(`Total terms: ${getNumberOfTerms()}`);
+export function clear(): void {
+  g_bimap = BiMap.empty<Iri, Label>();
 }
+
+export function debug(): void {}

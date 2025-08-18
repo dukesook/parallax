@@ -36,6 +36,12 @@ async function initStore(): Promise<void> {
   RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime);
 }
 
+export function addObservableEntity(): void {
+  // An object is a thing that can be observed, like a boat, airplane, or car.
+  // NOT TO BE CONFUSED WITH A TRIPLE STORE OBJECT
+}
+
+// Warning: addObservation should not create observable objects.
 export function addObservation(observedThing: string, lat: number, lng: number): void {
   console.log(`Adding observation for observed: ${observedThing}, lat: ${lat}, lng: ${lng}`);
 

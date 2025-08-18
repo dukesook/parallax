@@ -16,6 +16,21 @@ export function addTerm(iri: string, label: string): void {
   g_bimap = g_bimap.set(iri, label);
 }
 
+export function addTerms(terms: Array<{ iri: Iri; label: Label }>): void {
+  terms.forEach(({ iri, label }) => {
+    if (g_bimap.hasKey(iri) || g_bimap.hasValue(label)) {
+      throw new Error(`Term already exists: ${iri} or ${label}`);
+    }
+  });
+
+  const builder = g_bimap.toBuilder();
+
+  terms.forEach(({ iri, label }) => {
+    builder.set(iri, label);
+  });
+  g_bimap = builder.build();
+}
+
 export function getIRI(label: string): string {
   const iri = g_bimap.getKey(label);
   if (!iri) {
@@ -37,8 +52,13 @@ export function getNumberOfTerms(): number {
 }
 
 export function debug(): void {
-  console.log('Term Registry Debug Info:');
+  const newTerms = [
+    { iri: 'http://x/Observation', label: 'Observation' },
+    { iri: 'http://x/Location', label: 'Location' },
+    { iri: 'http://x/Latitude', label: 'Latitude' },
+  ];
+
   console.log(`Total terms: ${getNumberOfTerms()}`);
-  addTerm('http://x/Observation', 'Observation');
+  addTerms(newTerms);
   console.log(`Total terms: ${getNumberOfTerms()}`);
 }

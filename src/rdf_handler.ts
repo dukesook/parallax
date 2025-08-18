@@ -21,10 +21,8 @@ function initTermRegistry(): void {
   // print length of subjects
   console.log(`rdf_handler: initTermRegistry() found ${subjects.size} subjects in the triple store`);
 
-  // log the set:
-  subjects.forEach((subject) => {
-    // console.log(`rdf_handler: initTermRegistry() subject: ${subject}`);
-  });
+  // query for each rdfs:label
+  RDFLibWrapper.queryLabels();
 }
 
 async function initStore(): Promise<void> {
@@ -38,23 +36,14 @@ async function initStore(): Promise<void> {
   RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime);
 }
 
-export function addObject(objectType: string): void {
-  // TODO:
-  // first, add a mapping bewteen object strings and their IRIs.
-}
+export function addObservation(observedThing: string, lat: number, lng: number): void {
+  console.log(`Adding observation for observed: ${observedThing}, lat: ${lat}, lng: ${lng}`);
 
-// Warning - addObseration should accept the IRI of the features of interest.
-//         - If it doesn't exist, then addObject should create it first.
-//         - SRP - addObservation should only handle obseration data, not object creation.
-export function addObservation(object: string, lat: number, lng: number): void {
-  console.log(`Adding observation for object: ${object}, lat: ${lat}, lng: ${lng}`);
-
+  const observedThingIri = TermRegistry.getIRI(observedThing);
+  console.log(`Observed Thing IRI: ${observedThingIri}`);
   // Create a unique identifier for the observation
-  const observationId = uuidv4();
-  console.log(`Generated observation ID: ${observationId}`);
-
-  // Add RDF data to the store
-  // RDFLibWrapper.
+  // const observationId = uuidv4();
+  // console.log(`Generated observation ID: ${observationId}`);
 }
 
 // ================== Debugging Functions ==================

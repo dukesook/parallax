@@ -34,7 +34,28 @@ export function getSubjects(): Set<string> {
   return subjects;
 }
 
-// ================== Debugging Functions ==================
+export function queryLabels(): void {
+  const query = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    SELECT ?subject ?label WHERE {
+      ?subject rdfs:label ?label .
+    }
+    `;
+
+  // Prepare the query object
+  const testMode = false;
+  const sparqlQuery = $rdf.SPARQLToQuery(query, testMode, g_triple_store);
+
+  // Execute the query
+  const results = g_triple_store.querySync(sparqlQuery);
+
+  // Output the results
+  results.forEach((binding: { [key: string]: $rdf.Term }) => {
+    const rdfs_label = binding['?label'];
+    console.log('label:', rdfs_label.value);
+  });
+}
+
 export function logStore(): void {
   const store = g_triple_store as IndexedFormula;
 

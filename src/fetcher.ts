@@ -5,6 +5,9 @@ import { join } from 'path';
 const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10/geo.json';
 // const bfoPath = '/parallax/rdf/bfo.owl';
 const bfoPath = 'https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/heads/master/src/owl/bfo-core.ttl';
+
+// TODO: Use a subset:
+//    - https://github.com/EnvironmentOntology/envo/tree/master/subsets
 // const envoOntologyUrl = 'http://purl.obolibrary.org/obo/envo.owl';
 const envoOntologyPath = '/parallax/rdf/envo.owl';
 

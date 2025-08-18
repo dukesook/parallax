@@ -5,7 +5,8 @@ import { join } from 'path';
 const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10/geo.json';
 // const bfoPath = '/parallax/rdf/bfo.owl';
 const bfoPath = 'https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/heads/master/src/owl/bfo-core.ttl';
-const envoOntologyUrl = 'https://raw.githubusercontent.com/EnvironmentOntology/envo/master/subsets/envo-basic.obo';
+// const envoOntologyUrl = 'http://purl.obolibrary.org/obo/envo.owl';
+const envoOntologyPath = '/parallax/rdf/envo.owl';
 
 export type RdfFile = {
   rdf: string;
@@ -33,9 +34,9 @@ export async function fetchBFO(): Promise<RdfFile> {
 
 export async function fetchEnvoOntology(): Promise<RdfFile> {
   const envoOntology = {
-    rdf: await fetchFile(envoOntologyUrl),
-    base: 'http://environmentontology.org/obo/envo.owl',
-    mime: 'text/turtle',
+    rdf: await fetchFile(envoOntologyPath),
+    base: 'http://purl.obolibrary.org/obo/envo.owl',
+    mime: 'application/rdf+xml',
   };
   return envoOntology;
 }

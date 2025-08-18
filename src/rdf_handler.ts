@@ -35,7 +35,7 @@ async function initStore(): Promise<void> {
   RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime);
 
   const envoOntology = await Fetcher.fetchEnvoOntology();
-  console.log(envoOntology);
+  RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime);
 }
 
 export function addObject(objectType: string): void {

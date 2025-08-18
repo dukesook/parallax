@@ -72,16 +72,10 @@ Useful links:
   3. Data Model - https://rdf.js.org/data-model-spec/
 
 
-***** Statement Class *****
-export default class Statement<
-    S extends SubjectType = SubjectType,
-    P extends PredicateType = PredicateType,
-    O extends ObjectType = ObjectType,
-    G extends GraphType = GraphType
-  >
-  implements Quad<S, P, O, G | DefaultGraph> {
+
 
 ***** rdflib: types.ts *****
+Statement = Triple or Quad
 export type SubjectType   = RDFlibBlankNode | RDFlibNamedNode | RDFlibVariable
 export type PredicateType = RDFlibNamedNode | RDFlibVariable
 export type ObjectType    = RDFlibNamedNode | RDFlibLiteral | Collection | RDFlibBlankNode | RDFlibVariable | Empty

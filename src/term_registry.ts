@@ -1,7 +1,10 @@
 import { BiMap } from '@rimbu/bimap';
 
+type Iri = string;
+type Label = string;
+
 // prettier-ignore
-let g_bimap = BiMap.of<string, string>(
+let g_bimap = BiMap.of<Iri, Label>(
   ['http://x/Person', 'Person'],
   ['http://x/Name', 'Name'],
 );

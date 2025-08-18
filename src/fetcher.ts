@@ -5,6 +5,7 @@ import { join } from 'path';
 const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10/geo.json';
 // const bfoPath = '/parallax/rdf/bfo.owl';
 const bfoPath = 'https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/heads/master/src/owl/bfo-core.ttl';
+const envoOntologyUrl = 'https://raw.githubusercontent.com/EnvironmentOntology/envo/master/subsets/envo-basic.obo';
 
 export type RdfFile = {
   rdf: string;
@@ -28,6 +29,15 @@ export async function fetchBFO(): Promise<RdfFile> {
     mime: 'text/turtle',
   };
   return bfo;
+}
+
+export async function fetchEnvoOntology(): Promise<RdfFile> {
+  const envoOntology = {
+    rdf: await fetchFile(envoOntologyUrl),
+    base: 'http://environmentontology.org/obo/envo.owl',
+    mime: 'text/turtle',
+  };
+  return envoOntology;
 }
 
 export async function logEachFile(): Promise<void> {

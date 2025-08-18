@@ -33,10 +33,10 @@ async function initStore(): Promise<void> {
 
   const geoSparql = await Fetcher.fetchGeoSparql();
   RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime);
-}
 
-// Work in progress:
-// Map strings to their IRIs
+  const envoOntology = await Fetcher.fetchEnvoOntology();
+  console.log(envoOntology);
+}
 
 export function addObject(objectType: string): void {
   // TODO:

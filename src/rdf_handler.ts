@@ -32,7 +32,7 @@ async function initStore(): Promise<void> {
   const geoSparql = await Fetcher.fetchGeoSparql();
   RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime);
 
-  const envoOntology = await Fetcher.fetchEnvoOntology();
+  const envoOntology = await Fetcher.fetchEnvoBasicXml();
   RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime);
 }
 

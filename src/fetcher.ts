@@ -9,6 +9,8 @@ const bfoPath = 'https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/he
 // TODO: Use a subset:
 //    - https://github.com/EnvironmentOntology/envo/tree/master/subsets
 // const envoOntologyUrl = 'http://purl.obolibrary.org/obo/envo.owl';
+const envoBasicJSON = 'https://raw.githubusercontent.com/EnvironmentOntology/envo/refs/heads/master/subsets/envo-basic.json';
+const envoBasicXml = 'https://raw.githubusercontent.com/EnvironmentOntology/envo/refs/heads/master/subsets/envo-basic.owl';
 const envoOntologyPath = '/parallax/rdf/envo.owl';
 
 export type RdfFile = {
@@ -35,11 +37,21 @@ export async function fetchBFO(): Promise<RdfFile> {
   return bfo;
 }
 
-export async function fetchEnvoOntology(): Promise<RdfFile> {
+export async function fetchEnvoBasicXml(): Promise<RdfFile> {
   const envoOntology = {
-    rdf: await fetchFile(envoOntologyPath),
-    base: 'http://purl.obolibrary.org/obo/envo.owl',
+    rdf: await fetchFile(envoBasicXml),
+    base: 'http://purl.obolibrary.org/obo/subsets/envo-basic.owl',
     mime: 'application/rdf+xml',
+  };
+  return envoOntology;
+}
+
+// Warning - JSON uses ldl instead of rdfs:label
+async function fetchBasicEnvoJSON(): Promise<RdfFile> {
+  const envoOntology = {
+    rdf: await fetchFile(envoBasicJSON),
+    base: 'http://purl.obolibrary.org/obo/subsets/envo-basic.owl',
+    mime: 'application/ld+json',
   };
   return envoOntology;
 }

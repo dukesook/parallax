@@ -2,10 +2,15 @@ import * as $rdf from 'rdflib';
 import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
 import { DataFactory } from 'rdflib';
+import { Iri, Label } from '../aliases';
 
 const g_triple_store = new $rdf.Store();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
+
+type SparqlBinding = { [selectVariable: string]: $rdf.Term };
+// A SPARQL binding refers to a row in the query result.
+// A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
 
 export async function addRDFToStore(rdfData: string, baseIRI: string, contentType: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -34,7 +39,8 @@ export function getSubjects(): Set<string> {
   return subjects;
 }
 
-export function queryLabels(): void {
+// return an object of { subject: Iri, label: Label } for each rdfs:label
+export function queryLabels(): { [key: Iri]: Label } {
   const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     SELECT ?subject ?label WHERE {
@@ -47,13 +53,16 @@ export function queryLabels(): void {
   const sparqlQuery = $rdf.SPARQLToQuery(query, testMode, g_triple_store);
 
   // Execute the query
-  const results = g_triple_store.querySync(sparqlQuery);
+  const bindings: SparqlBinding[] = g_triple_store.querySync(sparqlQuery);
 
-  // Output the results
-  results.forEach((binding: { [key: string]: $rdf.Term }) => {
-    const rdfs_label = binding['?label'];
-    console.log('label:', rdfs_label.value);
+  const results: { [key: Iri]: Label } = {};
+  bindings.forEach((binding: SparqlBinding) => {
+    const label = binding['?label'].value as Label;
+    const subject = binding['?subject'].value as Iri;
+    results[subject] = label;
   });
+
+  return results;
 }
 
 export function logStore(): void {
@@ -82,7 +91,7 @@ export function debug(): void {
   g_triple_store.add(subject, predicate, object);
   console.log('Added triple to store');
 
-  logStore(g_triple_store);
+  logStore();
 }
 
 // ================== RDFLib API ==================

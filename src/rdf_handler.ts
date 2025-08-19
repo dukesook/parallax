@@ -22,7 +22,13 @@ function initTermRegistry(): void {
   console.log(`rdf_handler: initTermRegistry() found ${subjects.size} subjects in the triple store`);
 
   // query for each rdfs:label
-  RDFLibWrapper.queryLabels();
+  const results = RDFLibWrapper.queryLabels();
+  console.log(results);
+
+  // TODO: add results to TermRegistry
+  // .....
+  // .....
+  // .....
 }
 
 async function initStore(): Promise<void> {

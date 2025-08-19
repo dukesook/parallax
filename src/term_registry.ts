@@ -1,7 +1,5 @@
 import { BiMap } from '@rimbu/bimap';
-
-type Iri = string;
-type Label = string;
+import { Iri, Label } from './aliases';
 
 // prettier-ignore
 let g_bimap = BiMap.of<Iri, Label>();

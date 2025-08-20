@@ -36,7 +36,7 @@ describe('term_registry', () => {
   });
 
   it('addTerms adds multiple mappings at once', () => {
-    Registry.addTerms([
+    Registry.addTermsArray([
       { iri: 'iri:person', label: 'Person' },
       { iri: 'iri:name', label: 'Name' },
       { iri: 'iri:title', label: 'Title' },
@@ -51,7 +51,7 @@ describe('term_registry', () => {
     Registry.addTerm('iri:person', 'Person');
 
     expect(() =>
-      Registry.addTerms([
+      Registry.addTermsArray([
         { iri: 'iri:person', label: 'Human' }, // conflicts on IRI
         { iri: 'iri:name', label: 'Name' },
       ])
@@ -63,7 +63,7 @@ describe('term_registry', () => {
   });
 
   it('addTerms: duplicates within the same batch are allowed by current implementation (last write wins)', () => {
-    Registry.addTerms([
+    Registry.addTermsArray([
       { iri: 'iri:a', label: 'X' },
       { iri: 'iri:b', label: 'X' }, // same label in the same batch
     ]);

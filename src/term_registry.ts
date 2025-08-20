@@ -15,19 +15,29 @@ export function addTerm(iri: string, label: string): void {
   g_bimap = g_bimap.set(iri, label);
 }
 
-export function addTerms(terms: Array<{ iri: Iri; label: Label }>): void {
-  terms.forEach(({ iri, label }) => {
+export function addTerms(terms: { [key: Iri]: Label }): void {
+  Object.entries(terms).forEach(([iri, label]) => {
     if (g_bimap.hasKey(iri) || g_bimap.hasValue(label)) {
       throw new Error(`Term already exists: ${iri} or ${label}`);
     }
   });
 
   const builder = g_bimap.toBuilder();
-
-  terms.forEach(({ iri, label }) => {
+  Object.entries(terms).forEach(([iri, label]) => {
     builder.set(iri, label);
   });
   g_bimap = builder.build();
+}
+
+export function addTermsArray(terms: Array<{ iri: Iri; label: Label }>): void {
+  // Convert array into object
+  const obj: { [key: Iri]: Label } = {};
+  terms.forEach(({ iri, label }) => {
+    obj[iri] = label;
+  });
+
+  // Delegate to addTerms
+  addTerms(obj);
 }
 
 export function getIRI(label: string): string {

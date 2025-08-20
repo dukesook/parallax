@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
+import { Iri, Label } from './aliases';
 
 export async function init(): Promise<void> {
   initStore()
@@ -22,7 +23,7 @@ function initTermRegistry(): void {
   console.log(`rdf_handler: initTermRegistry() found ${subjects.size} subjects in the triple store`);
 
   // query for each rdfs:label
-  const results = RDFLibWrapper.queryLabels();
+  const results: { [key: Iri]: Label } = RDFLibWrapper.queryLabels();
   console.log(results);
 
   // TODO: add results to TermRegistry

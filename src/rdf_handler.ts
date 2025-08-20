@@ -26,10 +26,8 @@ function initTermRegistry(): void {
   const results: { [key: Iri]: Label } = RDFLibWrapper.queryLabels();
   console.log(results);
 
-  // TODO: add results to TermRegistry
-  // .....
-  // .....
-  // .....
+  TermRegistry.addTerms(results);
+  console.log('TermRegistry Number of Terms:', TermRegistry.getNumberOfTerms());
 }
 
 async function initStore(): Promise<void> {

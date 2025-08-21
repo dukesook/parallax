@@ -2,11 +2,11 @@
 const messageDiv = getElement('message') as HTMLElement;
 const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
 const knowledgeGraphTab = getElement('knowledge-graph-tab') as HTMLElement;
-const tab3Tab = getElement('tab3-tab') as HTMLElement;
+const termRegistryTab = getElement('term-registry-tab') as HTMLElement;
 
 const googleMapsContent = getElement('google-maps-content') as HTMLElement;
 const knowledgeGraphContent = getElement('knowledge-graph-content') as HTMLElement;
-const tab3Content = getElement('tab3-content') as HTMLElement;
+const termRegistryContent = getElement('term-registry-content') as HTMLElement;
 
 let g_currentTab = googleMapsTab;
 
@@ -101,12 +101,13 @@ export async function initGui(): Promise<void> {
   // Tabs
   googleMapsTab.addEventListener('click', () => activateTab(googleMapsTab));
   knowledgeGraphTab.addEventListener('click', () => activateTab(knowledgeGraphTab));
-  tab3Tab.addEventListener('click', () => activateTab(tab3Tab));
+  termRegistryTab.addEventListener('click', () => activateTab(termRegistryTab));
 
   // Tab Content
-  await loadHTMLIntoElement('/parallax/src/html/tab3.html', tab3Content);
+  await loadHTMLIntoElement('/parallax/src/html/tab3.html', termRegistryContent);
   await loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
   await loadHTMLIntoElement('/parallax/src/html/graph.html', knowledgeGraphContent);
+  await loadHTMLIntoElement('/parallax/src/html/term_registry.html', termRegistryContent);
 }
 
 function activateTab(tab: HTMLElement): void {

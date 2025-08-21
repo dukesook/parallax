@@ -15,6 +15,10 @@ export async function init(): Promise<void> {
     .then(initTermRegistry);
 }
 
+export function getTerms(): string[] {
+  return TermRegistry.getTerms();
+}
+
 function initTermRegistry(): void {
   // `todo - autogenerate terms from Local Triple Store`
   const subjects: Set<String> = RDFLibWrapper.getSubjects();

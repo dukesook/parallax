@@ -14,20 +14,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Document is ready');
 
   // Init GUI
+  // Init RDF Handler
+  RdfHandler.init();
+
   Gui.initGui().then(() => {
     const gmapElement = Gui.getGmapElement();
     GMaps.loadGoogleMapsScript(gmapElement);
-    Gui.onSave(onAddObservation);
-
-    Gui.onShowObservations(showObservations);
-
-    Gui.onDownloadRdf(downloadRdf);
 
     GraphTab.init();
-  });
 
-  // Init RDF Handler
-  RdfHandler.init();
+    // Listeners
+    Gui.onSave(onAddObservation);
+    Gui.onShowObservations(showObservations);
+    Gui.onDownloadRdf(downloadRdf);
+  });
 
   GMaps.addMapListener(onclickMap);
 });

@@ -1,7 +1,6 @@
 import { BiMap } from '@rimbu/bimap';
 import { Iri, Label } from './aliases';
 
-// prettier-ignore
 let g_bimap = BiMap.of<Iri, Label>();
 
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608
@@ -58,6 +57,10 @@ export function getLabel(iri: string): string {
 
 export function getNumberOfTerms(): number {
   return g_bimap.size;
+}
+
+export function getTerms(): Label[] {
+  return Array.from(g_bimap.values());
 }
 
 export function clear(): void {

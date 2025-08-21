@@ -86,7 +86,8 @@ async function loadHTMLIntoElement(url: string, container: HTMLElement): Promise
   }
 }
 
-function getElement(id: string): HTMLElement {
+//TODO: prevent non-gui modules from importing this function
+export function getElement(id: string): HTMLElement {
   const element = document.getElementById(id);
   if (!element) {
     throw new Error(`Element with id ${id} not found`);

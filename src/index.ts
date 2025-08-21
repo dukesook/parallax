@@ -1,8 +1,7 @@
 import * as GMaps from './use_gmaps';
 import * as RdfHandler from './rdf_handler';
 import * as Gui from './gui';
-import * as GraphTab from './graph';
-import { log } from 'console';
+import * as GraphTab from './graph_tab';
 
 const debugButton = document.getElementById('debug-button');
 const logStoreButton = document.getElementById('log-store-button');
@@ -22,6 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     GMaps.loadGoogleMapsScript(gmapElement);
 
     GraphTab.init();
+    GraphTab.onListTriplesButton(() => {
+      console.log('todo! list triples');
+    });
 
     // Listeners
     Gui.onSave(onAddObservation);

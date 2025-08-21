@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
-import { Iri, Label } from './aliases';
+import { Iri, Label, Triple } from './aliases';
 
 export async function init(): Promise<void> {
   initStore()
@@ -48,6 +48,10 @@ async function initStore(): Promise<void> {
 export function addObservableEntity(): void {
   // An object is a thing that can be observed, like a boat, airplane, or car.
   // NOT TO BE CONFUSED WITH A TRIPLE STORE OBJECT
+}
+
+export function getTriples(): Triple[] {
+  return RDFLibWrapper.getTriples();
 }
 
 // Warning: addObservation should not create observable objects.

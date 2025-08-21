@@ -20,9 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const gmapElement = Gui.getGmapElement();
     GMaps.loadGoogleMapsScript(gmapElement);
 
-    GraphTab.init();
-    GraphTab.onListTriplesButton(() => {
-      console.log('todo! list triples');
+    GraphTab.init().then(() => {
+      GraphTab.onListTriplesButton(showTriples);
     });
 
     // Listeners
@@ -62,6 +61,19 @@ function onAddObservation(): void {
 
 function downloadRdf(): void {
   console.log('downloadRdf()');
+}
+
+function showTriples(): void {
+  // Get Triples
+  const triples = RdfHandler.getTriples();
+  console.log('Triples:', triples);
+
+  // Display Triples
+  // ...
+  // ...
+  // ...
+  // ...
+  // ...
 }
 
 function showObservations(): void {

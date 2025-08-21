@@ -3,6 +3,7 @@ import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
 import { DataFactory } from 'rdflib';
 import { Iri, Label } from '../aliases';
+import { Triple } from '../aliases';
 
 const g_triple_store = new $rdf.Store();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
@@ -39,6 +40,26 @@ export function getSubjects(): Set<string> {
   return subjects;
 }
 
+export function getTriples(): Triple[] {
+  const triples: Triple[] = [];
+
+  for (const statement of g_triple_store.statements) {
+    // Skip statements with blank nodes
+    if (containsBlankNode(statement)) {
+      continue;
+    }
+
+    const subject = statement.subject.value;
+    const predicate = statement.predicate.value;
+    const object = statement.object.value;
+
+    const triple: Triple = { subject, predicate, object };
+    triples.push(triple);
+  }
+
+  return triples;
+}
+
 // return an object of { subject: Iri, label: Label } for each rdfs:label
 export function queryLabels(): { [key: Iri]: Label } {
   const query = `
@@ -65,6 +86,19 @@ export function queryLabels(): { [key: Iri]: Label } {
   return results;
 }
 
+// =================== Private Functions ===================
+function containsBlankNode(statement: Statement): boolean {
+  //prettier-ignore
+  if (statement.subject.termType === 'BlankNode' ||
+      statement.predicate.termType === 'BlankNode' ||
+      statement.object.termType === 'BlankNode') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// =================== Debugging and Logging ===================
 export function logStore(): void {
   const store = g_triple_store as IndexedFormula;
 

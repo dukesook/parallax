@@ -104,7 +104,6 @@ export async function initGui(): Promise<void> {
   termRegistryTab.addEventListener('click', () => activateTab(termRegistryTab));
 
   // Tab Content
-  await loadHTMLIntoElement('/parallax/src/html/tab3.html', termRegistryContent);
   await loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
   await loadHTMLIntoElement('/parallax/src/html/graph.html', knowledgeGraphContent);
   await loadHTMLIntoElement('/parallax/src/html/term_registry.html', termRegistryContent);

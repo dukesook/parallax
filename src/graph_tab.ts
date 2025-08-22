@@ -19,4 +19,30 @@ export function displayTriples(triples: Triple[]): void {
   table.innerHTML = 'testing';
 
   // Create table header
+  // Print first 10 triples
+  for (let i = 0; i < Math.min(triples.length, 100); i++) {
+    // for (let i = 0; i < triples.length; i++) {
+    const triple = triples[i];
+    const row = table.insertRow();
+    const subjectCell = row.insertCell();
+    const predicateCell = row.insertCell();
+    const objectCell = row.insertCell();
+
+    subjectCell.textContent = triple.subject;
+    predicateCell.textContent = triple.predicate;
+    objectCell.textContent = triple.object;
+
+    table.appendChild(row);
+  }
+
+  // triples.forEach((triple) => {
+  //   const row = table.insertRow();
+  //   const subjectCell = row.insertCell();
+  //   const predicateCell = row.insertCell();
+  //   const objectCell = row.insertCell();
+
+  //   subjectCell.textContent = triple.subject;
+  //   predicateCell.textContent = triple.predicate;
+  //   objectCell.textContent = triple.object;
+  // });
 }

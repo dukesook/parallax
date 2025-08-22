@@ -1,3 +1,6 @@
+import { Triple } from './aliases';
+import * as GraphTab from './graph_tab';
+
 // HTML Elements - index.html
 const messageDiv = getElement('message') as HTMLElement;
 const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
@@ -25,6 +28,10 @@ export function displayLatLng(lat: number, lng: number): void {
 
 export function displayMessage(message: string): void {
   messageDiv.innerHTML = message;
+}
+
+export function displayTriples(triples: Triple[]): void {
+  GraphTab.displayTriples(triples);
 }
 
 export function getLatLng(): { lat: number; lng: number } {

@@ -2,6 +2,7 @@ import * as GMaps from './use_gmaps';
 import * as RdfHandler from './rdf_handler';
 import * as Gui from './gui';
 import * as GraphTab from './graph_tab';
+import { Triple } from './aliases';
 
 const debugButton = document.getElementById('debug-button');
 const logStoreButton = document.getElementById('log-store-button');
@@ -65,15 +66,11 @@ function downloadRdf(): void {
 
 function showTriples(): void {
   // Get Triples
-  const triples = RdfHandler.getTriples();
+  const triples: Triple[] = RdfHandler.getTriples();
   console.log('Triples:', triples);
 
   // Display Triples
-  // ...
-  // ...
-  // ...
-  // ...
-  // ...
+  Gui.displayTriples(triples);
 }
 
 function showObservations(): void {

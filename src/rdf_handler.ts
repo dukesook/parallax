@@ -51,7 +51,18 @@ export function addObservableEntity(): void {
 }
 
 export function getTriples(): Triple[] {
-  return RDFLibWrapper.getTriples();
+  const triples: Triple[] = RDFLibWrapper.getTriples();
+
+  // TODO: Replace IRIs with labels where possible
+  for (const triple of triples) {
+    try {
+      const subjectLabel = TermRegistry.getLabel(triple.subject);
+      triple.subject = subjectLabel;
+      console.log('Replaced IRI:', triple.subject, 'with label:', subjectLabel);
+    } catch (error) {}
+  }
+
+  return triples;
 }
 
 // Warning: addObservation should not create observable objects.

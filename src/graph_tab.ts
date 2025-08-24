@@ -20,7 +20,7 @@ export function displayTriples(triples: Triple[]): void {
 
   // Create table header
   // Print first 10 triples
-  for (let i = 0; i < Math.min(triples.length, 100); i++) {
+  for (let i = 0; i < Math.min(triples.length, 1000); i++) {
     // for (let i = 0; i < triples.length; i++) {
     const triple = triples[i];
     const row = table.insertRow();

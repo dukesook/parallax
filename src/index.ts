@@ -11,8 +11,6 @@ debugButton?.addEventListener('click', debug);
 logStoreButton?.addEventListener('click', logStore);
 
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('Document is ready');
-
   // Init GUI
   // Init RDF Handler
   RdfHandler.init();
@@ -26,9 +24,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Listeners
-    Gui.onSave(onAddObservation);
-    Gui.onShowObservations(showObservations);
-    Gui.onDownloadRdf(downloadRdf);
+    Gui.onSaveButton(onAddObservation);
+    Gui.onShowObservationsButton(showObservations);
+    Gui.onDownloadRdfButton(downloadRdf);
+    Gui.onDisplayTermRegistryButton(displayTermRegistry);
   });
 
   GMaps.addMapListener(onclickMap);
@@ -46,6 +45,11 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
     };
     GMaps.moveCurrentMarker(latLngLiteral);
   }
+}
+
+function displayTermRegistry(): void {
+  const terms: string[] = RdfHandler.getTerms();
+  Gui.displayTermRegistry(terms);
 }
 
 function onAddObservation(): void {

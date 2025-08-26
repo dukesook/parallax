@@ -7,7 +7,7 @@ import { Iri, Label, Triple } from './aliases';
 export async function init(): Promise<void> {
   initStore()
     .then(() => {
-      console.log('rdf_handler: initStore() completed');
+      //
     })
     .catch((err) => {
       console.error('rdf_handler: initStore() failed', err);

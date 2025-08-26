@@ -1,5 +1,6 @@
 import { Triple } from './aliases';
 import * as GraphTab from './graph_tab';
+import * as TermRegistryGui from './term_registry_gui';
 
 // HTML Elements - index.html
 const messageDiv = getElement('message') as HTMLElement;
@@ -34,6 +35,14 @@ export function displayTriples(triples: Triple[]): void {
   GraphTab.displayTriples(triples);
 }
 
+export function displayTermRegistry(terms: string[]): void {
+  TermRegistryGui.displayTerms(terms);
+}
+
+export function onDisplayTermRegistryButton(callback: () => void): void {
+  TermRegistryGui.onShowTermRegistryButton(callback);
+}
+
 export function getLatLng(): { lat: number; lng: number } {
   const latInput = getElement('lat') as HTMLInputElement;
   const lngInput = getElement('lng') as HTMLInputElement;
@@ -54,17 +63,17 @@ export function getSelectedObject(): string {
   return selectedObject;
 }
 
-export function onSave(callback: () => void): void {
+export function onSaveButton(callback: () => void): void {
   const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
   addObservationButton.addEventListener('click', callback);
 }
 
-export function onShowObservations(callback: () => void): void {
+export function onShowObservationsButton(callback: () => void): void {
   const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
   showObservationsButton.addEventListener('click', callback);
 }
 
-export function onDownloadRdf(callback: () => void): void {
+export function onDownloadRdfButton(callback: () => void): void {
   const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
   downloadRdfButton.addEventListener('click', callback);
 }

@@ -59,7 +59,7 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
 
 These links can be loaded directly into GraphDB:
 
-- BFO: https://raw.githubusercontent.com/BFO-ontology/BFO-2020/master/src/owl/bfo-core.owl
+- BFO: https://raw.githubusercontent.com/BFO-ontology/BFO-2020/refs/heads/master/21838-2/owl/bfo-core.owl
   - XML Syntax Error: ~~http://purl.obolibrary.org/obo/bfo.owl~~
 - ENVO: https://raw.githubusercontent.com/EnvironmentOntology/envo/master/subsets/envo-basic.obo
   - XML Syntax Error: ~~http://purl.obolibrary.org/obo/envo.owl~~
@@ -72,3 +72,9 @@ These links can be loaded directly into GraphDB:
   - Stands for `Sensor, Observation, Sample, and Actuator`
   - SNN (Semantic Sensor Network) is built on top of SOSA
   - sosa:Observation, sosa:Sensor, sosa:Actuator, sosa:Platform
+
+## Eye on the Prize
+
+- Display Term Registry
+- Explore Knowlegdge Graph
+  - d

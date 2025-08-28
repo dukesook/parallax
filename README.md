@@ -75,6 +75,9 @@ These links can be loaded directly into GraphDB:
 
 ## Eye on the Prize
 
+- Foundation
+  - Divide Store into graphs.
+  - Use one graph per ontology.
 - Display Term Registry
 - Explore Knowlegdge Graph
   - d

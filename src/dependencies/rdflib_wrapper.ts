@@ -1,11 +1,12 @@
 import * as $rdf from 'rdflib';
+import { Store } from 'rdflib';
 import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
 import { DataFactory } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
 
-const g_triple_store = new $rdf.Store();
+const g_triple_store = new Store();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 

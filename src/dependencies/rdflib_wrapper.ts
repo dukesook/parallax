@@ -6,7 +6,7 @@ import { DataFactory } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
 
-const g_triple_store = new Store();
+const g_triple_store: IndexedFormula = new Store();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 
@@ -14,11 +14,21 @@ type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SPARQL binding refers to a row in the query result.
 // A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
 
-export async function addRDFToStore(rdfData: string, baseIRI: string, contentType: string): Promise<void> {
+export async function addRDFToStore(rdfData: string, baseIRI: string, contentType: string, graphIRI: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    $rdf.parse(rdfData, g_triple_store, baseIRI, contentType, (err: Error | undefined) => {
-      if (err) reject(err);
-      else resolve();
+    const tempStore = $rdf.graph(); // Temporary store to parse into
+
+    $rdf.parse(rdfData, tempStore, baseIRI, contentType, (err: Error | undefined) => {
+      if (err) return reject(err);
+
+      const graphSym = $rdf.sym(graphIRI);
+
+      // Transfer each triple from the temp store into the main store with the desired graph
+      tempStore.statements.forEach((statement: Statement) => {
+        g_triple_store.add(statement.subject, statement.predicate, statement.object, graphSym);
+      });
+
+      resolve();
     });
   });
 }

@@ -1,7 +1,12 @@
 import { BiMap } from '@rimbu/bimap';
 import { Iri, Label } from './aliases';
 
-let g_bimap = BiMap.of<Iri, Label>();
+// prettier-ignore
+let g_bimap = BiMap.of<Iri, Label>(
+    ['https://github.com/BFO-ontology/BFO', 'bfoGraph'],
+    ['https://github.com/EnvironmentOntology/envo', 'envoGraph'],
+    ['https://github.com/opengeospatial/ogc-geosparql', 'geoSparqlGraph'],
+);
 
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608
 // airplane = http://purl.obolibrary.org/obo/ENVO_03501349

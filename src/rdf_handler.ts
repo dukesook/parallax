@@ -36,13 +36,16 @@ function initTermRegistry(): void {
 
 async function initStore(): Promise<void> {
   const bfo = await Fetcher.fetchBFO();
-  RDFLibWrapper.addRDFToStore(bfo.rdf, bfo.base, bfo.mime, bfo.url);
+  const bfoGraphIRI = TermRegistry.getIRI('bfoGraph');
+  RDFLibWrapper.addRDFToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
-  RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparql.url);
+  const geoSparqlGraphIRI = TermRegistry.getIRI('geoSparqlGraph');
+  RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparqlGraphIRI);
 
   const envoOntology = await Fetcher.fetchEnvoBasicXml();
-  RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoOntology.url);
+  const envoGraphIRI = TermRegistry.getIRI('envoGraph');
+  RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
 }
 
 export function addObservableEntity(): void {

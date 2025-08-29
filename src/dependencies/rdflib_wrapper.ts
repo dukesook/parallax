@@ -1,7 +1,6 @@
 import * as $rdf from 'rdflib';
 import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
-import { DataFactory } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
 

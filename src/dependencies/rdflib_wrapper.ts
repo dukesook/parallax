@@ -7,6 +7,7 @@ import { Triple } from '../aliases';
 const g_triple_store: IndexedFormula = $rdf.graph();
 const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
+let g_named_graphs = new Set<string>();
 
 type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SPARQL binding refers to a row in the query result.
@@ -25,6 +26,9 @@ export async function addRDFToStore(rdfData: string, baseIRI: string, contentTyp
       tempStore.statements.forEach((statement: Statement) => {
         g_triple_store.add(statement.subject, statement.predicate, statement.object, graphSym);
       });
+
+      // Keep Track of named graphs
+      g_named_graphs.add(graphIRI);
 
       resolve();
     });

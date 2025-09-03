@@ -107,6 +107,10 @@ function containsBlankNode(statement: Statement): boolean {
   }
 }
 
+function getGraphName(statement: Statement): string | null {
+  return statement.why?.value ?? null;
+}
+
 // =================== Debugging and Logging ===================
 export function logStore(): void {
   const store = g_triple_store as IndexedFormula;

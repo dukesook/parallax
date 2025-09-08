@@ -4,6 +4,11 @@ import { Triple } from './aliases';
 // graph.ts
 export async function init() {}
 
+export function onListGraphsButton(callback: () => void): void {
+  const listGraphsButton = getElement('list-graphs-button') as HTMLButtonElement;
+  listGraphsButton.addEventListener('click', callback);
+}
+
 export function onListTriplesButton(callback: () => void): void {
   const listTriplesButton = getElement('list-triples-button') as HTMLButtonElement;
   listTriplesButton.addEventListener('click', callback);

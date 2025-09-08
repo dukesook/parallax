@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     GraphTab.init().then(() => {
       GraphTab.onListTriplesButton(showTriples);
+      GraphTab.onListGraphsButton(showGraphs);
     });
 
     // Listeners
@@ -75,6 +76,10 @@ function showTriples(): void {
 
   // Display Triples
   Gui.displayTriples(triples);
+}
+
+function showGraphs(): void {
+  console.log('TODO: showGraphs()');
 }
 
 function showObservations(): void {

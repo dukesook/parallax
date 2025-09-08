@@ -1,5 +1,5 @@
 import { Triple } from './aliases';
-import * as GraphTab from './graph_tab';
+import * as GraphTab from './graph_tab_gui';
 import * as TermRegistryGui from './term_registry_gui';
 
 // HTML Elements - index.html
@@ -122,7 +122,7 @@ export async function initGui(): Promise<void> {
 
   // Tab Content
   await loadHTMLIntoElement('/parallax/src/html/google_maps.html', googleMapsContent);
-  await loadHTMLIntoElement('/parallax/src/html/graph.html', knowledgeGraphContent);
+  await loadHTMLIntoElement('/parallax/src/html/graph_tab.html', knowledgeGraphContent);
   await loadHTMLIntoElement('/parallax/src/html/term_registry.html', termRegistryContent);
 }
 

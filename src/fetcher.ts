@@ -16,10 +16,11 @@ export type RdfFile = {
 };
 
 export async function fetchGeoSparql(): Promise<RdfFile> {
-  const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql10/geo.json';
+  const geoSparqlUrl = 'https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.json';
+  const localPath = '/parallax/rdf/geo.json';
   const geoSparql = {
     url: geoSparqlUrl,
-    rdf: await fetchFile(geoSparqlUrl),
+    rdf: await fetchFile(localPath),
     base: 'http://www.opengis.net/ont/geosparql/',
     mime: 'application/ld+json',
   };

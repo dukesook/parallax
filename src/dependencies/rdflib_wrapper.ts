@@ -35,8 +35,8 @@ export async function addRDFToStore(rdfData: string, baseIRI: string, contentTyp
   });
 }
 
-export function getGraphs(): Set<string> {
-  return g_named_graphs;
+export function getGraphs(): string[] {
+  return Array.from(g_named_graphs);
 }
 
 export function getSubjects(): Set<string> {

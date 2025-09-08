@@ -80,10 +80,7 @@ function showTriples(): void {
 
 function showGraphs(): void {
   const graphs = RdfHandler.getGraphs();
-
-  console.log('Graphs:', graphs);
-
-  //TODO: display graphs in GUI
+  GraphTab.displayList(graphs);
 }
 
 function showObservations(): void {

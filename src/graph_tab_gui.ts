@@ -51,3 +51,13 @@ export function displayTriples(triples: Triple[]): void {
   //   objectCell.textContent = triple.object;
   // });
 }
+
+export function displayList(items: string[]): void {
+  const outputDiv = getElement('graph-output') as HTMLDivElement;
+  outputDiv.innerHTML = '';
+  items.forEach((item) => {
+    const p = document.createElement('p');
+    p.textContent = item;
+    outputDiv.appendChild(p);
+  });
+}

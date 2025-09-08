@@ -19,7 +19,7 @@ export function getTerms(): string[] {
   return TermRegistry.getTerms();
 }
 
-export function getGraphs(): Set<string> {
+export function getGraphs(): string[] {
   const graphs = RDFLibWrapper.getGraphs();
   return graphs;
 }

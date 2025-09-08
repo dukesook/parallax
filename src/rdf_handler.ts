@@ -19,6 +19,11 @@ export function getTerms(): string[] {
   return TermRegistry.getTerms();
 }
 
+export function getGraphs(): Set<string> {
+  const graphs = RDFLibWrapper.getGraphs();
+  return graphs;
+}
+
 function initTermRegistry(): void {
   // `todo - autogenerate terms from Local Triple Store`
   const subjects: Set<String> = RDFLibWrapper.getSubjects();
@@ -40,7 +45,6 @@ async function initStore(): Promise<void> {
   RDFLibWrapper.addRDFToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
-  console.log(geoSparql.rdf);
   const geoSparqlGraphIRI = TermRegistry.getIRI('geoSparqlGraph');
   RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparqlGraphIRI);
 

@@ -79,7 +79,11 @@ function showTriples(): void {
 }
 
 function showGraphs(): void {
-  console.log('TODO: showGraphs()');
+  const graphs = RdfHandler.getGraphs();
+
+  console.log('Graphs:', graphs);
+
+  //TODO: display graphs in GUI
 }
 
 function showObservations(): void {

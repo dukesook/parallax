@@ -3,9 +3,11 @@ import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
+import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 
 const g_triple_store: IndexedFormula = $rdf.graph();
-const PARALLAX = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
+const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
+const PARALLAX_NS = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 let g_named_graphs = new Set<string>();
 
@@ -33,6 +35,17 @@ export async function addRDFToStore(rdfData: string, baseIRI: string, contentTyp
       resolve();
     });
   });
+}
+
+export async function addObservableEntity(entityType: Iri): Promise<Iri> {
+  const observableEntity: Iri = PARALLAX_R(uuidv4());
+  const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+  g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
+  return observableEntity;
+}
+
+export async function addObservation(entity: Iri, lat: number, lng: number, date: Date): Promise<void> {
+  //
 }
 
 export function getGraphs(): string[] {
@@ -139,7 +152,7 @@ export function logStore(): void {
 export function debug(): void {
   // Add triple to store
   console.log('creating triple...');
-  const subject = PARALLAX('subject1');
+  const subject = PARALLAX_NS('subject1');
   const predicate = $rdf.sym('http://parallax.edu/ns/predicate1');
   const object = $rdf.literal('Object1');
 

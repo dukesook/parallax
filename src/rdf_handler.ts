@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
@@ -53,9 +52,9 @@ async function initStore(): Promise<void> {
   RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
 }
 
-export function addObservableEntity(): void {
-  // An object is a thing that can be observed, like a boat, airplane, or car.
-  // NOT TO BE CONFUSED WITH A TRIPLE STORE OBJECT
+export async function addObservableEntity(entityType: string): Promise<Iri> {
+  const iri = await RDFLibWrapper.addObservableEntity(entityType);
+  return iri;
 }
 
 export function getTriples(): Triple[] {
@@ -73,15 +72,8 @@ export function getTriples(): Triple[] {
   return triples;
 }
 
-// Warning: addObservation should not create observable objects.
-export function addObservation(observedThing: string, lat: number, lng: number): void {
-  console.log(`Adding observation for observed: ${observedThing}, lat: ${lat}, lng: ${lng}`);
-
-  const observedThingIri = TermRegistry.getIRI(observedThing);
-  console.log(`Observed Thing IRI: ${observedThingIri}`);
-  // Create a unique identifier for the observation
-  // const observationId = uuidv4();
-  // console.log(`Generated observation ID: ${observationId}`);
+export function addObservation(observedThing: Iri, lat: number, lng: number, date: Date): void {
+  RDFLibWrapper.addObservation(observedThing, lat, lng, date);
 }
 
 // ================== Debugging Functions ==================

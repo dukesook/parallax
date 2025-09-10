@@ -2,7 +2,7 @@ import * as GMaps from './use_gmaps';
 import * as RdfHandler from './rdf_handler';
 import * as Gui from './gui';
 import * as GraphTab from './graph_tab_gui';
-import { Triple } from './aliases';
+import { Triple, Iri } from './aliases';
 
 const debugButton = document.getElementById('debug-button');
 const logStoreButton = document.getElementById('log-store-button');
@@ -53,7 +53,7 @@ function displayTermRegistry(): void {
   Gui.displayTermRegistry(terms);
 }
 
-function onAddObservation(): void {
+async function onAddObservation(): Promise<void> {
   const selectedObject = Gui.getSelectedObject();
   const { lat, lng } = Gui.getLatLng();
   console.log(`Saving data for object: ${selectedObject}, lat: ${lat}, lng: ${lng}`);
@@ -61,8 +61,9 @@ function onAddObservation(): void {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  // TODO: add observation
-  RdfHandler.addObservation(selectedObject, lat, lng);
+  const objectIri = await RdfHandler.addObservableEntity(selectedObject);
+  const timestamp = new Date();
+  RdfHandler.addObservation(objectIri, lat, lng, timestamp);
 }
 
 function downloadRdf(): void {

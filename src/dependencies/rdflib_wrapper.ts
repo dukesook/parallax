@@ -9,7 +9,9 @@ const g_triple_store: IndexedFormula = $rdf.graph();
 const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
 const PARALLAX_NS = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
+const SOSA = $rdf.Namespace('http://www.w3.org/ns/sosa/');
 let g_named_graphs = new Set<string>();
+const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
 
 type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SPARQL binding refers to a row in the query result.
@@ -39,16 +41,15 @@ export async function addRDFToStore(rdfData: string, baseIRI: string, contentTyp
 
 export async function addObservableEntity(entityType: Iri): Promise<Iri> {
   const observableEntity: Iri = PARALLAX_R(uuidv4());
-  const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
   g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
   return observableEntity;
 }
 
 export async function addObservation(entity: Iri, lat: number, lng: number, date: Date): Promise<void> {
   const observation: Iri = PARALLAX_R(uuidv4());
-
-  // g_triple_store.add(observation);
-
+  const ObservationType = SOSA('Observation');
+  g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
+  // TODO: add lat, lng, date
   // g_triple_store.add();
 }
 

@@ -39,9 +39,10 @@ export async function fetchBFO(): Promise<RdfFile> {
 }
 
 export async function fetchSosa(): Promise<RdfFile> {
-  const sosaPath = 'https://raw.githubusercontent.com/w3c/sdw/refs/heads/gh-pages/ssn/integrated/sosa.ttl';
+  const sosaURL = 'https://raw.githubusercontent.com/w3c/sdw/refs/heads/gh-pages/ssn/integrated/sosa.ttl';
+  const sosaPath = '/parallax/rdf/sosa.ttl';
   const sosa = {
-    url: sosaPath,
+    url: sosaURL,
     rdf: await fetchFile(sosaPath),
     base: 'http://www.w3.org/ns/sosa/',
     mime: 'text/turtle',

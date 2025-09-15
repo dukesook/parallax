@@ -6,6 +6,7 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://github.com/BFO-ontology/BFO', 'bfoGraph'],
     ['https://github.com/EnvironmentOntology/envo', 'envoGraph'],
     ['https://github.com/opengeospatial/ogc-geosparql', 'geoSparqlGraph'],
+    ['https://www.w3.org/ns/sosa/', 'sosaGraph'],
 );
 
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608

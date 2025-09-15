@@ -38,6 +38,17 @@ export async function fetchBFO(): Promise<RdfFile> {
   return bfo;
 }
 
+export async function fetchSosa(): Promise<RdfFile> {
+  const sosaPath = 'https://raw.githubusercontent.com/w3c/sdw/refs/heads/gh-pages/ssn/integrated/sosa.ttl';
+  const sosa = {
+    url: sosaPath,
+    rdf: await fetchFile(sosaPath),
+    base: 'http://www.w3.org/ns/sosa/',
+    mime: 'text/turtle',
+  };
+  return sosa;
+}
+
 export async function fetchEnvoBasicXml(): Promise<RdfFile> {
   const envoBasicXml = 'https://raw.githubusercontent.com/EnvironmentOntology/envo/refs/heads/master/subsets/envo-basic.owl';
   const envoOntology = {

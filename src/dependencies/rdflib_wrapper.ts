@@ -45,7 +45,11 @@ export async function addObservableEntity(entityType: Iri): Promise<Iri> {
 }
 
 export async function addObservation(entity: Iri, lat: number, lng: number, date: Date): Promise<void> {
-  //
+  const observation: Iri = PARALLAX_R(uuidv4());
+
+  // g_triple_store.add(observation);
+
+  // g_triple_store.add();
 }
 
 export function getGraphs(): string[] {

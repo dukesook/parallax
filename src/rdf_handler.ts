@@ -50,6 +50,10 @@ async function initStore(): Promise<void> {
   const envoOntology = await Fetcher.fetchEnvoBasicXml();
   const envoGraphIRI = TermRegistry.getIRI('envoGraph');
   RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
+
+  const sosaOntology = await Fetcher.fetchSosa();
+  const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');
+  RDFLibWrapper.addRDFToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
 }
 
 export async function addObservableEntity(entityType: string): Promise<Iri> {
@@ -72,8 +76,8 @@ export function getTriples(): Triple[] {
   return triples;
 }
 
-export function addObservation(observedThing: Iri, lat: number, lng: number, date: Date): void {
-  RDFLibWrapper.addObservation(observedThing, lat, lng, date);
+export function addObservation(observedThing: Iri, lat: number, long: number, date: Date): void {
+  RDFLibWrapper.addObservation(observedThing, lat, long, date);
 }
 
 // ================== Debugging Functions ==================

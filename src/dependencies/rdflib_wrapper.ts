@@ -4,6 +4,7 @@ import { IndexedFormula } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
+import * as TermRegistry from '../term_registry';
 
 const g_triple_store: IndexedFormula = $rdf.graph();
 const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
@@ -50,8 +51,18 @@ export async function addObservation(entity: Iri, lat: number, lng: number, date
 }
 
 export function getGraphs(): string[] {
-  const graphs: Set<string> = getNamedGraphs(g_triple_store);
-  return Array.from(graphs);
+  const graphIris: Set<Iri> = getNamedGraphs(g_triple_store);
+  const graphNames: string[] = [];
+  graphIris.forEach((graph) => {
+    try {
+      const name = TermRegistry.getLabel(graph);
+      graphNames.push(name);
+    } catch (error) {
+      console.error('Graph IRI not found in TermRegistry:', graph);
+      graphNames.push(graph);
+    }
+  });
+  return graphNames;
 }
 
 export function getSubjects(): Set<string> {
@@ -134,8 +145,8 @@ function getGraphName(statement: Statement): string | null {
   return statement.why?.value ?? null;
 }
 
-function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<string> {
-  const graphNames = new Set<string>();
+function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
+  const graphNames = new Set<Iri>();
 
   for (const stmt of tripleStore.statementsMatching(undefined, undefined, undefined, undefined)) {
     const graphIRI = stmt.why?.value;

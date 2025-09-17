@@ -81,7 +81,7 @@ function showTriples(): void {
 
 function showGraphs(): void {
   const graphs = RdfHandler.getGraphs();
-  GraphTab.displayList(graphs);
+  GraphTab.displayGraphs(graphs);
 }
 
 function showObservations(): void {

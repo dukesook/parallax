@@ -61,3 +61,17 @@ export function displayList(items: string[]): void {
     outputDiv.appendChild(p);
   });
 }
+
+export function displayGraphs(graphs: string[]): void {
+  const outputDiv = getElement('graph-output') as HTMLDivElement;
+  outputDiv.innerHTML = '';
+  graphs.forEach((graph) => {
+    const p = document.createElement('p');
+    p.textContent = graph;
+    outputDiv.appendChild(p);
+
+    p.addEventListener('click', () => {
+      console.log('Graph clicked:', graph);
+    });
+  });
+}

@@ -10,7 +10,6 @@ const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
 const PARALLAX_NS = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 const SOSA = $rdf.Namespace('http://www.w3.org/ns/sosa/');
-let g_named_graphs = new Set<string>();
 const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
 
 type SparqlBinding = { [selectVariable: string]: $rdf.Term };
@@ -30,9 +29,6 @@ export async function addRDFToStore(rdfData: string, baseIRI: string, contentTyp
       tempStore.statements.forEach((statement: Statement) => {
         g_triple_store.add(statement.subject, statement.predicate, statement.object, graphSym);
       });
-
-      // Keep Track of named graphs
-      g_named_graphs.add(graphIRI);
 
       resolve();
     });
@@ -54,7 +50,8 @@ export async function addObservation(entity: Iri, lat: number, lng: number, date
 }
 
 export function getGraphs(): string[] {
-  return Array.from(g_named_graphs);
+  const graphs: Set<string> = getNamedGraphs(g_triple_store);
+  return Array.from(graphs);
 }
 
 export function getSubjects(): Set<string> {
@@ -135,6 +132,19 @@ function containsBlankNode(statement: Statement): boolean {
 
 function getGraphName(statement: Statement): string | null {
   return statement.why?.value ?? null;
+}
+
+function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<string> {
+  const graphNames = new Set<string>();
+
+  for (const stmt of tripleStore.statementsMatching(undefined, undefined, undefined, undefined)) {
+    const graphIRI = stmt.why?.value;
+    if (graphIRI) {
+      graphNames.add(graphIRI);
+    }
+  }
+
+  return graphNames;
 }
 
 // =================== Debugging and Logging ===================

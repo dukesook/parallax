@@ -2,6 +2,7 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
+import { Port } from './models';
 
 export async function init(): Promise<void> {
   initStore()
@@ -16,6 +17,9 @@ export async function init(): Promise<void> {
 
 const add = {
   ship(iri: Iri): void {
+    // todo
+  },
+  port(port: Port): void {
     // todo
   },
 };

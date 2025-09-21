@@ -1,5 +1,6 @@
 import * as RdfHandler from './rdf_handler';
 import { Iri } from './aliases';
+import { Port } from './models';
 
 let g_ships = [];
 
@@ -16,7 +17,7 @@ function generateShips() {
   const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
 
   // for loop to create 5 ships
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++) {
     RdfHandler.addObservableEntity(boat).then((iri: Iri) => {
       console.log('Generated Ship IRI:', iri);
       g_ships.push(iri);
@@ -26,7 +27,7 @@ function generateShips() {
 
 function generatePorts() {
   console.log('generatePorts()');
-  const ports = [
+  const ports: Port[] = [
     { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
     { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
     { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },

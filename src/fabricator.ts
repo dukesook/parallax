@@ -3,18 +3,25 @@ import { Iri } from './aliases';
 
 let g_ships = [];
 
-function generateData() {
+export function generateData() {
   generateShips();
   generatePorts();
   generateTrips();
+  RdfHandler.debug();
 }
 
 function generateShips() {
   console.log('generateShips()');
-  RdfHandler.addObservableEntity('Ship').then((iri: Iri) => {
-    console.log('Generated Ship IRI:', iri);
-    g_ships.push(iri);
-  });
+
+  const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
+
+  // for loop to create 5 ships
+  for (let i = 1; i <= 5; i++) {
+    RdfHandler.addObservableEntity(boat).then((iri: Iri) => {
+      console.log('Generated Ship IRI:', iri);
+      g_ships.push(iri);
+    });
+  }
 }
 
 function generatePorts() {

@@ -175,17 +175,48 @@ export function logStore(): void {
   });
 }
 
+function getParallaxTriples(): Triple[] {
+  const triples: Triple[] = [];
+  g_triple_store.statementsMatching(undefined, undefined, undefined, PARALLAX_GRAPH).forEach((statement: Statement) => {
+    const s = statement.subject.value;
+    const p = statement.predicate.value;
+    const o = statement.object.value;
+    triples.push({ subject: s, predicate: p, object: o });
+  });
+  return triples;
+}
+
+export function instanceDataToTurtle(): string {
+  const parallaxTriples = getParallaxTriples();
+  let turtle = '';
+
+  const subGraph: $rdf.IndexedFormula = $rdf.graph();
+  for (const triple of parallaxTriples) {
+    const subject = $rdf.sym(triple.subject);
+    const predicate = $rdf.sym(triple.predicate);
+    const object = $rdf.sym(triple.object);
+    subGraph.add(subject, predicate, object, PARALLAX_GRAPH);
+  }
+
+  $rdf.serialize(undefined, subGraph, PARALLAX_GRAPH.value, 'text/turtle', (err: Error, str: string) => {
+    if (err) {
+      console.error('Error serializing to Turtle:', err);
+    } else {
+      turtle = str || '';
+    }
+  });
+
+  return turtle;
+}
+
 export function debug(): void {
-  // Add triple to store
-  console.log('creating triple...');
-  const subject = PARALLAX_NS('subject1');
-  const predicate = $rdf.sym('http://parallax.edu/ns/predicate1');
-  const object = $rdf.literal('Object1');
-
-  g_triple_store.add(subject, predicate, object);
-  console.log('Added triple to store');
-
-  logStore();
+  // Get all triples from specified graph
+  g_triple_store.statementsMatching(undefined, undefined, undefined, PARALLAX_GRAPH).forEach((statement: Statement) => {
+    const s = statement.subject.value;
+    const p = statement.predicate.value;
+    const o = statement.object.value;
+    console.log(`PARALLAX_GRAPH Statement: ${s} ${p} ${o}`);
+  });
 }
 
 // ================== RDFLib API ==================

@@ -94,3 +94,21 @@ async function fetchFile(url: string): Promise<string> {
     throw error;
   }
 }
+
+export async function saveFile(data: string) {
+  // Ask user where to save
+  const handle = await (window as any).showSaveFilePicker({
+    suggestedName: 'output.txt',
+    types: [
+      {
+        description: 'Text file',
+        accept: { 'text/plain': ['.txt'] },
+      },
+    ],
+  });
+
+  // Create a writable stream
+  const writable = await handle.createWritable();
+  await writable.write(data);
+  await writable.close();
+}

@@ -14,6 +14,12 @@ export async function init(): Promise<void> {
     .then(initTermRegistry);
 }
 
+const add = {
+  ship(iri: Iri): void {
+    // todo
+  },
+};
+
 export function getTerms(): string[] {
   return TermRegistry.getTerms();
 }
@@ -88,5 +94,7 @@ export function logStore(): void {
 }
 
 export function debug(): void {
-  TermRegistry.debug();
+  const turtle = RDFLibWrapper.instanceDataToTurtle();
+  console.log(turtle);
+  Fetcher.saveFile(turtle);
 }

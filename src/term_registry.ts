@@ -13,6 +13,7 @@ let g_bimap = BiMap.of<Iri, Label>(
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608
 // airplane = http://purl.obolibrary.org/obo/ENVO_03501349
 // car  = http://purl.obolibrary.org/obo/ENVO_01000605
+// harbour = http://purl.obolibrary.org/obo/ENVO_00000463
 
 export function addTerm(iri: string, label: string): void {
   if (g_bimap.hasKey(iri) || g_bimap.hasValue(label)) {

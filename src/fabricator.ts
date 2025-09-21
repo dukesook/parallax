@@ -34,6 +34,10 @@ function generatePorts() {
     { port_id: 'P004', name: 'Port of Singapore', country: 'Singapore', latitude: 1.2644, longitude: 103.82 },
     { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
   ];
+
+  ports.forEach((port) => {
+    RdfHandler.add.port(port);
+  });
 }
 
 function generateTrips() {

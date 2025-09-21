@@ -15,12 +15,14 @@ export async function init(): Promise<void> {
     .then(initTermRegistry);
 }
 
-const add = {
+export const add = {
   ship(iri: Iri): void {
     // todo
   },
-  port(port: Port): void {
+  async port(port: Port) {
     // todo
+    const harbourType: Iri = TermRegistry.getIRI('harbour');
+    const harbour: Iri = await addObservableEntity(harbourType);
   },
 };
 

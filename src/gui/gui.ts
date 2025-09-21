@@ -1,4 +1,4 @@
-import { Triple } from './aliases';
+import { Triple } from '../aliases';
 import * as GraphTab from './graph_tab_gui';
 import * as TermRegistryGui from './term_registry_gui';
 

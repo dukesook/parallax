@@ -1,5 +1,5 @@
 import { getElement } from './gui';
-import { Triple } from './aliases';
+import { Triple } from '../aliases';
 
 // graph.ts
 export async function init() {}

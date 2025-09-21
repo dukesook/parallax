@@ -1,7 +1,7 @@
 import * as GMaps from './use_gmaps';
 import * as RdfHandler from './rdf_handler';
-import * as Gui from './gui';
-import * as GraphTab from './graph_tab_gui';
+import * as Gui from './gui/gui';
+import * as GraphTab from './gui/graph_tab_gui';
 import { Triple, Iri } from './aliases';
 
 const debugButton = document.getElementById('debug-button');

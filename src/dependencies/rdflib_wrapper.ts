@@ -12,10 +12,23 @@ const PARALLAX_NS = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 const SOSA = $rdf.Namespace('http://www.w3.org/ns/sosa/');
 const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+const rdfsLabel = $rdf.sym('http://www.w3.org/2000/01/rdf-schema#label');
 
 type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SPARQL binding refers to a row in the query result.
 // A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
+
+export const add = {
+  async label(subject: Iri, label: string) {
+    g_triple_store.add($rdf.sym(subject), rdfsLabel, $rdf.literal(label), PARALLAX_GRAPH);
+    // read triple back
+    const triples = g_triple_store.statementsMatching($rdf.sym(subject), rdfsLabel, undefined, PARALLAX_GRAPH);
+    if (triples.length === 0) {
+      throw new Error(`Failed to add label triple for subject: ${subject}`);
+    }
+    console.log(`Added label triple: ${triples[0].subject.value} ${triples[0].predicate.value} ${triples[0].object.value}`);
+  },
+};
 
 export async function addRDFToStore(rdfData: string, baseIRI: string, contentType: string, graphIRI: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -175,6 +188,17 @@ export function logStore(): void {
   });
 }
 
+export function logInstanceData(): void {
+  const triples = getParallaxTriples();
+  if (triples.length === 0) {
+    console.log('No triples found in PARALLAX_GRAPH');
+    return;
+  }
+  for (const triple of triples) {
+    console.log(`${triple.subject} ${triple.predicate} ${triple.object}`);
+  }
+}
+
 function getParallaxTriples(): Triple[] {
   const triples: Triple[] = [];
   g_triple_store.statementsMatching(undefined, undefined, undefined, PARALLAX_GRAPH).forEach((statement: Statement) => {
@@ -186,6 +210,12 @@ function getParallaxTriples(): Triple[] {
   return triples;
 }
 
+function isLiteral(value: string): boolean {
+  // Regex for absolute IRI scheme: "scheme:"
+  const iriPattern = /^(?:[a-z][a-z0-9+.-]*):/i;
+  return !iriPattern.test(value);
+}
+
 export function instanceDataToTurtle(): string {
   const parallaxTriples = getParallaxTriples();
   let turtle = '';
@@ -194,7 +224,15 @@ export function instanceDataToTurtle(): string {
   for (const triple of parallaxTriples) {
     const subject = $rdf.sym(triple.subject);
     const predicate = $rdf.sym(triple.predicate);
-    const object = $rdf.sym(triple.object);
+
+    let toObject;
+    const isLiteralObj = isLiteral(triple.object);
+    if (isLiteralObj) {
+      toObject = $rdf.literal;
+    } else {
+      toObject = $rdf.sym;
+    }
+    const object = toObject(triple.object);
     subGraph.add(subject, predicate, object, PARALLAX_GRAPH);
   }
 

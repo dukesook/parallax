@@ -4,14 +4,12 @@ import { Port } from './models';
 
 let g_ships = [];
 
-export function generateData() {
-  generateShips();
-  generatePorts();
-  generateTrips();
-  RdfHandler.debug();
+export async function generateData() {
+  await generateShips();
+  await generatePorts();
 }
 
-function generateShips() {
+async function generateShips() {
   console.log('generateShips()');
 
   const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
@@ -25,7 +23,7 @@ function generateShips() {
   }
 }
 
-function generatePorts() {
+async function generatePorts() {
   console.log('generatePorts()');
   const ports: Port[] = [
     { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
@@ -35,8 +33,8 @@ function generatePorts() {
     { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
   ];
 
-  ports.forEach((port) => {
-    RdfHandler.add.port(port);
+  ports.forEach(async (port) => {
+    await RdfHandler.add.port(port);
   });
 }
 

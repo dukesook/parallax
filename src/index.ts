@@ -4,11 +4,14 @@ import * as Gui from './gui/gui';
 import * as GraphTab from './gui/graph_tab_gui';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
+import { saveFile } from './fetcher';
 
 const debugButton = document.getElementById('debug-button');
+const debug2Button = document.getElementById('debug2-button');
 const logStoreButton = document.getElementById('log-store-button');
 
 debugButton?.addEventListener('click', debug);
+debug2Button?.addEventListener('click', debug2);
 logStoreButton?.addEventListener('click', logStore);
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -96,4 +99,9 @@ function logStore(): void {
 
 function debug() {
   Fabricator.generateData();
+}
+
+function debug2() {
+  const rdf = RdfHandler.get.instanceData();
+  saveFile(rdf);
 }

@@ -20,9 +20,16 @@ export const add = {
     // todo
   },
   async port(port: Port) {
-    // todo
     const harbourType: Iri = TermRegistry.getIRI('harbour');
     const harbour: Iri = await addObservableEntity(harbourType);
+
+    await RDFLibWrapper.add.label(harbour, port.name);
+  },
+};
+
+export const get = {
+  instanceData(): string {
+    return RDFLibWrapper.instanceDataToTurtle();
   },
 };
 
@@ -92,11 +99,13 @@ export function addObservation(observedThing: Iri, lat: number, long: number, da
   RDFLibWrapper.addObservation(observedThing, lat, long, date);
 }
 
+// ================== Private Functions ==================
+
 // ================== Debugging Functions ==================
 
 export function logStore(): void {
   console.log('rdf_handler: logStore()');
-  RDFLibWrapper.logStore();
+  RDFLibWrapper.logInstanceData();
 }
 
 export function debug(): void {

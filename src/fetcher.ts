@@ -95,10 +95,10 @@ async function fetchFile(url: string): Promise<string> {
   }
 }
 
-export async function saveFile(data: string) {
+export async function saveFile(data: string, suggestedName = 'output.txt') {
   // Ask user where to save
   const handle = await (window as any).showSaveFilePicker({
-    suggestedName: 'output.txt',
+    suggestedName: suggestedName,
     types: [
       {
         description: 'Text file',

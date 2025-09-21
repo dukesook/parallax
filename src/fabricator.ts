@@ -1,3 +1,8 @@
+import * as RdfHandler from './rdf_handler';
+import { Iri } from './aliases';
+
+let g_ships = [];
+
 function generateData() {
   generateShips();
   generatePorts();
@@ -6,6 +11,10 @@ function generateData() {
 
 function generateShips() {
   console.log('generateShips()');
+  RdfHandler.addObservableEntity('Ship').then((iri: Iri) => {
+    console.log('Generated Ship IRI:', iri);
+    g_ships.push(iri);
+  });
 }
 
 function generatePorts() {

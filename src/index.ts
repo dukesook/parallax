@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.onSaveButton(onAddObservation);
     Gui.onShowObservationsButton(showObservations);
     Gui.onDownloadRdfButton(downloadRdf);
-    Gui.onDisplayTermRegistryButton(displayTermRegistry);
   });
 
   GMaps.addMapListener(onclickMap);
@@ -52,11 +51,6 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
   }
 }
 
-function displayTermRegistry(): void {
-  const terms: string[] = RdfHandler.getTerms();
-  Gui.displayTermRegistry(terms);
-}
-
 async function onAddObservation(): Promise<void> {
   const selectedObject = Gui.getSelectedObject();
   const { lat, lng } = Gui.getLatLng();
@@ -65,9 +59,9 @@ async function onAddObservation(): Promise<void> {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  const objectIri = await RdfHandler.addObservableEntity(selectedObject);
+  const objectIri = await RdfHandler.add.observableEntity(selectedObject);
   const timestamp = new Date();
-  RdfHandler.addObservation(objectIri, lat, lng, timestamp);
+  RdfHandler.add.observation(objectIri, lat, lng, timestamp);
 }
 
 function downloadRdf(): void {
@@ -76,7 +70,7 @@ function downloadRdf(): void {
 
 function showTriples(): void {
   // Get Triples
-  const triples: Triple[] = RdfHandler.getTriples();
+  const triples: Triple[] = RdfHandler.get.allTriples();
   console.log('Triples:', triples);
 
   // Display Triples
@@ -84,7 +78,7 @@ function showTriples(): void {
 }
 
 function showGraphs(): void {
-  const graphs = RdfHandler.getGraphs();
+  const graphs = RdfHandler.get.graphNames();
   GraphTab.displayGraphs(graphs);
 }
 

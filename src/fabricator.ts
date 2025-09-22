@@ -24,7 +24,7 @@ async function generateShips() {
   ];
 
   for (const name of boatNames) {
-    RdfHandler.addObservableEntity(boat).then((iri: Iri) => {
+    RdfHandler.add.observableEntity(boat).then((iri: Iri) => {
       console.log('Generated Ship IRI:', iri);
       RdfHandler.add.label(iri, name);
       g_ships.push(iri);

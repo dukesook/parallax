@@ -16,13 +16,18 @@ export async function init(): Promise<void> {
 }
 
 export const add = {
-  ship(iri: Iri): void {
-    // todo
+  async observableEntity(entityType: string): Promise<Iri> {
+    const iri = await RDFLibWrapper.addObservableEntity(entityType);
+    return iri;
+  },
+
+  observation(observedThing: Iri, lat: number, long: number, date: Date): void {
+    RDFLibWrapper.addObservation(observedThing, lat, long, date);
   },
 
   async port(port: Port) {
     const harbourType: Iri = TermRegistry.getIRI('harbour');
-    const harbour: Iri = await addObservableEntity(harbourType);
+    const harbour: Iri = await add.observableEntity(harbourType);
 
     await RDFLibWrapper.add.label(harbour, port.name);
   },
@@ -36,16 +41,28 @@ export const get = {
   instanceData(): string {
     return RDFLibWrapper.instanceDataToTurtle();
   },
+
+  graphNames(): Label[] {
+    const graphs = RDFLibWrapper.getGraphs();
+    return graphs;
+  },
+
+  allTriples(): Triple[] {
+    const triples: Triple[] = RDFLibWrapper.getTriples();
+
+    for (const triple of triples) {
+      try {
+        const subjectLabel = TermRegistry.getLabel(triple.subject);
+        triple.subject = subjectLabel;
+        console.log('Replaced IRI:', triple.subject, 'with label:', subjectLabel);
+      } catch (error) {}
+    }
+
+    return triples;
+  },
 };
 
-export function getTerms(): string[] {
-  return TermRegistry.getTerms();
-}
-
-export function getGraphs(): string[] {
-  const graphs = RDFLibWrapper.getGraphs();
-  return graphs;
-}
+// ================== Private Functions ==================
 
 function initTermRegistry(): void {
   // `todo - autogenerate terms from Local Triple Store`
@@ -79,32 +96,6 @@ async function initStore(): Promise<void> {
   const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');
   RDFLibWrapper.addRDFToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
 }
-
-export async function addObservableEntity(entityType: string): Promise<Iri> {
-  const iri = await RDFLibWrapper.addObservableEntity(entityType);
-  return iri;
-}
-
-export function getTriples(): Triple[] {
-  const triples: Triple[] = RDFLibWrapper.getTriples();
-
-  // TODO: Replace IRIs with labels where possible
-  for (const triple of triples) {
-    try {
-      const subjectLabel = TermRegistry.getLabel(triple.subject);
-      triple.subject = subjectLabel;
-      console.log('Replaced IRI:', triple.subject, 'with label:', subjectLabel);
-    } catch (error) {}
-  }
-
-  return triples;
-}
-
-export function addObservation(observedThing: Iri, lat: number, long: number, date: Date): void {
-  RDFLibWrapper.addObservation(observedThing, lat, long, date);
-}
-
-// ================== Private Functions ==================
 
 // ================== Debugging Functions ==================
 

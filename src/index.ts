@@ -1,7 +1,7 @@
 import * as GMaps from './use_gmaps';
 import RdfHandler from './rdf_handler';
 import * as Gui from './gui/gui';
-import * as GraphTab from './gui/graph_tab_gui';
+import * as GraphTab from './gui/knowledge_graph_tab';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import { saveFile } from './fetcher';

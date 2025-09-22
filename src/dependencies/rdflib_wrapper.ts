@@ -28,40 +28,50 @@ export const add = {
     }
     console.log(`Added label triple: ${triples[0].subject.value} ${triples[0].predicate.value} ${triples[0].object.value}`);
   },
+
+  async rdfToStore(rdfData: string, baseIRI: string, contentType: string, graphIRI: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const tempStore = $rdf.graph(); // Temporary store to parse into
+
+      $rdf.parse(rdfData, tempStore, baseIRI, contentType, (err: Error | undefined) => {
+        if (err) return reject(err);
+
+        const graphSym = $rdf.sym(graphIRI);
+
+        // Transfer each triple from the temp store into the main store with the desired graph
+        tempStore.statements.forEach((statement: Statement) => {
+          g_triple_store.add(statement.subject, statement.predicate, statement.object, graphSym);
+        });
+
+        resolve();
+      });
+    });
+  },
+
+  async observableEntity(entityType: Iri): Promise<Iri> {
+    const observableEntity: Iri = PARALLAX_R(uuidv4());
+    g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
+    return observableEntity;
+  },
+
+  async observation(observedThing: Iri, lat: number, lng: number, date: Date): Promise<void> {
+    const observation: Iri = PARALLAX_R(uuidv4());
+    const ObservationType = SOSA('Observation');
+    g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
+    // TODO: add lat, lng, date
+    // g_triple_store.add();
+  },
 };
 
-export async function addRDFToStore(rdfData: string, baseIRI: string, contentType: string, graphIRI: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const tempStore = $rdf.graph(); // Temporary store to parse into
+const get = {
+  //
+};
 
-    $rdf.parse(rdfData, tempStore, baseIRI, contentType, (err: Error | undefined) => {
-      if (err) return reject(err);
-
-      const graphSym = $rdf.sym(graphIRI);
-
-      // Transfer each triple from the temp store into the main store with the desired graph
-      tempStore.statements.forEach((statement: Statement) => {
-        g_triple_store.add(statement.subject, statement.predicate, statement.object, graphSym);
-      });
-
-      resolve();
-    });
-  });
-}
-
-export async function addObservableEntity(entityType: Iri): Promise<Iri> {
-  const observableEntity: Iri = PARALLAX_R(uuidv4());
-  g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
-  return observableEntity;
-}
-
-export async function addObservation(entity: Iri, lat: number, lng: number, date: Date): Promise<void> {
-  const observation: Iri = PARALLAX_R(uuidv4());
-  const ObservationType = SOSA('Observation');
-  g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
-  // TODO: add lat, lng, date
-  // g_triple_store.add();
-}
+// ================== Default Export ==================
+export default {
+  add,
+  get,
+};
 
 export function getGraphs(): string[] {
   const graphIris: Set<Iri> = getNamedGraphs(g_triple_store);

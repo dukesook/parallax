@@ -17,12 +17,12 @@ async function init(): Promise<void> {
 
 const add = {
   async observableEntity(entityType: string): Promise<Iri> {
-    const iri = await RDFLibWrapper.addObservableEntity(entityType);
+    const iri = await RDFLibWrapper.add.observableEntity(entityType);
     return iri;
   },
 
   observation(observedThing: Iri, lat: number, long: number, date: Date): void {
-    RDFLibWrapper.addObservation(observedThing, lat, long, date);
+    RDFLibWrapper.add.observation(observedThing, lat, long, date);
   },
 
   async port(port: Port) {
@@ -90,19 +90,19 @@ function initTermRegistry(): void {
 async function initStore(): Promise<void> {
   const bfo = await Fetcher.fetchBFO();
   const bfoGraphIRI = TermRegistry.getIRI('bfoGraph');
-  RDFLibWrapper.addRDFToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
+  RDFLibWrapper.add.rdfToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
   const geoSparqlGraphIRI = TermRegistry.getIRI('geoSparqlGraph');
-  RDFLibWrapper.addRDFToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparqlGraphIRI);
+  RDFLibWrapper.add.rdfToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparqlGraphIRI);
 
   const envoOntology = await Fetcher.fetchEnvoBasicXml();
   const envoGraphIRI = TermRegistry.getIRI('envoGraph');
-  RDFLibWrapper.addRDFToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
+  RDFLibWrapper.add.rdfToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
 
   const sosaOntology = await Fetcher.fetchSosa();
   const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');
-  RDFLibWrapper.addRDFToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
+  RDFLibWrapper.add.rdfToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
 }
 
 // ================== Debugging Functions ==================

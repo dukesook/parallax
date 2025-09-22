@@ -19,11 +19,16 @@ export const add = {
   ship(iri: Iri): void {
     // todo
   },
+
   async port(port: Port) {
     const harbourType: Iri = TermRegistry.getIRI('harbour');
     const harbour: Iri = await addObservableEntity(harbourType);
 
     await RDFLibWrapper.add.label(harbour, port.name);
+  },
+
+  label(iri: Iri, label: string): void {
+    RDFLibWrapper.add.label(iri, label);
   },
 };
 

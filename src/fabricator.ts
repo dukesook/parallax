@@ -13,11 +13,20 @@ async function generateShips() {
   console.log('generateShips()');
 
   const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
+  //prettier-ignore
+  const boatNames = [
+    'Ship - Red October',
+    'Ship - USS Enterprise',
+    'Ship - Black Pearl',
+    'Ship - Flying Dutchman',
+    'Ship - Titanic',
+    'Ship - Booty Hunter',
+  ];
 
-  // for loop to create 5 ships
-  for (let i = 1; i <= 10; i++) {
+  for (const name of boatNames) {
     RdfHandler.addObservableEntity(boat).then((iri: Iri) => {
       console.log('Generated Ship IRI:', iri);
+      RdfHandler.add.label(iri, name);
       g_ships.push(iri);
     });
   }

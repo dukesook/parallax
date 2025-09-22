@@ -16,9 +16,19 @@ let g_bimap = BiMap.of<Iri, Label>(
 // harbour = http://purl.obolibrary.org/obo/ENVO_00000463
 
 export function addTerm(iri: string, label: string): void {
-  if (g_bimap.hasKey(iri) || g_bimap.hasValue(label)) {
-    throw new Error(`Term already exists: ${iri} or ${label}`);
+  const hasIri = g_bimap.hasKey(iri);
+  const hasLabel = g_bimap.hasValue(label);
+
+  if (hasIri) {
+    throw new Error(`IRI already exists: ${iri}`);
   }
+
+  if (hasLabel) {
+    // Some labels are duplicated
+    // console.warn('Label aready exists, skipping: ' + label + ' - <' + iri + '>');
+    return;
+  }
+
   g_bimap = g_bimap.set(iri, label);
 }
 

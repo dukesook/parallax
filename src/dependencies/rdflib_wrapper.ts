@@ -98,41 +98,42 @@ export const get = {
 
     return triples;
   },
-};
 
-// ================== Default Export ==================
-export default {
-  add,
-  get,
-};
-
-// return an object of { subject: Iri, label: Label } for each rdfs:label
-export function queryLabels(): { [key: Iri]: Label } {
-  const query = `
+  iriToLabelMapping(): { [key: Iri]: Label } {
+    const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     SELECT ?subject ?label WHERE {
       ?subject rdfs:label ?label .
     }
     `;
 
-  // Prepare the query object
-  const testMode = false;
-  const sparqlQuery = $rdf.SPARQLToQuery(query, testMode, g_triple_store);
+    // Prepare the query object
+    const testMode = false;
+    const sparqlQuery = $rdf.SPARQLToQuery(query, testMode, g_triple_store);
 
-  // Execute the query
-  const bindings: SparqlBinding[] = g_triple_store.querySync(sparqlQuery);
+    // Execute the query
+    const bindings: SparqlBinding[] = g_triple_store.querySync(sparqlQuery);
 
-  const results: { [key: Iri]: Label } = {};
-  bindings.forEach((binding: SparqlBinding) => {
-    const label = binding['?label'].value as Label;
-    const subject = binding['?subject'].value as Iri;
-    results[subject] = label;
-  });
+    const results: { [key: Iri]: Label } = {};
+    bindings.forEach((binding: SparqlBinding) => {
+      const label = binding['?label'].value as Label;
+      const subject = binding['?subject'].value as Iri;
+      results[subject] = label;
+    });
 
-  return results;
-}
+    return results;
+  },
+};
+
+// ================== Default Export ==================
+export default {
+  add,
+  get,
+  debug,
+};
 
 // =================== Private Functions ===================
+
 function containsBlankNode(statement: Statement): boolean {
   //prettier-ignore
   if (statement.subject.termType === 'BlankNode' ||
@@ -142,10 +143,6 @@ function containsBlankNode(statement: Statement): boolean {
   } else {
     return false;
   }
-}
-
-function getGraphName(statement: Statement): string | null {
-  return statement.why?.value ?? null;
 }
 
 function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
@@ -162,21 +159,6 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
 }
 
 // =================== Debugging and Logging ===================
-export function logStore(): void {
-  const store = g_triple_store as IndexedFormula;
-
-  if (store.statements.length === 0) {
-    console.log('========= Store is empty =========');
-    return;
-  }
-
-  store.statements.forEach((statement: $rdf.Statement) => {
-    const s = statement.subject.value;
-    const p = statement.predicate.value;
-    const o = statement.object.value;
-    console.log(`Statement: ${s} ${p} ${o}`);
-  });
-}
 
 export function logInstanceData(): void {
   const triples = getParallaxTriples();
@@ -237,14 +219,8 @@ export function instanceDataToTurtle(): string {
   return turtle;
 }
 
-export function debug(): void {
-  // Get all triples from specified graph
-  g_triple_store.statementsMatching(undefined, undefined, undefined, PARALLAX_GRAPH).forEach((statement: Statement) => {
-    const s = statement.subject.value;
-    const p = statement.predicate.value;
-    const o = statement.object.value;
-    console.log(`PARALLAX_GRAPH Statement: ${s} ${p} ${o}`);
-  });
+function debug(): void {
+  // debug
 }
 
 // ================== RDFLib API ==================

@@ -73,13 +73,16 @@ export default {
 // ================== Private Functions ==================
 
 function initTermRegistry(): void {
-  // todo: explain what is going on here
+  // The term registry manages terms.
+  // A term is a mapping between an IRI and a human-readable label.
+  // Initialize the Term Registry by loading each IRI/label pair from the Triple Store.
   // todo: should rdf_handler initialize the term registry?
   //        if index.ts uses the term registry, perhaps it should initialize it.
-  const results: { [key: Iri]: Label } = RDFLibWrapper.queryLabels();
+  const mapping: { [key: Iri]: Label } = RDFLibWrapper.get.iriToLabelMapping();
 
-  // todo: add one term at a time for clarity
-  TermRegistry.addTerms(results);
+  for (const [iri, label] of Object.entries(mapping)) {
+    TermRegistry.addTerm(iri, label);
+  }
 }
 
 async function initStore(): Promise<void> {

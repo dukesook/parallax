@@ -52,9 +52,10 @@ export async function fetchSosa(): Promise<RdfFile> {
 
 export async function fetchEnvoBasicXml(): Promise<RdfFile> {
   const envoBasicXml = 'https://raw.githubusercontent.com/EnvironmentOntology/envo/refs/heads/master/subsets/envo-basic.owl';
+  const envoPath = '/parallax/rdf/envo.owl';
   const envoOntology = {
     url: envoBasicXml,
-    rdf: await fetchFile(envoBasicXml),
+    rdf: await fetchFile(envoPath),
     base: 'http://purl.obolibrary.org/obo/subsets/envo-basic.owl',
     mime: 'application/rdf+xml',
   };

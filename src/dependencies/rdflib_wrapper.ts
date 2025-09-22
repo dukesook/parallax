@@ -78,6 +78,26 @@ export const get = {
     });
     return graphNames;
   },
+
+  allTriples(): Triple[] {
+    const triples: Triple[] = [];
+
+    for (const statement of g_triple_store.statements) {
+      // Skip statements with blank nodes
+      if (containsBlankNode(statement)) {
+        continue;
+      }
+
+      const subject = statement.subject.value;
+      const predicate = statement.predicate.value;
+      const object = statement.object.value;
+
+      const triple: Triple = { subject, predicate, object };
+      triples.push(triple);
+    }
+
+    return triples;
+  },
 };
 
 // ================== Default Export ==================
@@ -85,26 +105,6 @@ export default {
   add,
   get,
 };
-
-export function getTriples(): Triple[] {
-  const triples: Triple[] = [];
-
-  for (const statement of g_triple_store.statements) {
-    // Skip statements with blank nodes
-    if (containsBlankNode(statement)) {
-      continue;
-    }
-
-    const subject = statement.subject.value;
-    const predicate = statement.predicate.value;
-    const object = statement.object.value;
-
-    const triple: Triple = { subject, predicate, object };
-    triples.push(triple);
-  }
-
-  return triples;
-}
 
 // return an object of { subject: Iri, label: Label } for each rdfs:label
 export function queryLabels(): { [key: Iri]: Label } {

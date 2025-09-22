@@ -48,7 +48,7 @@ const get = {
   },
 
   allTriples(): Triple[] {
-    const triples: Triple[] = RDFLibWrapper.getTriples();
+    const triples: Triple[] = RDFLibWrapper.get.allTriples();
 
     for (const triple of triples) {
       try {
@@ -73,7 +73,12 @@ export default {
 // ================== Private Functions ==================
 
 function initTermRegistry(): void {
+  // todo: explain what is going on here
+  // todo: should rdf_handler initialize the term registry?
+  //        if index.ts uses the term registry, perhaps it should initialize it.
   const results: { [key: Iri]: Label } = RDFLibWrapper.queryLabels();
+
+  // todo: add one term at a time for clarity
   TermRegistry.addTerms(results);
 }
 

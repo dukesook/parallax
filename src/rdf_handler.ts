@@ -4,7 +4,7 @@ import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
 import { Port } from './models';
 
-export async function init(): Promise<void> {
+async function init(): Promise<void> {
   initStore()
     .then(() => {
       //
@@ -15,7 +15,7 @@ export async function init(): Promise<void> {
     .then(initTermRegistry);
 }
 
-export const add = {
+const add = {
   async observableEntity(entityType: string): Promise<Iri> {
     const iri = await RDFLibWrapper.addObservableEntity(entityType);
     return iri;
@@ -37,7 +37,7 @@ export const add = {
   },
 };
 
-export const get = {
+const get = {
   instanceData(): string {
     return RDFLibWrapper.instanceDataToTurtle();
   },
@@ -60,6 +60,14 @@ export const get = {
 
     return triples;
   },
+};
+
+// ================== Default Export ==================
+
+export default {
+  init,
+  add,
+  get,
 };
 
 // ================== Private Functions ==================

@@ -43,7 +43,7 @@ const get = {
   },
 
   graphNames(): Label[] {
-    const graphs = RDFLibWrapper.getGraphs();
+    const graphs = RDFLibWrapper.get.allGraphs();
     return graphs;
   },
 
@@ -73,18 +73,8 @@ export default {
 // ================== Private Functions ==================
 
 function initTermRegistry(): void {
-  // `todo - autogenerate terms from Local Triple Store`
-  const subjects: Set<String> = RDFLibWrapper.getSubjects();
-
-  // print length of subjects
-  console.log(`rdf_handler: initTermRegistry() found ${subjects.size} subjects in the triple store`);
-
-  // query for each rdfs:label
   const results: { [key: Iri]: Label } = RDFLibWrapper.queryLabels();
-  console.log(results);
-
   TermRegistry.addTerms(results);
-  console.log('TermRegistry Number of Terms:', TermRegistry.getNumberOfTerms());
 }
 
 async function initStore(): Promise<void> {

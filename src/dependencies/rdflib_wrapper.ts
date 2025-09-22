@@ -63,8 +63,21 @@ export const add = {
   },
 };
 
-const get = {
-  //
+export const get = {
+  allGraphs(): Label[] {
+    const graphIris: Set<Iri> = getNamedGraphs(g_triple_store);
+    const graphNames: string[] = [];
+    graphIris.forEach((graph) => {
+      try {
+        const name = TermRegistry.getLabel(graph);
+        graphNames.push(name);
+      } catch (error) {
+        console.error('Graph IRI not found in TermRegistry:', graph);
+        graphNames.push(graph);
+      }
+    });
+    return graphNames;
+  },
 };
 
 // ================== Default Export ==================
@@ -72,39 +85,6 @@ export default {
   add,
   get,
 };
-
-export function getGraphs(): string[] {
-  const graphIris: Set<Iri> = getNamedGraphs(g_triple_store);
-  const graphNames: string[] = [];
-  graphIris.forEach((graph) => {
-    try {
-      const name = TermRegistry.getLabel(graph);
-      graphNames.push(name);
-    } catch (error) {
-      console.error('Graph IRI not found in TermRegistry:', graph);
-      graphNames.push(graph);
-    }
-  });
-  return graphNames;
-}
-
-export function getSubjects(): Set<string> {
-  console.log('getSubjects()');
-  const subjects = new Set<string>();
-  g_triple_store.statements.forEach((statement: Statement) => {
-    // If blank node, skip it:
-    const termType = statement.subject.termType;
-    if (termType === 'BlankNode') {
-      return;
-    } else if (termType === 'NamedNode') {
-      subjects.add(statement.subject.value);
-    } else {
-      throw new Error(`Unexpected term type: ${termType}`);
-    }
-  });
-  console.log(`Found ${subjects.size} subjects`);
-  return subjects;
-}
 
 export function getTriples(): Triple[] {
   const triples: Triple[] = [];

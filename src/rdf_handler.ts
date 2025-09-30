@@ -2,7 +2,7 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port } from './models';
+import { Port, Voyage } from './models';
 
 async function init(): Promise<void> {
   initStore()
@@ -25,11 +25,17 @@ const add = {
     RDFLibWrapper.add.observation(observedThing, lat, long, date);
   },
 
-  async port(port: Port) {
+  async port(port: Port): Promise<Iri> {
     const harbourType: Iri = TermRegistry.getIRI('harbour');
     const harbour: Iri = await add.observableEntity(harbourType);
 
     await RDFLibWrapper.add.label(harbour, port.name);
+    return harbour;
+  },
+
+  voyage(voyage: Voyage): Iri {
+    const voyageIri: Iri = RDFLibWrapper.add.voyage(voyage);
+    return voyageIri;
   },
 
   label(iri: Iri, label: string): void {
@@ -68,6 +74,7 @@ export default {
   init,
   add,
   get,
+  logStore,
 };
 
 // ================== Private Functions ==================

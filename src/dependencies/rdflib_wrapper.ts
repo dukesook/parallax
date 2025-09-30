@@ -3,6 +3,7 @@ import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
+import { Voyage } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import * as TermRegistry from '../term_registry';
 
@@ -60,6 +61,15 @@ export const add = {
     g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
     // TODO: add lat, lng, date
     // g_triple_store.add();
+  },
+
+  voyage(voyage: Voyage): Iri {
+    const voyageIri: Iri = PARALLAX_R(uuidv4());
+    const VoyageType = TermRegistry.getIRI('voyage');
+    g_triple_store.add(voyageIri, a, VoyageType, PARALLAX_GRAPH);
+
+    add.label(voyageIri, 'Voyage');
+    return voyageIri;
   },
 };
 

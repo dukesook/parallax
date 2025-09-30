@@ -1,3 +1,5 @@
+import { Iri } from './aliases';
+
 export interface Port {
   port_id: string;
   name: string;
@@ -17,9 +19,10 @@ export interface Observation {
   Entities: string[];
 }
 
-export interface Trip {
-  traveller: string;
+export interface Voyage {
+  ship: string;
   start_time: Date;
   end_time: Date;
-  observations: Observation[];
+  start_port: Iri;
+  end_port: Iri;
 }

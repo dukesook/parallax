@@ -1,12 +1,14 @@
-import * as RdfHandler from './rdf_handler';
+import RdfHandler from './rdf_handler';
 import { Iri } from './aliases';
-import { Port } from './models';
+import { Port, Voyage } from './models';
 
-let g_ships = [];
+let g_ships: Iri[] = [];
+let g_ports: Iri[] = [];
 
 export async function generateData() {
   await generateShips();
   await generatePorts();
+  generateVoyages();
 }
 
 async function generateShips() {
@@ -43,8 +45,33 @@ async function generatePorts() {
   ];
 
   ports.forEach(async (port) => {
-    await RdfHandler.add.port(port);
+    const port_iri: Iri = await RdfHandler.add.port(port);
+    g_ports.push(port_iri);
   });
+}
+
+function generateVoyages() {
+  // A voyage consists of:
+  //  1. A ship
+  //  2. A departure port
+  //  3. An arrival port
+  //  4. A departure date
+  //  5. An arrival date
+  //   export interface Voyage {
+  //   ship: string;
+  //   start_time: Date;
+  //   end_time: Date;
+  //   start_port: Iri;
+  //   end_port: Iri;
+  // }
+  const myVoyage: Voyage = {
+    ship: g_ships[0],
+    start_port: g_ports[0],
+    end_port: g_ports[1],
+    start_time: new Date('2023-01-01T10:00:00Z'),
+    end_time: new Date('2023-01-15T15:00:00Z'),
+  };
+  const voyageIri: Iri = RdfHandler.add.voyage(myVoyage);
 }
 
 function generateTrips() {

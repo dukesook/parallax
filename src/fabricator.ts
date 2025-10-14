@@ -8,12 +8,12 @@ let g_ports: Iri[] = [];
 let g_voyages: Iri[] = [];
 
 export async function generateData() {
-  await generateShips();
-  await generatePorts();
+  generateShips();
+  generatePorts();
   generateVoyages();
 }
 
-async function generateShips() {
+function generateShips() {
   console.log('generateShips()');
 
   const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
@@ -28,15 +28,14 @@ async function generateShips() {
   ];
 
   for (const name of boatNames) {
-    RdfHandler.add.observableEntity(boat).then((iri: Iri) => {
-      console.log('Generated Ship IRI:', iri);
-      RdfHandler.add.label(iri, name);
-      g_ships.push(iri);
-    });
+    const iri = RdfHandler.add.observableEntity(boat);
+    console.log('Generated Ship IRI:', iri);
+    RdfHandler.add.label(iri, name);
+    g_ships.push(iri);
   }
 }
 
-async function generatePorts() {
+function generatePorts() {
   console.log('generatePorts()');
   const ports: Port[] = [
     { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
@@ -46,8 +45,8 @@ async function generatePorts() {
     { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
   ];
 
-  ports.forEach(async (port) => {
-    const port_iri: Iri = await RdfHandler.add.port(port);
+  ports.forEach((port) => {
+    const port_iri: Iri = RdfHandler.add.port(port);
     g_ports.push(port_iri);
   });
 }

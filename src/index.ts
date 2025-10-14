@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   GMaps.addMapListener(onclickMap);
+
+  console.log('DOM fully loaded');
 });
 
 function onclickMap(event: google.maps.MapMouseEvent): void {

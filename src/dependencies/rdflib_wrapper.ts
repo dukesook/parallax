@@ -20,7 +20,7 @@ type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
 
 export const add = {
-  async label(subject: Iri, label: string) {
+  label(subject: Iri, label: string) {
     g_triple_store.add($rdf.sym(subject), rdfsLabel, $rdf.literal(label), PARALLAX_GRAPH);
     // read triple back
     const triples = g_triple_store.statementsMatching($rdf.sym(subject), rdfsLabel, undefined, PARALLAX_GRAPH);
@@ -49,13 +49,13 @@ export const add = {
     });
   },
 
-  async observableEntity(entityType: Iri): Promise<Iri> {
+  observableEntity(entityType: Iri): Iri {
     const observableEntity: Iri = PARALLAX_R(uuidv4());
     g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
     return observableEntity;
   },
 
-  async observation(observedThing: Iri, lat: number, lng: number, date: Date): Promise<void> {
+  observation(observedThing: Iri, lat: number, lng: number, date: Date) {
     const observation: Iri = PARALLAX_R(uuidv4());
     const ObservationType = SOSA('Observation');
     g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);

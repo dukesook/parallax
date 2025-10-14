@@ -1,9 +1,11 @@
 import RdfHandler from './rdf_handler';
 import { Iri } from './aliases';
 import { Port, Voyage } from './models';
+import { get } from 'http';
 
 let g_ships: Iri[] = [];
 let g_ports: Iri[] = [];
+let g_voyages: Iri[] = [];
 
 export async function generateData() {
   await generateShips();
@@ -51,27 +53,61 @@ async function generatePorts() {
 }
 
 function generateVoyages() {
-  // A voyage consists of:
-  //  1. A ship
-  //  2. A departure port
-  //  3. An arrival port
-  //  4. A departure date
-  //  5. An arrival date
-  //   export interface Voyage {
-  //   ship: string;
-  //   start_time: Date;
-  //   end_time: Date;
-  //   start_port: Iri;
-  //   end_port: Iri;
-  // }
-  const myVoyage: Voyage = {
-    ship: g_ships[0],
-    start_port: g_ports[0],
-    end_port: g_ports[1],
-    start_time: new Date('2023-01-01T10:00:00Z'),
-    end_time: new Date('2023-01-15T15:00:00Z'),
+  // generate 100 voyages
+  console.log('generateVoyages()');
+  for (let i = 0; i < 10; i++) {
+    const voyage = fabricateVoyage();
+    const voyageIri: Iri = RdfHandler.add.voyage(voyage);
+    g_voyages.push(voyageIri);
+    console.log('Generated Voyage IRI:', voyageIri);
+  }
+}
+
+function fabricateVoyage(): Voyage {
+  const ship: Iri = getRandomShip();
+
+  // Get two different ports
+  const start_port: Iri = getRandomPort();
+  let end_port: Iri = getRandomPort();
+  while (end_port === start_port) {
+    end_port = getRandomPort();
+  }
+
+  // Dates
+  const start_time: Date = getRandomDate();
+  const durationDays = Math.floor(Math.random() * 30) + 1;
+  const end_time: Date = new Date(start_time);
+  end_time.setDate(start_time.getDate() + durationDays);
+
+  const voyage: Voyage = {
+    ship: ship,
+    start_port: start_port,
+    end_port: end_port,
+    start_time: start_time,
+    end_time: end_time,
   };
-  const voyageIri: Iri = RdfHandler.add.voyage(myVoyage);
+  return voyage;
+}
+
+function getRandomShip(): Iri {
+  const randomIndex = getRandomIndex(g_ships);
+  return g_ships[randomIndex];
+}
+
+function getRandomPort(): Iri {
+  const randomIndex = getRandomIndex(g_ports);
+  return g_ports[randomIndex];
+}
+
+function getRandomIndex(data: any[]): number {
+  return Math.floor(Math.random() * data.length);
+}
+
+function getRandomDate(): Date {
+  const start = new Date(2020, 0, 1); // January 1, 2023
+  const end = new Date(2025, 11, 31); // December 31, 2023
+  const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
+  return new Date(randomTime);
 }
 
 function generateTrips() {

@@ -103,7 +103,7 @@ export async function saveFile(data: string, suggestedName = 'output.txt') {
     types: [
       {
         description: 'Text file',
-        accept: { 'text/plain': ['.txt'] },
+        // accept: { 'text/plain': ['.txt'] },
       },
     ],
   });

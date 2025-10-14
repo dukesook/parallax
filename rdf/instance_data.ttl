@@ -1,0 +1,88 @@
+@prefix : </#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix id: </id/>.
+@prefix obo: <http://purl.obolibrary.org/obo/>.
+@prefix n: </ns/>.
+
+# Ships
+id:02206c9f-20b0-42bc-b74d-279ae2ef0f70
+  a obo:ENVO_01000608; rdfs:label "Ship - Black Pearl".
+
+id:02830ea4-1108-428e-9a89-33c0730e5a8e
+  a obo:ENVO_01000608; rdfs:label "Ship - Flying Dutchman".
+
+id:aa5f564e-15a5-4bea-841b-da99fe07a9a4
+  a obo:ENVO_01000608; rdfs:label "Ship - Booty Hunter".
+
+id:b2998bcb-c18e-41a2-889d-e49b1723478e
+  a obo:ENVO_01000608; rdfs:label "Ship - Red October".
+
+id:627bfeff-8c99-4acb-9912-0e0a77462125
+  a obo:ENVO_01000608; rdfs:label "Ship - Titanic".
+
+id:723f975e-d8d6-4614-88d0-c9872c9c27c9
+  a obo:ENVO_01000608; rdfs:label "Ship - USS Enterprise".
+
+
+# Ports
+id:1f18af8d-3eda-4cb6-aa40-656885924c71
+  a obo:ENVO_00000463;
+  rdfs:label "Port of Rotterdam".
+
+id:a079bdf2-88b4-47e7-b16c-08aad6e766e8
+  a obo:ENVO_00000463;
+  rdfs:label "Port of Sydney".
+
+id:38c34332-a215-4278-858e-a4455f15b8a1
+  a obo:ENVO_00000463;
+  rdfs:label "Port of Singapore".
+
+id:497b45e7-1a3e-4078-a77b-1a6cb0f0d5a4
+  a obo:ENVO_00000463;
+  rdfs:label "Port of Los Angeles".
+
+id:4fd85d85-db2e-49a8-83a1-5542fe15a188
+  a obo:ENVO_00000463;
+  rdfs:label "Port of Shanghai".
+
+# Voyages
+id:498fab3d-8657-482f-aa0d-6c49ec3b7045
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:12888e11-e5ac-473b-a109-563ae4371538 
+  a n:voyage; 
+  rdfs:label "Voyage".
+
+id:28bee69d-aa6c-4c83-8fa8-386b24381b65
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:2e980e94-9cc4-4564-9c02-22a1589b8088
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:489c79dd-4ee7-4d36-bb31-c21dec6b7817
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:5775b33f-8f50-4f92-b4ae-d94a2e2d1fed
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:a7ba8639-2ef2-4e8e-9236-e7aec4175047
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:6c8603c1-208d-4745-9ce3-52da3935168e
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:938797f9-ebcc-4b3d-a27b-678f52dc17dc 
+  a n:voyage;
+  rdfs:label "Voyage".
+
+id:a4efbd78-5f9b-4989-8731-5f1de7ddbab2
+  a n:voyage;
+  rdfs:label "Voyage".
+

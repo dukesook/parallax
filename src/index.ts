@@ -99,5 +99,5 @@ function debug() {
 
 function debug2() {
   const rdf = RdfHandler.get.instanceData();
-  saveFile(rdf);
+  saveFile(rdf, 'instance_data.ttl');
 }

@@ -65,8 +65,11 @@ export const add = {
 
   voyage(voyage: Voyage): Iri {
     const voyageIri: Iri = PARALLAX_R(uuidv4());
-    const VoyageType = TermRegistry.getIRI('voyage');
+    const VoyageType = TermRegistry.getIRI('ActOfTravel');
+    const is_about = TermRegistry.getIRI('is_about');
     g_triple_store.add(voyageIri, a, VoyageType, PARALLAX_GRAPH);
+
+    g_triple_store.add(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;

@@ -9,6 +9,8 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://www.w3.org/ns/sosa/', 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
     ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
+    ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
+    ['https://www.commoncoreontologies.org/ont00001808', 'is_about'],
 );
 
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608

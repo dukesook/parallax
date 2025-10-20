@@ -10,7 +10,7 @@ let g_voyages: Iri[] = [];
 export async function generateData() {
   generateShips(1);
   generatePorts();
-  generateVoyages();
+  generateVoyages(1);
 }
 
 const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
@@ -58,9 +58,8 @@ function generatePorts() {
   }
 }
 
-function generateVoyages() {
-  // generate 100 voyages
-  for (let i = 0; i < 10; i++) {
+function generateVoyages(desiredCount: number = 100) {
+  for (let i = 0; i < desiredCount; i++) {
     const voyage = fabricateVoyage();
     const voyageIri: Iri = RdfHandler.add.voyage(voyage);
     g_voyages.push(voyageIri);

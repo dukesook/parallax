@@ -21,6 +21,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@rimbu/bimap": "^2.0.4",
     "rdflib": "^2.2.37",
     "uuid": "^11.1.0"

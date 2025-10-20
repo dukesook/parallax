@@ -1,22 +1,21 @@
 import RdfHandler from './rdf_handler';
 import { Iri } from './aliases';
 import { Port, Voyage } from './models';
-import { get } from 'http';
+import { faker } from '@faker-js/faker';
 
 let g_ships: Iri[] = [];
 let g_ports: Iri[] = [];
 let g_voyages: Iri[] = [];
 
 export async function generateData() {
-  generateShips();
+  generateShips(100);
   generatePorts();
   generateVoyages();
 }
 
-function generateShips() {
-  console.log('generateShips()');
+const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
 
-  const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
+function generateShips(desiredCount: number = 6) {
   //prettier-ignore
   const boatNames = [
     'Ship - Red October',
@@ -29,8 +28,15 @@ function generateShips() {
 
   for (const name of boatNames) {
     const iri = RdfHandler.add.observableEntity(boat);
-    console.log('Generated Ship IRI:', iri);
     RdfHandler.add.label(iri, name);
+    g_ships.push(iri);
+  }
+
+  const shipsToAdd = desiredCount - boatNames.length;
+  for (let i = 0; i < shipsToAdd; i++) {
+    const shipName = fabricateShipName();
+    const iri = RdfHandler.add.observableEntity(boat);
+    RdfHandler.add.label(iri, 'ship - ' + shipName);
     g_ships.push(iri);
   }
 }
@@ -53,12 +59,10 @@ function generatePorts() {
 
 function generateVoyages() {
   // generate 100 voyages
-  console.log('generateVoyages()');
   for (let i = 0; i < 10; i++) {
     const voyage = fabricateVoyage();
     const voyageIri: Iri = RdfHandler.add.voyage(voyage);
     g_voyages.push(voyageIri);
-    console.log('Generated Voyage IRI:', voyageIri);
   }
 }
 
@@ -86,6 +90,14 @@ function fabricateVoyage(): Voyage {
     end_time: end_time,
   };
   return voyage;
+}
+
+function fabricateShipName(): string {
+  const adjective = faker.word.adjective({ length: { min: 4, max: 8 } });
+  const noun = faker.word.noun({ length: { min: 4, max: 8 } });
+  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const fakeName = `${capitalize(adjective)} ${capitalize(noun)}`;
+  return fakeName;
 }
 
 function getRandomShip(): Iri {

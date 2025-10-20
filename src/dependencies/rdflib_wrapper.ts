@@ -25,24 +25,13 @@ type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SPARQL binding refers to a row in the query result.
 // A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
 
-let has_start_time: null | Iri = NamedNode;
-let has_end_time: null | Iri = NamedNode;
-let has_start_port: null | Iri = NamedNode;
-let has_end_port: null | Iri = NamedNode;
 const is_about: NamedNode = $rdf.sym(Term.is_about);
+const has_start_time: NamedNode = $rdf.sym(Term.has_start_time);
+const has_end_time: NamedNode = $rdf.sym(Term.has_end_time);
+const has_start_port: NamedNode = $rdf.sym(Term.has_start_port);
+const has_end_port: NamedNode = $rdf.sym(Term.has_end_port);
 
-function init(): void {
-  try {
-    // TODO - Move to TermRegsitry and Import from there
-    has_start_time = get.namedNode('start_time') as NamedNode;
-    has_end_time = get.namedNode('end_time') as NamedNode;
-    has_start_port = get.namedNode('start_port') as NamedNode;
-    has_end_port = get.namedNode('end_port') as NamedNode;
-  } catch (error) {
-    console.error('Error during RDFLib initialization:', error);
-    throw error;
-  }
-}
+function init(): void {}
 
 export const add = {
   label(subject: Iri, label: string) {
@@ -52,7 +41,6 @@ export const add = {
     if (triples.length === 0) {
       throw new Error(`Failed to add label triple for subject: ${subject}`);
     }
-    console.log(`Added label triple: ${triples[0].subject.value} ${triples[0].predicate.value} ${triples[0].object.value}`);
   },
 
   async rdfToStore(rdfData: string, baseIRI: string, contentType: string, graphIRI: string): Promise<void> {
@@ -96,11 +84,10 @@ export const add = {
     const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
 
-    g_triple_store.add(voyageIri, $rdf.sym('http://example/has_start_time'), 'https://example.com/start_time', PARALLAX_GRAPH);
-    // g_triple_store.add(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
-    // g_triple_store.add(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
-    // g_triple_store.add(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
-    // g_triple_store.add(voyageIri, has_end_port, voyage.end_port, PARALLAX_GRAPH);
+    g_triple_store.add(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
+    g_triple_store.add(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
+    g_triple_store.add(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
+    g_triple_store.add(voyageIri, has_end_port, voyage.end_port, PARALLAX_GRAPH);
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;

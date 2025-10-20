@@ -3,6 +3,10 @@ import { Iri, Label } from './aliases';
 
 export const Term = {
   is_about: 'https://www.commoncoreontologies.org/ont00001808',
+  has_start_time: 'https://parallax.nmsu.edu/ns/start_time',
+  has_end_time: 'https://parallax.nmsu.edu/ns/end_time',
+  has_start_port: 'https://parallax.nmsu.edu/ns/start_port',
+  has_end_port: 'https://parallax.nmsu.edu/ns/end_port',
 };
 
 // prettier-ignore
@@ -13,10 +17,10 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://www.w3.org/ns/sosa/', 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
     ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
-    ['https://parallax.nmsu.edu/ns/start_time', 'start_time'],
-    ['https://parallax.nmsu.edu/ns/end_time', 'end_time'],
-    ['https://parallax.nmsu.edu/ns/start_port', 'start_port'],
-    ['https://parallax.nmsu.edu/ns/end_port', 'end_port'],
+    [Term.has_start_time, 'start_time'],
+    [Term.has_end_time, 'end_time'],
+    [Term.has_start_port, 'start_port'],
+    [Term.has_end_port, 'end_port'],
     ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
     [Term.is_about, 'is_about'],
 );

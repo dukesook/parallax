@@ -8,7 +8,7 @@ let g_ports: Iri[] = [];
 let g_voyages: Iri[] = [];
 
 export async function generateData() {
-  generateShips(100);
+  generateShips(1);
   generatePorts();
   generateVoyages();
 }
@@ -22,18 +22,19 @@ function generateShips(desiredCount: number = 6) {
     'Ship - USS Enterprise',
     'Ship - Black Pearl',
     'Ship - Flying Dutchman',
-    'Ship - Titanic',
+    'Ship - The Titanic',
     'Ship - Booty Hunter',
   ];
 
-  for (const name of boatNames) {
-    const iri = RdfHandler.add.observableEntity(boat);
-    RdfHandler.add.label(iri, name);
-    g_ships.push(iri);
+  if (desiredCount == boatNames.length) {
+    for (const name of boatNames) {
+      const iri = RdfHandler.add.observableEntity(boat);
+      RdfHandler.add.label(iri, name);
+      g_ships.push(iri);
+    }
   }
 
-  const shipsToAdd = desiredCount - boatNames.length;
-  for (let i = 0; i < shipsToAdd; i++) {
+  for (let i = 0; i < desiredCount; i++) {
     const shipName = fabricateShipName();
     const iri = RdfHandler.add.observableEntity(boat);
     RdfHandler.add.label(iri, 'ship - ' + shipName);
@@ -51,10 +52,10 @@ function generatePorts() {
     { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
   ];
 
-  ports.forEach((port) => {
+  for (const port of ports) {
     const port_iri: Iri = RdfHandler.add.port(port);
     g_ports.push(port_iri);
-  });
+  }
 }
 
 function generateVoyages() {
@@ -101,6 +102,9 @@ function fabricateShipName(): string {
 }
 
 function getRandomShip(): Iri {
+  if (g_ships.length === 0) {
+    throw new Error('Fabricator.getRandomShip(): No ships available');
+  }
   const randomIndex = getRandomIndex(g_ships);
   return g_ships[randomIndex];
 }

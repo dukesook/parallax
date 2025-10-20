@@ -1,0 +1,32 @@
+@prefix : </#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix id: </id/>.
+@prefix obo: <http://purl.obolibrary.org/obo/>.
+@prefix www: <https://www.commoncoreontologies.org/>.
+@prefix n: </ns/>.
+
+# Ship
+id:60221dfc-6d51-4d87-ae3e-7f6c31b426a4
+    a obo:ENVO_01000608; rdfs:label "ship - Punctual Heroine".
+
+# Voyage
+id:961c7163-60fa-4233-91cb-9fe75c101f1b
+    a www:ont00000890;
+    rdfs:label "Voyage";
+    n:end_port id:3f4d269f-5606-4d7d-8c8b-c9f19ad28ea5;
+    n:end_time "2022-08-16T19:44:14.048Z";
+    n:start_port id:eda9fac2-8d0d-42ef-a1a7-a36ad602f7be;
+    n:start_time "2022-08-07T19:44:14.048Z";
+    www:ont00001808 id:60221dfc-6d51-4d87-ae3e-7f6c31b426a4 .
+
+# Ports
+id:0b76f3ed-819e-44a4-9894-22393923f077
+    a obo:ENVO_00000463; rdfs:label "Port of Singapore".
+id:3f4d269f-5606-4d7d-8c8b-c9f19ad28ea5
+    a obo:ENVO_00000463; rdfs:label "Port of Shanghai".
+id:40348fc4-b2c7-41c5-878f-ae135a8f44e4
+    a obo:ENVO_00000463; rdfs:label "Port of Sydney".
+id:e937e00e-8af6-4372-801b-d21c3acfae8a
+    a obo:ENVO_00000463; rdfs:label "Port of Rotterdam".
+id:eda9fac2-8d0d-42ef-a1a7-a36ad602f7be
+    a obo:ENVO_00000463; rdfs:label "Port of Los Angeles".

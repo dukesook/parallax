@@ -1,7 +1,8 @@
 import RdfHandler from './rdf_handler';
 import { Iri } from './aliases';
-import { Port, Voyage } from './models';
+import { Port, Voyage, Observation, GeoPoint } from './models';
 import { faker } from '@faker-js/faker';
+import rdf_handler from './rdf_handler';
 
 let g_ships: Iri[] = [];
 let g_ports: Iri[] = [];
@@ -63,6 +64,14 @@ function generateVoyages(desiredCount: number = 100) {
     const voyage = fabricateVoyage();
     const voyageIri: Iri = RdfHandler.add.voyage(voyage);
     g_voyages.push(voyageIri);
+
+    // const observation_start: Observation = {
+    // }
+
+    const geoPoint: GeoPoint = rdf_handler.get.geoPoint(voyage.start_port);
+    const lat_start: number = 0; // Placeholder
+    const long_start: number = 0; // Placeholder
+    RdfHandler.add.observation(voyage.ship, lat_start, long_start, voyage.start_time);
   }
 }
 

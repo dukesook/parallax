@@ -8,6 +8,7 @@ import { Voyage } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
+import { GeoPoint, Port } from '../models';
 
 // $rdf.Namespace() returns a function.
 //    This function appends a string to the namespace and returns a NamedNode.
@@ -66,6 +67,16 @@ export const add = {
     const observableEntity: Iri = PARALLAX_R(uuidv4());
     g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
     return observableEntity;
+  },
+
+  port(port: Port): Iri {
+    const the_port: Iri = PARALLAX_R(port.port_id);
+    const harbourType: NamedNode = $rdf.sym('http://purl.obolibrary.org/obo/ENVO_00000463'); // harbour
+    g_triple_store.add(the_port, a, harbourType, PARALLAX_GRAPH);
+    g_triple_store.add(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
+    // const latitude: NamedNode
+    // latitude is as literal?
+    return the_port;
   },
 
   observation(observedThing: Iri, lat: number, lng: number, date: Date) {
@@ -158,6 +169,10 @@ export const get = {
   namedNode(label: string): $rdf.NamedNode {
     const iri = TermRegistry.getIRI(label);
     return $rdf.sym(iri);
+  },
+
+  geoPoint(portIri: Iri): { latitude: number; longitude: number } {
+    return { latitude: 0, longitude: 0 };
   },
 };
 

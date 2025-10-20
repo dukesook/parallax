@@ -7,6 +7,8 @@ export const Term = {
   has_end_time: 'https://parallax.nmsu.edu/ns/end_time',
   has_start_port: 'https://parallax.nmsu.edu/ns/start_port',
   has_end_port: 'https://parallax.nmsu.edu/ns/end_port',
+  has_latitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
+  has_longitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
 };
 
 // prettier-ignore
@@ -23,6 +25,8 @@ let g_bimap = BiMap.of<Iri, Label>(
     [Term.has_end_port, 'end_port'],
     ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
     [Term.is_about, 'is_about'],
+    [Term.has_latitude, 'latitude'],
+    [Term.has_longitude, 'longitude'],
 );
 
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608

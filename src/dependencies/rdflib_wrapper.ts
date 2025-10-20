@@ -31,6 +31,8 @@ const has_start_time: NamedNode = $rdf.sym(Term.has_start_time);
 const has_end_time: NamedNode = $rdf.sym(Term.has_end_time);
 const has_start_port: NamedNode = $rdf.sym(Term.has_start_port);
 const has_end_port: NamedNode = $rdf.sym(Term.has_end_port);
+const has_latitude: NamedNode = $rdf.sym(Term.has_latitude);
+const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 
 function init(): void {}
 
@@ -83,8 +85,14 @@ export const add = {
     const observation: Iri = PARALLAX_R(uuidv4());
     const ObservationType = SOSA('Observation');
     g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
-    // TODO: add lat, lng, date
-    // g_triple_store.add();
+    const latitude = $rdf.literal(lat.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
+    const longitude = $rdf.literal(lng.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
+    g_triple_store.add(observation, has_latitude, latitude);
+    g_triple_store.add(observation, has_longitude, longitude);
+    g_triple_store.add(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
+    const timeLiteral = $rdf.literal(date.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
+    const resultTime = SOSA('resultTime');
+    g_triple_store.add(observation, resultTime, timeLiteral, PARALLAX_GRAPH);
   },
 
   voyage(voyage: Voyage): Iri {

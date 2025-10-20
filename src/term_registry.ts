@@ -1,6 +1,10 @@
 import { BiMap } from '@rimbu/bimap';
 import { Iri, Label } from './aliases';
 
+export const Term = {
+  is_about: 'https://www.commoncoreontologies.org/ont00001808',
+};
+
 // prettier-ignore
 let g_bimap = BiMap.of<Iri, Label>(
     ['https://github.com/BFO-ontology/BFO', 'bfoGraph'],
@@ -9,8 +13,12 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://www.w3.org/ns/sosa/', 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
     ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
+    ['https://parallax.nmsu.edu/ns/start_time', 'start_time'],
+    ['https://parallax.nmsu.edu/ns/end_time', 'end_time'],
+    ['https://parallax.nmsu.edu/ns/start_port', 'start_port'],
+    ['https://parallax.nmsu.edu/ns/end_port', 'end_port'],
     ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
-    ['https://www.commoncoreontologies.org/ont00001808', 'is_about'],
+    [Term.is_about, 'is_about'],
 );
 
 // boat = http://purl.obolibrary.org/obo/ENVO_01000608
@@ -60,7 +68,7 @@ export function addTermsArray(terms: Array<{ iri: Iri; label: Label }>): void {
   addTerms(obj);
 }
 
-export function getIRI(label: string): string {
+export function getIRI(label: string): Iri {
   const iri = g_bimap.getKey(label);
   if (!iri) {
     throw new Error(`IRI not found for label: ${label}`);
@@ -68,7 +76,7 @@ export function getIRI(label: string): string {
   return iri;
 }
 
-export function getLabel(iri: string): string {
+export function getLabel(iri: Iri): string {
   const label = g_bimap.getValue(iri);
   if (!label) {
     throw new Error(`Label not found for IRI: ${iri}`);

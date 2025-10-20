@@ -1,23 +1,48 @@
 import * as $rdf from 'rdflib';
+import { NamedNode } from 'rdflib';
 import { Statement } from 'rdflib';
 import { IndexedFormula } from 'rdflib';
 import { Iri, Label } from '../aliases';
 import { Triple } from '../aliases';
 import { Voyage } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
+import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
+
+// $rdf.Namespace() returns a function.
+//    This function appends a string to the namespace and returns a NamedNode.
+type NamespaceFn = (localName?: string) => NamedNode;
+const PARALLAX_NS: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
+const SOSA: NamespaceFn = $rdf.Namespace('http://www.w3.org/ns/sosa/');
+const PARALLAX_R: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 
 const g_triple_store: IndexedFormula = $rdf.graph();
 const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
-const PARALLAX_NS = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
-const PARALLAX_R = $rdf.Namespace('https://parallax.nmsu.edu/id/');
-const SOSA = $rdf.Namespace('http://www.w3.org/ns/sosa/');
 const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
 const rdfsLabel = $rdf.sym('http://www.w3.org/2000/01/rdf-schema#label');
 
 type SparqlBinding = { [selectVariable: string]: $rdf.Term };
 // A SPARQL binding refers to a row in the query result.
 // A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
+
+let has_start_time: null | Iri = NamedNode;
+let has_end_time: null | Iri = NamedNode;
+let has_start_port: null | Iri = NamedNode;
+let has_end_port: null | Iri = NamedNode;
+const is_about: NamedNode = $rdf.sym(Term.is_about);
+
+function init(): void {
+  try {
+    // TODO - Move to TermRegsitry and Import from there
+    has_start_time = get.namedNode('start_time') as NamedNode;
+    has_end_time = get.namedNode('end_time') as NamedNode;
+    has_start_port = get.namedNode('start_port') as NamedNode;
+    has_end_port = get.namedNode('end_port') as NamedNode;
+  } catch (error) {
+    console.error('Error during RDFLib initialization:', error);
+    throw error;
+  }
+}
 
 export const add = {
   label(subject: Iri, label: string) {
@@ -66,10 +91,16 @@ export const add = {
   voyage(voyage: Voyage): Iri {
     const voyageIri: Iri = PARALLAX_R(uuidv4());
     const VoyageType = TermRegistry.getIRI('ActOfTravel');
-    const is_about = TermRegistry.getIRI('is_about');
     g_triple_store.add(voyageIri, a, VoyageType, PARALLAX_GRAPH);
-
     g_triple_store.add(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
+    const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
+    const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
+
+    g_triple_store.add(voyageIri, $rdf.sym('http://example/has_start_time'), 'https://example.com/start_time', PARALLAX_GRAPH);
+    // g_triple_store.add(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
+    // g_triple_store.add(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
+    // g_triple_store.add(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
+    // g_triple_store.add(voyageIri, has_end_port, voyage.end_port, PARALLAX_GRAPH);
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;
@@ -136,6 +167,11 @@ export const get = {
 
     return results;
   },
+
+  namedNode(label: string): $rdf.NamedNode {
+    const iri = TermRegistry.getIRI(label);
+    return $rdf.sym(iri);
+  },
 };
 
 // ================== Default Export ==================
@@ -143,6 +179,7 @@ export default {
   add,
   get,
   debug,
+  init,
 };
 
 // =================== Private Functions ===================

@@ -1,4 +1,4 @@
-# parallax
+# Parallax
 
 Creates inferences from a knowledge graph. See the [Parallax Wiki](https://github.com/dukesook/parallax.wiki.git) for more informations.
 

@@ -8,13 +8,18 @@ export interface Port {
   longitude: number;
 }
 
-export interface GeoPoint {
+export interface SpatiotemporalCoordinate {
+  Coordinate: Coordinate;
+  time: Date;
+}
+
+export interface Coordinate {
   latitude: number; // Degrees
   longitude: number; // Degrees
 }
 
 export interface Observation {
-  location: GeoPoint;
+  location: Coordinate;
   time: Date;
   Entities: string[];
 }

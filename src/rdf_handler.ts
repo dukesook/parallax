@@ -2,7 +2,7 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port, Voyage, GeoPoint } from './models';
+import { Port, Voyage, Coordinate } from './models';
 
 async function init(): Promise<void> {
   initStore()
@@ -67,9 +67,9 @@ const get = {
     return triples;
   },
 
-  geoPoint(portIri: Iri): GeoPoint {
-    const geoPoint = RDFLibWrapper.get.geoPoint(portIri);
-    return geoPoint;
+  coordinate(portIri: Iri): Coordinate {
+    const coordinate = RDFLibWrapper.get.coordinate(portIri);
+    return coordinate;
   },
 };
 

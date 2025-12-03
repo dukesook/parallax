@@ -8,7 +8,7 @@ import { Voyage } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
-import { GeoPoint, Port } from '../models';
+import { Coordinate, Port } from '../models';
 
 // $rdf.Namespace() returns a function.
 //    This function appends a string to the namespace and returns a NamedNode.
@@ -179,7 +179,7 @@ export const get = {
     return $rdf.sym(iri);
   },
 
-  geoPoint(portIri: Iri): { latitude: number; longitude: number } {
+  coordinate(portIri: Iri): { latitude: number; longitude: number } {
     return { latitude: 0, longitude: 0 };
   },
 };

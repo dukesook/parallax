@@ -90,6 +90,50 @@ cco:ont00001766 rdf:type owl:DatatypeProperty ;
                 skos:definition "A Data Property that has as its range the latitude value from some Geospatial Location coordinates set expressed in decimal degrees."@en ;
                 cco:ont00001760 "https://www.commoncoreontologies.org/GeospatialOntology"^^xsd:anyURI .
 
+parallax:hasBoat a owl:ObjectProperty ;
+  rdfs:label "has boat"@en .
+
+parallax:hasOriginHarbour a owl:ObjectProperty ;
+  rdfs:label "has origin harbour"@en .
+
+parallax:hasDestinationHarbour a owl:ObjectProperty ;
+  rdfs:label "has destination harbour"@en .
+
+parallax:hasStartTime a owl:DatatypeProperty ;
+  rdfs:label "has start time"@en ;
+  rdfs:range xsd:dateTime .
+
+parallax:hasEndTime a owl:DatatypeProperty ;
+  rdfs:label "has end time"@en ;
+  rdfs:range xsd:dateTime .
+
+parallax:Voyage a owl:Class ;
+  rdfs:label "Voyage"@en ;
+  rdfs:subClassOf
+    cco:ont00000890 ,             # Act of Travel
+    [ a owl:Restriction ;
+      owl:onProperty parallax:hasBoat ;
+      owl:someValuesFrom envo:01000608      # boat
+    ] ,
+    [ a owl:Restriction ;
+      owl:onProperty parallax:hasOriginHarbour ;
+      owl:someValuesFrom envo:00000463      # harbour
+    ] ,
+    [ a owl:Restriction ;
+      owl:onProperty parallax:hasDestinationHarbour ;
+      owl:someValuesFrom envo:00000463      # harbour
+    ] ,
+    [
+      a owl:Restriction ;
+      owl:onProperty parallax:hasStartTime ;
+      owl:someValuesFrom xsd:dateTime
+    ] ,
+    [
+      a owl:Restriction ;
+      owl:onProperty parallax:hasEndTime ;
+      owl:someValuesFrom xsd:dateTime
+    ] .
+
 
 #################################################################
 #    Classes

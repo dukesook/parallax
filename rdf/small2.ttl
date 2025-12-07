@@ -1,0 +1,38 @@
+@prefix parallax: <https://parallax.nmsu.edu/ns/> .
+@prefix envo:     <http://purl.obolibrary.org/obo/ENVO_> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+########################################
+# Boat
+########################################
+
+parallax:Boat_001
+  a envo:_01000608 ;
+  rdfs:label "Fishing vessel Alpha"@en .
+
+########################################
+# Harbours
+########################################
+
+parallax:Harbour_A
+  a envo:_00000463 ;
+  rdfs:label "Port of Los Angeles"@en .
+
+parallax:Harbour_B
+  a envo:_00000463 ;
+  rdfs:label "Port of San Diego"@en .
+
+########################################
+# Voyage
+########################################
+
+parallax:Voyage_001
+  a parallax:Voyage ;
+  parallax:hasBoat parallax:Boat_001 ;
+  parallax:hasOriginHarbour parallax:Harbour_A ;
+  parallax:hasDestinationHarbour parallax:Harbour_B ;
+  parallax:hasStartTime "2025-01-10T08:00:00Z"^^xsd:dateTime ;
+  parallax:hasEndTime   "2025-01-10T20:00:00Z"^^xsd:dateTime .
+

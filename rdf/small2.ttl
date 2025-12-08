@@ -3,6 +3,7 @@
 @prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
 
 ########################################
 # Boat
@@ -24,6 +25,11 @@ parallax:Harbour_B
   a envo:_00000463 ;
   rdfs:label "Port of San Diego"@en .
 
+parallax:Harbour_C
+  a envo:_00000463 ;
+  rdfs:label "Port of Santa Barbara"@en .
+
+
 ########################################
 # Voyage
 ########################################
@@ -36,3 +42,13 @@ parallax:Voyage_001
   parallax:hasStartTime "2025-01-10T08:00:00Z"^^xsd:dateTime ;
   parallax:hasEndTime   "2025-01-10T20:00:00Z"^^xsd:dateTime .
 
+########################################
+# Observation: Boat_001 at Harbour_C
+########################################
+
+parallax:Observation_001
+  a parallax:BoatObservation ;
+  sosa:hasFeatureOfInterest parallax:Boat_001 ;
+  sosa:resultTime "2025-01-10T12:00:00Z"^^xsd:dateTime ;
+  rdfs:label "Observation of Boat_001 at Harbour C"@en ;
+  sosa:hasResult parallax:Harbour_C .

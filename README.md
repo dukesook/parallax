@@ -43,9 +43,9 @@ Creates inferences from a knowledge graph. See the [Parallax Wiki](https://githu
   - `VITE_GOOGLE_MAPS_API_KEY=YOUR-API-KEY`
 - Find your API Key:
   - https://console.cloud.google.com/
-  - Navigation Menu (.)
+  - Open Navigation Menu - Three horizontal bars on top left (Press .)
   - APIs & Services
-  - Crednetials
+  - Credentials
 - `$ npm install`
 - `$ npm run dev`
 

@@ -81,3 +81,6 @@ These links can be loaded directly into GraphDB:
 - Display Term Registry
 - Explore Knowlegdge Graph
   - d
+
+## Design Patterns
+1. `document.getElementById()` should only be called by `gui.ts`. In other words, only the GUI knows about elements.

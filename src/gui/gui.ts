@@ -147,4 +147,7 @@ function activateTab(tab: HTMLElement): void {
   const tabContentId = tab.getAttribute('content-id')!;
   const tabContent = getElement(tabContentId);
   tabContent.classList.add('active');
+
+  // Clear message
+  displayMessage('');
 }

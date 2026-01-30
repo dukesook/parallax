@@ -12,6 +12,7 @@ export async function generateData() {
   generateShips(1);
   generatePorts();
   generateVoyages(1);
+  console.log('Data fabrication complete.');
 }
 
 const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';

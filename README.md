@@ -83,4 +83,10 @@ These links can be loaded directly into GraphDB:
   - d
 
 ## Design Patterns
-1. `document.getElementById()` should only be called by `gui.ts`. In other words, only the GUI knows about elements.
+### GUI
+- `document.getElementById()` should only be called by `gui.ts`. In other words, only the GUI knows about elements
+- `gui.ts` know how to get the buttons while `index.ts` determines what happens when those buttons are pressed.
+
+
+### Style
+1. If a function returns nothing, then you don't have to specify void.

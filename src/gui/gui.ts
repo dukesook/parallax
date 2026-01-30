@@ -41,7 +41,7 @@ export function displayTermRegistry(terms: string[]): void {
   TermRegistryGui.displayTerms(terms);
 }
 
-export function onDisplayTermRegistryButton(callback: () => void): void {
+export function onDisplayTermRegistryButton(callback: () => void) {
   TermRegistryGui.onShowTermRegistryButton(callback);
 }
 
@@ -65,19 +65,24 @@ export function getSelectedObject(): string {
   return selectedObject;
 }
 
-export function onSaveButton(callback: () => void): void {
+export function onSaveButton(callback: () => void) {
   const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
   addObservationButton.addEventListener('click', callback);
 }
 
-export function onShowObservationsButton(callback: () => void): void {
+export function onShowObservationsButton(callback: () => void) {
   const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
   showObservationsButton.addEventListener('click', callback);
 }
 
-export function onDownloadRdfButton(callback: () => void): void {
+export function onDownloadRdfButton(callback: () => void) {
   const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
   downloadRdfButton.addEventListener('click', callback);
+}
+
+export function onFabricateDataButton(callback: () => void) {
+  const fabricateDataButton = getElement('fabricate-data-button') as HTMLButtonElement;
+  fabricateDataButton.addEventListener('click', callback);
 }
 
 export function getGmapElement(): HTMLElement {

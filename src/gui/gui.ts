@@ -2,6 +2,14 @@ import { Triple } from '../aliases';
 import * as GraphTab from './knowledge_graph_tab';
 import * as TermRegistryGui from './term_registry_tab';
 
+/*
+******************* gui.ts *******************
+The GUI is dumb. It just display data and gets user-input.
+
+No other module should call document.getElementById().
+
+*/
+
 // HTML Elements - index.html
 const messageDiv = getElement('message') as HTMLElement;
 const googleMapsTab = getElement('google-maps-tab') as HTMLElement;
@@ -63,6 +71,14 @@ export function getSelectedObject(): string {
     throw new Error('No object selected');
   }
   return selectedObject;
+}
+
+// TODO: Organize all event listeners here
+export const On = {
+  writeGraphToFile(callback: () => void) {
+    const graphToFileButton = getElement('graph-to-file-button') as HTMLButtonElement;
+    graphToFileButton.addEventListener('click', callback);
+  }
 }
 
 export function onSaveButton(callback: () => void) {

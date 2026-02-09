@@ -108,6 +108,13 @@ export const On = {
   },
 };
 
+// TODO: move all getters here
+export const Get = {
+  fabricatorUserInput(): void {
+    //
+  },
+};
+
 export function getGmapElement(): HTMLElement {
   const gmapElement = getElement('map');
   if (!gmapElement) {

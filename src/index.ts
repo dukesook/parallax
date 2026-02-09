@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Listeners
-    Gui.onSaveButton(onAddObservation);
-    Gui.onShowObservationsButton(showObservations);
-    Gui.onDownloadRdfButton(downloadRdf);
-    Gui.onFabricateDataButton(Fabricator.generateData);
+    Gui.On.saveButton(onAddObservation);
+    Gui.On.showObservationsButton(showObservations);
+    Gui.On.downloadRdfButton(downloadRdf);
+    Gui.On.fabricateDataButton(Fabricator.generateData);
   });
 
   GMaps.addMapListener(onclickMap);

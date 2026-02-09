@@ -73,33 +73,40 @@ export function getSelectedObject(): string {
   return selectedObject;
 }
 
-// TODO: Organize all event listeners here
 export const On = {
   writeGraphToFile(callback: () => void) {
     const graphToFileButton = getElement('graph-to-file-button') as HTMLButtonElement;
     graphToFileButton.addEventListener('click', callback);
-  }
-}
+  },
 
-export function onSaveButton(callback: () => void) {
-  const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
-  addObservationButton.addEventListener('click', callback);
-}
+  fabricateData(callback: () => void) {
+    const form = getElement('fabricator-form') as HTMLFormElement;
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      callback();
+    });
+  },
 
-export function onShowObservationsButton(callback: () => void) {
-  const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
-  showObservationsButton.addEventListener('click', callback);
-}
+  saveButton(callback: () => void) {
+    const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
+    addObservationButton.addEventListener('click', callback);
+  },
 
-export function onDownloadRdfButton(callback: () => void) {
-  const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
-  downloadRdfButton.addEventListener('click', callback);
-}
+  showObservationsButton(callback: () => void) {
+    const showObservationsButton = getElement('show-observations-button') as HTMLButtonElement;
+    showObservationsButton.addEventListener('click', callback);
+  },
 
-export function onFabricateDataButton(callback: () => void) {
-  const fabricateDataButton = getElement('fabricate-data-button') as HTMLButtonElement;
-  fabricateDataButton.addEventListener('click', callback);
-}
+  downloadRdfButton(callback: () => void) {
+    const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
+    downloadRdfButton.addEventListener('click', callback);
+  },
+
+  fabricateDataButton(callback: () => void) {
+    const fabricateDataButton = getElement('fabricate-data-button') as HTMLButtonElement;
+    fabricateDataButton.addEventListener('click', callback);
+  },
+};
 
 export function getGmapElement(): HTMLElement {
   const gmapElement = getElement('map');

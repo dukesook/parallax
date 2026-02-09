@@ -1,16 +1,38 @@
 <div>
+  <h2>Fabricator</h2>
 
-  <h2>Fabricator.html</h2>
+  <form id="fabricator-form">
+    <!-- Boats -->
+    <label for="n_boats">Number of Boats:</label>
+    <input type="number" id="n_boats" name="lat" step="any" value="5" />
+    <br />
 
-  <label for="n_airplanes">Number of Airplanes:</label>
-  <input type="number" id="n_airplanes" name="lat" step="any" value="5" />
-  <br/>
+    <label for="n_trips_per_boat">Number of Trips per boat:</label>
+    <input type="number" id="n_trips_per_boat" name="lat" step="any" value="10" />
+    <br />
+    <br />
 
-  <label for="n_trips_per_plane">Number of Trips per plane:</label>
-  <input type="number" id="n_trips_per_plane" name="lat" step="any" value="10" />
-  <br/>
+    <!-- Airplanes -->
+    <label for="n_airplanes">Number of Airplanes:</label>
+    <input type="number" id="n_airplanes" name="lat" step="any" value="5" />
+    <br />
 
-  <!-- adds data to knowledge graph -->
-  <button id="fabricate-data-button">Fabricate Data!</button>
+    <label for="n_trips_per_plane">Number of Trips per plane:</label>
+    <input type="number" id="n_trips_per_plane" name="lat" step="any" value="10" />
+    <br />
+    <br />
 
+    <!-- Vehicles -->
+    <label for="n_vehicle">Number of Vehicles:</label>
+    <input type="number" id="n_vehicles" name="lat" step="any" value="5" />
+    <br />
+
+    <label for="n_trips_per_vehicle">Number of Trips per plane:</label>
+    <input type="number" id="n_trips_per_plane" name="lat" step="any" value="10" />
+    <br />
+    <br />
+
+    <!-- adds data to knowledge graph -->
+    <button id="fabricate-data-button">Fabricate Data! (adds to knowledge graph)</button>
+  </form>
 </div>

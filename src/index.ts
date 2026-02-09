@@ -91,6 +91,7 @@ function showObservations(): void {
 
 function fabricateData(): void {
   console.log('fabricateData()');
+  Gui.Get.fabricatorUserInput();
 }
 
 function logStore(): void {

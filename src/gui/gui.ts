@@ -111,7 +111,18 @@ export const On = {
 // TODO: move all getters here
 export const Get = {
   fabricatorUserInput(): void {
-    //
+    const form = getElement('fabricator-form') as HTMLFormElement;
+
+    const data = new FormData(form);
+
+    const n_boats = data.get('n_boats') as string;
+    const n_trips_per_boat = data.get('n_trips_per_boat') as string;
+    const n_airplanes = data.get('n_airplanes') as string;
+    const n_trips_per_plane = data.get('n_trips_per_plane') as string;
+    const n_vehicles = data.get('n_vehicles') as string;
+    const n_trips_per_vehicle = data.get('n_trips_per_vehicle') as string;
+
+    // TODO return form data
   },
 };
 

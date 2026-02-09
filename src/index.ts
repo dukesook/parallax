@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Listeners
+    Gui.On.fabricateData(fabricateData);
     Gui.On.saveButton(onAddObservation);
     Gui.On.showObservationsButton(showObservations);
     Gui.On.downloadRdfButton(downloadRdf);
-    Gui.On.fabricateDataButton(Fabricator.generateData);
   });
 
   GMaps.addMapListener(onclickMap);
@@ -87,6 +87,10 @@ function showGraphs(): void {
 
 function showObservations(): void {
   console.log('showObservations()');
+}
+
+function fabricateData(): void {
+  console.log('fabricateData()');
 }
 
 function logStore(): void {

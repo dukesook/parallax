@@ -25,8 +25,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     GMaps.loadGoogleMapsScript(gmapElement);
 
     GraphTab.init().then(() => {
-      GraphTab.onListTriplesButton(showTriples);
-      GraphTab.onListGraphsButton(showGraphs);
+      GraphTab.On.listTriplesButton(showTriples);
+      GraphTab.On.listGraphsButton(showGraphs);
+      GraphTab.On.listInstanceData(showInstanceData);
     });
 
     // Listeners
@@ -83,6 +84,11 @@ function showTriples(): void {
 function showGraphs(): void {
   const graphs = RdfHandler.get.graphNames();
   GraphTab.displayGraphs(graphs);
+}
+
+function showInstanceData(): void {
+  const instanceData: Triple[] = RdfHandler.get.instanceData();
+  GraphTab.displayTriples(instanceData);
 }
 
 function fabricateData(): void {

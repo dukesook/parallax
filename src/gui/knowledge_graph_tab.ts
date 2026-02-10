@@ -4,15 +4,22 @@ import { Triple } from '../aliases';
 // graph.ts
 export async function init() {}
 
-export function onListGraphsButton(callback: () => void): void {
-  const listGraphsButton = getElement('list-graphs-button') as HTMLButtonElement;
-  listGraphsButton.addEventListener('click', callback);
-}
+export const On = {
+  listInstanceData(callback: () => void): void {
+    const listInstanceDataButton = getElement('list-instance-data') as HTMLButtonElement;
+    listInstanceDataButton.addEventListener('click', callback);
+  },
 
-export function onListTriplesButton(callback: () => void): void {
-  const listTriplesButton = getElement('list-triples-button') as HTMLButtonElement;
-  listTriplesButton.addEventListener('click', callback);
-}
+  listGraphsButton(callback: () => void): void {
+    const listGraphsButton = getElement('list-graphs-button') as HTMLButtonElement;
+    listGraphsButton.addEventListener('click', callback);
+  },
+
+  listTriplesButton(callback: () => void): void {
+    const listTriplesButton = getElement('list-triples-button') as HTMLButtonElement;
+    listTriplesButton.addEventListener('click', callback);
+  },
+};
 
 export function displayTriples(triples: Triple[]): void {
   const table = document.getElementById('knowledge-graph-table') as HTMLTableElement;
@@ -20,8 +27,13 @@ export function displayTriples(triples: Triple[]): void {
     throw new Error('Table element not found');
   }
 
+  if (triples.length === 0) {
+    table.innerHTML = '<tr><td colspan="3">No triples found.</td></tr>';
+    return;
+  }
+
   // Clear existing table rows
-  table.innerHTML = 'testing';
+  table.innerHTML = '';
 
   // Create table header
   // Print first 10 triples

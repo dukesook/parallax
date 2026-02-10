@@ -31,3 +31,12 @@ export interface Voyage {
   start_port: Iri;
   end_port: Iri;
 }
+
+export interface FabricatorOptions {
+  n_boats: number;
+  n_trips_per_boat: number;
+  n_airplanes: number;
+  n_trips_per_plane: number;
+  n_vehicles: number;
+  n_trips_per_vehicle: number;
+}

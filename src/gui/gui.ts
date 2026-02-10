@@ -1,6 +1,7 @@
 import { Triple } from '../aliases';
 import * as GraphTab from './knowledge_graph_tab';
 import * as TermRegistryGui from './term_registry_tab';
+import { FabricatorOptions } from '../models';
 
 /*
 ******************* gui.ts *******************
@@ -110,7 +111,7 @@ export const On = {
 
 // TODO: move all getters here
 export const Get = {
-  fabricatorUserInput(): void {
+  fabricatorUserInput(): FabricatorOptions {
     const form = getElement('fabricator-form') as HTMLFormElement;
 
     const data = new FormData(form);
@@ -121,6 +122,17 @@ export const Get = {
     const n_trips_per_plane = data.get('n_trips_per_plane') as string;
     const n_vehicles = data.get('n_vehicles') as string;
     const n_trips_per_vehicle = data.get('n_trips_per_vehicle') as string;
+
+    const userInput: FabricatorOptions = {
+      n_boats: parseInt(n_boats),
+      n_trips_per_boat: parseInt(n_trips_per_boat),
+      n_airplanes: parseInt(n_airplanes),
+      n_trips_per_plane: parseInt(n_trips_per_plane),
+      n_vehicles: parseInt(n_vehicles),
+      n_trips_per_vehicle: parseInt(n_trips_per_vehicle),
+    };
+
+    return userInput;
 
     // TODO return form data
   },

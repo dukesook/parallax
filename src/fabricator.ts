@@ -3,15 +3,18 @@ import { Iri } from './aliases';
 import { Port, Voyage, Observation, Coordinate } from './models';
 import { faker } from '@faker-js/faker';
 import rdf_handler from './rdf_handler';
+import { FabricatorOptions } from './models';
 
 let g_ships: Iri[] = [];
 let g_ports: Iri[] = [];
 let g_voyages: Iri[] = [];
 
-export async function generateData() {
-  generateShips(1);
+export async function generateData(options: FabricatorOptions): Promise<void> {
+  const n_ships = options.n_boats;
+  const n_trips_per_boat = options.n_trips_per_boat;
+  generateShips(n_ships);
   generatePorts();
-  generateVoyages(1);
+  generateVoyages(n_trips_per_boat);
   console.log('Data fabrication complete.');
 }
 

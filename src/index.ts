@@ -5,6 +5,7 @@ import * as GraphTab from './gui/knowledge_graph_tab';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import { saveFile } from './fetcher';
+import { FabricatorOptions as FabricatorOptions } from './models';
 
 const debugButton = document.getElementById('debug-button');
 const debug2Button = document.getElementById('debug2-button');
@@ -91,7 +92,8 @@ function showObservations(): void {
 
 function fabricateData(): void {
   console.log('fabricateData()');
-  Gui.Get.fabricatorUserInput();
+  const options = Gui.Get.fabricatorUserInput() as FabricatorOptions;
+  Fabricator.generateData(options);
 }
 
 function logStore(): void {

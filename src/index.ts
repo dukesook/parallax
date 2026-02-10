@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Listeners
     Gui.On.fabricateData(fabricateData);
     Gui.On.saveButton(onAddObservation);
-    Gui.On.showObservationsButton(showObservations);
     Gui.On.downloadRdfButton(downloadRdf);
   });
 
@@ -84,10 +83,6 @@ function showTriples(): void {
 function showGraphs(): void {
   const graphs = RdfHandler.get.graphNames();
   GraphTab.displayGraphs(graphs);
-}
-
-function showObservations(): void {
-  console.log('showObservations()');
 }
 
 function fabricateData(): void {

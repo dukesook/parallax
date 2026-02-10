@@ -53,6 +53,8 @@ export function displayTriples(triples: Triple[]): void {
 }
 
 export function displayList(items: string[]): void {
+  const table = document.getElementById('knowledge-graph-table') as HTMLTableElement;
+  table.innerHTML = '';
   const outputDiv = getElement('graph-output') as HTMLDivElement;
   outputDiv.innerHTML = '';
   items.forEach((item) => {

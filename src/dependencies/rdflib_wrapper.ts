@@ -13,9 +13,9 @@ import { Coordinate, Port } from '../models';
 // $rdf.Namespace() returns a function.
 //    This function appends a string to the namespace and returns a NamedNode.
 type NamespaceFn = (localName?: string) => NamedNode;
+const PARALLAX_R: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 const PARALLAX_NS: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
 const SOSA: NamespaceFn = $rdf.Namespace('http://www.w3.org/ns/sosa/');
-const PARALLAX_R: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/id/');
 
 const g_triple_store: IndexedFormula = $rdf.graph();
 const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
@@ -84,25 +84,26 @@ export const add = {
   observation(observedThing: Iri, lat: number, lng: number, date: Date) {
     const observation: Iri = PARALLAX_R(uuidv4());
     const ObservationType = SOSA('Observation');
-    g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
     const latitude = $rdf.literal(lat.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
     const longitude = $rdf.literal(lng.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
-    g_triple_store.add(observation, has_latitude, latitude);
-    g_triple_store.add(observation, has_longitude, longitude);
-    g_triple_store.add(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
     const timeLiteral = $rdf.literal(date.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const resultTime = SOSA('resultTime');
+
+    g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
+    g_triple_store.add(observation, has_latitude, latitude, PARALLAX_GRAPH);
+    g_triple_store.add(observation, has_longitude, longitude, PARALLAX_GRAPH);
+    g_triple_store.add(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
     g_triple_store.add(observation, resultTime, timeLiteral, PARALLAX_GRAPH);
   },
 
   voyage(voyage: Voyage): Iri {
     const voyageIri: Iri = PARALLAX_R(uuidv4());
     const VoyageType = TermRegistry.getIRI('ActOfTravel');
-    g_triple_store.add(voyageIri, a, VoyageType, PARALLAX_GRAPH);
-    g_triple_store.add(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
     const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
 
+    g_triple_store.add(voyageIri, a, VoyageType, PARALLAX_GRAPH);
+    g_triple_store.add(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
     g_triple_store.add(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
     g_triple_store.add(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
     g_triple_store.add(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
@@ -146,6 +147,17 @@ export const get = {
       triples.push(triple);
     }
 
+    return triples;
+  },
+
+  instanceData(): Triple[] {
+    const triples: Triple[] = [];
+    g_triple_store.statementsMatching(undefined, undefined, undefined, PARALLAX_GRAPH).forEach((statement: Statement) => {
+      const subject = statement.subject.value;
+      const predicate = statement.predicate.value;
+      const object = statement.object.value;
+      triples.push({ subject, predicate, object });
+    });
     return triples;
   },
 

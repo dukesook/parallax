@@ -97,10 +97,9 @@ function logStore(): void {
 }
 
 function debug() {
-  // Fabricator.generateData();
+  console.log('debug()');
 }
 
 function debug2() {
-  const rdf = RdfHandler.get.instanceData();
-  saveFile(rdf, 'instance_data.ttl');
+  console.log('debug2()');
 }

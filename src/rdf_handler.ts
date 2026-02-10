@@ -44,8 +44,8 @@ const add = {
 };
 
 const get = {
-  instanceData(): string {
-    return RDFLibWrapper.instanceDataToTurtle();
+  instanceData(): Triple[] {
+    return RDFLibWrapper.get.instanceData();
   },
 
   graphNames(): Label[] {
@@ -123,7 +123,5 @@ export function logStore(): void {
 }
 
 export function debug(): void {
-  const turtle = RDFLibWrapper.instanceDataToTurtle();
-  console.log(turtle);
-  Fetcher.saveFile(turtle);
+  console.log('rdf_handler: debug()');
 }

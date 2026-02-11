@@ -44,8 +44,12 @@ const add = {
 };
 
 const get = {
-  instanceData(): Triple[] {
+  instanceDataTriples(): Triple[] {
     return RDFLibWrapper.get.instanceData();
+  },
+
+  instanceDataTurtle(): string {
+    return RDFLibWrapper.get.instanceDataTurtle();
   },
 
   graphNames(): Label[] {

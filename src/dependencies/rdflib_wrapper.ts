@@ -161,6 +161,37 @@ export const get = {
     return triples;
   },
 
+  instanceDataTurtle(): string {
+    const parallaxTriples = getParallaxTriples();
+    let turtle = '';
+
+    const subGraph: $rdf.IndexedFormula = $rdf.graph();
+    for (const triple of parallaxTriples) {
+      const subject = $rdf.sym(triple.subject);
+      const predicate = $rdf.sym(triple.predicate);
+
+      let toObject;
+      const isLiteralObj = isLiteral(triple.object);
+      if (isLiteralObj) {
+        toObject = $rdf.literal;
+      } else {
+        toObject = $rdf.sym;
+      }
+      const object = toObject(triple.object);
+      subGraph.add(subject, predicate, object, PARALLAX_GRAPH);
+    }
+
+    $rdf.serialize(undefined, subGraph, PARALLAX_GRAPH.value, 'text/turtle', (err: Error, str: string) => {
+      if (err) {
+        console.error('Error serializing to Turtle:', err);
+      } else {
+        turtle = str || '';
+      }
+    });
+
+    return turtle;
+  },
+
   iriToLabelMapping(): { [key: Iri]: Label } {
     const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -258,37 +289,6 @@ function isLiteral(value: string): boolean {
   // Regex for absolute IRI scheme: "scheme:"
   const iriPattern = /^(?:[a-z][a-z0-9+.-]*):/i;
   return !iriPattern.test(value);
-}
-
-export function instanceDataToTurtle(): string {
-  const parallaxTriples = getParallaxTriples();
-  let turtle = '';
-
-  const subGraph: $rdf.IndexedFormula = $rdf.graph();
-  for (const triple of parallaxTriples) {
-    const subject = $rdf.sym(triple.subject);
-    const predicate = $rdf.sym(triple.predicate);
-
-    let toObject;
-    const isLiteralObj = isLiteral(triple.object);
-    if (isLiteralObj) {
-      toObject = $rdf.literal;
-    } else {
-      toObject = $rdf.sym;
-    }
-    const object = toObject(triple.object);
-    subGraph.add(subject, predicate, object, PARALLAX_GRAPH);
-  }
-
-  $rdf.serialize(undefined, subGraph, PARALLAX_GRAPH.value, 'text/turtle', (err: Error, str: string) => {
-    if (err) {
-      console.error('Error serializing to Turtle:', err);
-    } else {
-      turtle = str || '';
-    }
-  });
-
-  return turtle;
 }
 
 function debug(): void {

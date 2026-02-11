@@ -4,7 +4,7 @@ import * as Gui from './gui/gui';
 import * as GraphTab from './gui/knowledge_graph_tab';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
-import { saveFile } from './fetcher';
+import * as Fetcher from './fetcher';
 import { FabricatorOptions as FabricatorOptions } from './models';
 
 const debugButton = document.getElementById('debug-button');
@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Listeners
     Gui.On.fabricateData(fabricateData);
     Gui.On.saveButton(onAddObservation);
+    Gui.On.writeGraphToFile(writeGraphToFile);
   });
 
   GMaps.addMapListener(onclickMap);
@@ -67,6 +68,12 @@ async function onAddObservation(): Promise<void> {
   RdfHandler.add.observation(objectIri, lat, lng, timestamp);
 }
 
+function writeGraphToFile(): void {
+  console.log('writeGraphToFile()');
+  const rdf = RdfHandler.get.instanceDataTurtle();
+  Fetcher.saveFile(rdf, 'graph.ttl');
+}
+
 function showTriples(): void {
   // Get Triples
   const triples: Triple[] = RdfHandler.get.allTriples();
@@ -82,7 +89,7 @@ function showGraphs(): void {
 }
 
 function showInstanceData(): void {
-  const instanceData: Triple[] = RdfHandler.get.instanceData();
+  const instanceData: Triple[] = RdfHandler.get.instanceDataTriples();
   GraphTab.displayTriples(instanceData);
 }
 

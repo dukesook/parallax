@@ -93,11 +93,6 @@ export const On = {
     addObservationButton.addEventListener('click', callback);
   },
 
-  downloadRdfButton(callback: () => void) {
-    const downloadRdfButton = getElement('download-rdf-button') as HTMLButtonElement;
-    downloadRdfButton.addEventListener('click', callback);
-  },
-
   fabricateDataButton(callback: () => void) {
     const fabricateDataButton = getElement('fabricate-data-button') as HTMLButtonElement;
     fabricateDataButton.addEventListener('click', callback);

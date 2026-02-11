@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Listeners
     Gui.On.fabricateData(fabricateData);
     Gui.On.saveButton(onAddObservation);
-    Gui.On.downloadRdfButton(downloadRdf);
   });
 
   GMaps.addMapListener(onclickMap);
@@ -66,10 +65,6 @@ async function onAddObservation(): Promise<void> {
   const objectIri = await RdfHandler.add.observableEntity(selectedObject);
   const timestamp = new Date();
   RdfHandler.add.observation(objectIri, lat, lng, timestamp);
-}
-
-function downloadRdf(): void {
-  console.log('downloadRdf()');
 }
 
 function showTriples(): void {

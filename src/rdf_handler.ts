@@ -16,9 +16,12 @@ async function init(): Promise<void> {
 }
 
 const add = {
-  observableEntity(entityType: string): Iri {
-    const iri = RDFLibWrapper.add.observableEntity(entityType);
-    return iri;
+  observableEntity(entityTypeString: string): Iri {
+    let entityType: Iri = TermRegistry.getIRI(entityTypeString);
+    console.log('entityTypeString:', entityTypeString);
+    console.log('entityType IRI:', entityType);
+    const entity = RDFLibWrapper.add.observableEntity(entityType) as Iri;
+    return entity;
   },
 
   observation(observedThing: Iri, lat: number, long: number, date: Date): void {

@@ -81,7 +81,7 @@ export const add = {
     return the_port;
   },
 
-  observation(observedThing: Iri, lat: number, lng: number, date: Date) {
+  observation(observedThing: Iri, lat: number, lng: number, date: Date): Iri {
     const observation: Iri = PARALLAX_R(uuidv4());
     const ObservationType = SOSA('Observation');
     const latitude = $rdf.literal(lat.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
@@ -94,6 +94,7 @@ export const add = {
     g_triple_store.add(observation, has_longitude, longitude, PARALLAX_GRAPH);
     g_triple_store.add(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
     g_triple_store.add(observation, resultTime, timeLiteral, PARALLAX_GRAPH);
+    return observation;
   },
 
   voyage(voyage: Voyage): Iri {

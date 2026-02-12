@@ -18,8 +18,6 @@ async function init(): Promise<void> {
 const add = {
   observableEntity(entityTypeString: string): Iri {
     let entityType: Iri = TermRegistry.getIRI(entityTypeString);
-    console.log('entityTypeString:', entityTypeString);
-    console.log('entityType IRI:', entityType);
     const entity = RDFLibWrapper.add.observableEntity(entityType) as Iri;
     return entity;
   },
@@ -29,9 +27,7 @@ const add = {
   },
 
   port(port: Port): Iri {
-    const harbourType: Iri = TermRegistry.getIRI('harbour');
-    const harbour: Iri = add.observableEntity(harbourType);
-
+    const harbour: Iri = add.observableEntity('harbour');
     RDFLibWrapper.add.label(harbour, port.name);
     return harbour;
   },

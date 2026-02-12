@@ -77,6 +77,11 @@ export function addTermsArray(terms: Array<{ iri: Iri; label: Label }>): void {
 }
 
 export function getIRI(label: string): Iri {
+  // Check if an IRI was passed in instead of a label:
+  if (g_bimap.hasKey(label)) {
+    throw new Error(`getIRI(): Expected a label, but got an IRI: ${label}`);
+  }
+
   const iri = g_bimap.getKey(label);
   if (!iri) {
     throw new Error(`IRI not found for label: ${label}`);

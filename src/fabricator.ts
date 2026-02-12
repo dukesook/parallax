@@ -5,8 +5,6 @@ import { faker } from '@faker-js/faker';
 import rdf_handler from './rdf_handler';
 import { FabricatorOptions } from './models';
 
-let g_ports: Iri[] = [];
-
 export async function generateData(options: FabricatorOptions): Promise<void> {
   const n_ships = options.n_boats;
   const n_trips_per_boat = options.n_trips_per_boat;
@@ -16,7 +14,7 @@ export async function generateData(options: FabricatorOptions): Promise<void> {
   console.log('Data fabrication complete.');
 }
 
-const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
+const BOAT: string = 'boat';
 
 function generateShips(desiredCount: number = 6): Iri[] {
   let ships: Iri[] = [];
@@ -33,7 +31,7 @@ function generateShips(desiredCount: number = 6): Iri[] {
 
   if (desiredCount == boatNames.length) {
     for (const name of boatNames) {
-      const iri = RdfHandler.add.observableEntity(boat);
+      const iri = RdfHandler.add.observableEntity(BOAT);
       RdfHandler.add.label(iri, name);
       ships.push(iri);
     }
@@ -41,7 +39,7 @@ function generateShips(desiredCount: number = 6): Iri[] {
 
   for (let i = 0; i < desiredCount; i++) {
     const shipName = fabricateShipName();
-    const iri = RdfHandler.add.observableEntity(boat);
+    const iri = RdfHandler.add.observableEntity(BOAT);
     RdfHandler.add.label(iri, 'ship - ' + shipName);
     ships.push(iri);
   }

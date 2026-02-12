@@ -5,14 +5,13 @@ import { faker } from '@faker-js/faker';
 import rdf_handler from './rdf_handler';
 import { FabricatorOptions } from './models';
 
-let g_ships: Iri[] = [];
 let g_ports: Iri[] = [];
 let g_voyages: Iri[] = [];
 
 export async function generateData(options: FabricatorOptions): Promise<void> {
   const n_ships = options.n_boats;
   const n_trips_per_boat = options.n_trips_per_boat;
-  generateShips(n_ships);
+  let ships: Iri[] = generateShips(n_ships);
   generatePorts();
   generateVoyages(n_trips_per_boat);
   console.log('Data fabrication complete.');
@@ -20,7 +19,9 @@ export async function generateData(options: FabricatorOptions): Promise<void> {
 
 const boat: Iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
 
-function generateShips(desiredCount: number = 6) {
+function generateShips(desiredCount: number = 6): Iri[] {
+  let ships: Iri[] = [];
+
   //prettier-ignore
   const boatNames = [
     'Ship - Red October',
@@ -35,7 +36,7 @@ function generateShips(desiredCount: number = 6) {
     for (const name of boatNames) {
       const iri = RdfHandler.add.observableEntity(boat);
       RdfHandler.add.label(iri, name);
-      g_ships.push(iri);
+      ships.push(iri);
     }
   }
 
@@ -43,8 +44,10 @@ function generateShips(desiredCount: number = 6) {
     const shipName = fabricateShipName();
     const iri = RdfHandler.add.observableEntity(boat);
     RdfHandler.add.label(iri, 'ship - ' + shipName);
-    g_ships.push(iri);
+    ships.push(iri);
   }
+
+  return ships;
 }
 
 function generatePorts() {
@@ -79,8 +82,8 @@ function generateVoyages(desiredCount: number = 100) {
   }
 }
 
-function fabricateVoyage(): Voyage {
-  const ship: Iri = getRandomShip();
+function fabricateVoyage(ships: Iri[]): Voyage {
+  const ship: Iri = getRandomShip(ships);
 
   // Get two different ports
   const start_port: Iri = getRandomPort();
@@ -113,12 +116,12 @@ function fabricateShipName(): string {
   return fakeName;
 }
 
-function getRandomShip(): Iri {
-  if (g_ships.length === 0) {
+function getRandomShip(ships: Iri[]): Iri {
+  if (ships.length === 0) {
     throw new Error('Fabricator.getRandomShip(): No ships available');
   }
-  const randomIndex = getRandomIndex(g_ships);
-  return g_ships[randomIndex];
+  const randomIndex = getRandomIndex(ships);
+  return ships[randomIndex];
 }
 
 function getRandomPort(): Iri {

@@ -78,6 +78,11 @@ const get = {
     const coordinate = RDFLibWrapper.get.coordinate(portIri);
     return coordinate;
   },
+
+  voyages(): Voyage[] {
+    const voyages = RDFLibWrapper.get.voyages();
+    return voyages;
+  },
 };
 
 // ================== Private Functions ==================

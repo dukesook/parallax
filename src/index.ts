@@ -100,7 +100,6 @@ function scanKGraph(): void {
 }
 
 function fabricateData(): void {
-  console.log('fabricateData()');
   const options = Gui.Get.fabricatorUserInput() as FabricatorOptions;
   Fabricator.generateData(options);
 }

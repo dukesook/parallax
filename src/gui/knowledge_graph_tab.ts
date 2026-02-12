@@ -19,6 +19,11 @@ export const On = {
     const listTriplesButton = getElement('list-triples-button') as HTMLButtonElement;
     listTriplesButton.addEventListener('click', callback);
   },
+
+  scan(callback: () => void): void {
+    const scanButton = getElement('scan') as HTMLButtonElement;
+    scanButton.addEventListener('click', callback);
+  },
 };
 
 export function displayTriples(triples: Triple[]): void {

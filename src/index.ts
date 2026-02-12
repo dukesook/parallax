@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       GraphTab.On.listTriplesButton(showTriples);
       GraphTab.On.listGraphsButton(showGraphs);
       GraphTab.On.listInstanceData(showInstanceData);
+      GraphTab.On.scan(scanKGraph);
     });
 
     // Listeners
@@ -91,6 +92,10 @@ function showGraphs(): void {
 function showInstanceData(): void {
   const instanceData: Triple[] = RdfHandler.get.instanceDataTriples();
   GraphTab.displayTriples(instanceData);
+}
+
+function scanKGraph(): void {
+  console.log('scanKGraph()');
 }
 
 function fabricateData(): void {

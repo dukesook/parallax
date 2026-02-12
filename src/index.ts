@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       GraphTab.On.listTriplesButton(showTriples);
       GraphTab.On.listGraphsButton(showGraphs);
       GraphTab.On.listInstanceData(showInstanceData);
+      GraphTab.On.listShipsButton(showShips);
       GraphTab.On.scan(scanKGraph);
     });
 
@@ -93,6 +94,11 @@ function showGraphs(): void {
 function showInstanceData(): void {
   const instanceData: Triple[] = RdfHandler.get.instanceDataTriples();
   GraphTab.displayTriples(instanceData);
+}
+
+function showShips(): void {
+  console.log('showShips button');
+  // const ships: Triple[] = RdfHandler.get.ships();
 }
 
 function scanKGraph(): void {

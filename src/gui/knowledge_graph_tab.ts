@@ -20,6 +20,11 @@ export const On = {
     listTriplesButton.addEventListener('click', callback);
   },
 
+  listShipsButton(callback: () => void): void {
+    const listShipsButton = getElement('list-ships-button') as HTMLButtonElement;
+    listShipsButton.addEventListener('click', callback);
+  },
+
   scan(callback: () => void): void {
     const scanButton = getElement('scan') as HTMLButtonElement;
     scanButton.addEventListener('click', callback);

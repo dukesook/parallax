@@ -80,15 +80,6 @@ const get = {
   },
 };
 
-// ================== Default Export ==================
-
-export default {
-  init,
-  add,
-  get,
-  logStore,
-};
-
 // ================== Private Functions ==================
 
 function initTermRegistry(): void {
@@ -132,3 +123,12 @@ export function logStore(): void {
 export function debug(): void {
   console.log('rdf_handler: debug()');
 }
+
+// ================== Default Export ==================
+
+export default {
+  init,
+  add,
+  get,
+  logStore,
+};

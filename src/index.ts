@@ -6,6 +6,7 @@ import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import * as Fetcher from './fetcher';
 import { FabricatorOptions as FabricatorOptions } from './models';
+import Scanner from './scanner';
 
 const debugButton = document.getElementById('debug-button');
 const debug2Button = document.getElementById('debug2-button');
@@ -95,7 +96,7 @@ function showInstanceData(): void {
 }
 
 function scanKGraph(): void {
-  console.log('scanKGraph()');
+  Scanner.scan();
 }
 
 function fabricateData(): void {

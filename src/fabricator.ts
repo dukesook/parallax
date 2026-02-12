@@ -10,9 +10,9 @@ let g_ports: Iri[] = [];
 export async function generateData(options: FabricatorOptions): Promise<void> {
   const n_ships = options.n_boats;
   const n_trips_per_boat = options.n_trips_per_boat;
-  let ships: Iri[] = generateShips(n_ships);
-  generatePorts();
-  const voyages: Iri[] = generateVoyages(n_trips_per_boat, ships);
+  const ships: Iri[] = generateShips(n_ships);
+  const ports = generatePorts();
+  const voyages: Iri[] = generateVoyages(n_trips_per_boat, ships, ports);
   console.log('Data fabrication complete.');
 }
 
@@ -49,9 +49,9 @@ function generateShips(desiredCount: number = 6): Iri[] {
   return ships;
 }
 
-function generatePorts() {
-  console.log('generatePorts()');
-  const ports: Port[] = [
+function generatePorts(): Iri[] {
+  let ports: Iri[] = [];
+  const port_objects: Port[] = [
     { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
     { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
     { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },
@@ -59,16 +59,17 @@ function generatePorts() {
     { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
   ];
 
-  for (const port of ports) {
+  for (const port of port_objects) {
     const port_iri: Iri = RdfHandler.add.port(port);
-    g_ports.push(port_iri);
+    ports.push(port_iri);
   }
+  return ports;
 }
 
-function generateVoyages(desiredCount: number = 100, ships: Iri[]): Iri[] {
+function generateVoyages(desiredCount: number, ships: Iri[], ports: Iri[]): Iri[] {
   let voyages: Iri[] = [];
   for (let i = 0; i < desiredCount; i++) {
-    const voyage = fabricateVoyage(ships);
+    const voyage = fabricateVoyage(ships, ports);
     const voyageIri: Iri = RdfHandler.add.voyage(voyage);
     voyages.push(voyageIri);
 
@@ -83,14 +84,14 @@ function generateVoyages(desiredCount: number = 100, ships: Iri[]): Iri[] {
   return voyages;
 }
 
-function fabricateVoyage(ships: Iri[]): Voyage {
+function fabricateVoyage(ships: Iri[], ports: Iri[]): Voyage {
   const ship: Iri = getRandomShip(ships);
 
   // Get two different ports
-  const start_port: Iri = getRandomPort();
-  let end_port: Iri = getRandomPort();
+  const start_port: Iri = getRandomPort(ports);
+  let end_port: Iri = getRandomPort(ports);
   while (end_port === start_port) {
-    end_port = getRandomPort();
+    end_port = getRandomPort(ports);
   }
 
   // Dates
@@ -125,9 +126,9 @@ function getRandomShip(ships: Iri[]): Iri {
   return ships[randomIndex];
 }
 
-function getRandomPort(): Iri {
-  const randomIndex = getRandomIndex(g_ports);
-  return g_ports[randomIndex];
+function getRandomPort(ports: Iri[]): Iri {
+  const randomIndex = getRandomIndex(ports);
+  return ports[randomIndex];
 }
 
 function getRandomIndex(data: any[]): number {

@@ -6,14 +6,13 @@ import rdf_handler from './rdf_handler';
 import { FabricatorOptions } from './models';
 
 let g_ports: Iri[] = [];
-let g_voyages: Iri[] = [];
 
 export async function generateData(options: FabricatorOptions): Promise<void> {
   const n_ships = options.n_boats;
   const n_trips_per_boat = options.n_trips_per_boat;
   let ships: Iri[] = generateShips(n_ships);
   generatePorts();
-  generateVoyages(n_trips_per_boat);
+  const voyages: Iri[] = generateVoyages(n_trips_per_boat, ships);
   console.log('Data fabrication complete.');
 }
 
@@ -66,11 +65,12 @@ function generatePorts() {
   }
 }
 
-function generateVoyages(desiredCount: number = 100) {
+function generateVoyages(desiredCount: number = 100, ships: Iri[]): Iri[] {
+  let voyages: Iri[] = [];
   for (let i = 0; i < desiredCount; i++) {
-    const voyage = fabricateVoyage();
+    const voyage = fabricateVoyage(ships);
     const voyageIri: Iri = RdfHandler.add.voyage(voyage);
-    g_voyages.push(voyageIri);
+    voyages.push(voyageIri);
 
     // const observation_start: Observation = {
     // }
@@ -80,6 +80,7 @@ function generateVoyages(desiredCount: number = 100) {
     const long_start: number = 0; // Placeholder
     RdfHandler.add.observation(voyage.ship, lat_start, long_start, voyage.start_time);
   }
+  return voyages;
 }
 
 function fabricateVoyage(ships: Iri[]): Voyage {

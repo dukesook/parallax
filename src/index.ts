@@ -97,8 +97,8 @@ function showInstanceData(): void {
 }
 
 function showShips(): void {
-  console.log('showShips button');
   // const ships: Triple[] = RdfHandler.get.ships();
+  RdfHandler.get.ships();
 }
 
 function scanKGraph(): void {

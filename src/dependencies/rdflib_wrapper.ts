@@ -1,9 +1,6 @@
 import * as $rdf from 'rdflib';
-import { NamedNode } from 'rdflib';
-import { Statement } from 'rdflib';
-import { IndexedFormula } from 'rdflib';
-import { Iri, Label } from '../aliases';
-import { Triple } from '../aliases';
+import { IndexedFormula, Query, Statement, NamedNode } from 'rdflib';
+import { Iri, Label, Triple } from '../aliases';
 import { Voyage } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
@@ -202,8 +199,7 @@ export const get = {
     `;
 
     // Prepare the query object
-    const testMode = false;
-    const sparqlQuery = $rdf.SPARQLToQuery(query, testMode, g_triple_store);
+    const sparqlQuery = $rdf.SPARQLToQuery(query, false, g_triple_store);
 
     // Execute the query
     const bindings: SparqlBinding[] = g_triple_store.querySync(sparqlQuery);
@@ -225,6 +221,23 @@ export const get = {
 
   coordinate(portIri: Iri): { latitude: number; longitude: number } {
     return { latitude: 0, longitude: 0 };
+  },
+
+  ships(): Iri[] {
+    let query = `
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX parallax: <https://parallax.nmsu.edu/ns/>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+    SELECT ?ship WHERE {
+      ?ship rdf:type obo:ENVO_01000608 .
+    }
+    `;
+
+    runQuery(query);
+
+    return [];
   },
 };
 
@@ -260,6 +273,26 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
   }
 
   return graphNames;
+}
+
+function runQuery(queryStr: string) {
+  console.log('runQuery()');
+  const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
+
+  let rowCount = 0;
+  const limit = 1;
+
+  function onRow(row: Record<string, $rdf.Term>): void {
+    if (rowCount >= limit) {
+      return;
+    }
+    rowCount++;
+    console.log('onRow()');
+    console.log(row);
+  }
+
+  g_triple_store.query(queryObj, onRow);
+  console.log('End of runQuery()');
 }
 
 // =================== Debugging and Logging ===================

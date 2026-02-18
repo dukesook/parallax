@@ -34,6 +34,12 @@ const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 function init(): void {}
 
 export const add = {
+  // TODO: ENSURE EVERYONE USES THIS FUNCTION.
+  // DO NOT CALL g_triple_store.add() DIRECTLY.
+  triple(s: NamedNode, p: Node, o: Node, graph: NamedNode) {
+    g_triple_store.add(s, p, o, graph);
+  },
+
   label(subject: Iri, label: string) {
     g_triple_store.add($rdf.sym(subject), rdfsLabel, $rdf.literal(label), PARALLAX_GRAPH);
     // read triple back
@@ -63,8 +69,10 @@ export const add = {
   },
 
   observableEntity(entityType: Iri): Iri {
-    const observableEntity: Iri = PARALLAX_R(uuidv4());
-    g_triple_store.add(observableEntity, a, entityType, PARALLAX_GRAPH);
+    const observableEntity: NamedNode = PARALLAX_R(uuidv4());
+    const entityTypeNode: NamedNode = $rdf.sym(entityType);
+    add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
+    // g_triple_store.add(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     return observableEntity;
   },
 
@@ -232,10 +240,9 @@ export const get = {
 
     SELECT * WHERE {
       
-      ?s ?p ?o .
+      ?s ?p obo:ENVO_01000608 .
     }
     `;
-    // ?ship rdf:type obo:ENVO_01000608 .
     runQuery(query);
 
     return [];
@@ -280,24 +287,24 @@ function runQuery(queryStr: string) {
   console.log('runQuery()');
   const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
 
-  let rowCount = 0;
-  const limit = 9991;
-
   function onRow(row: Record<string, $rdf.Term>): void {
-    if (rowCount >= limit) {
-      return;
-    }
     for (const [key, value] of Object.entries(row)) {
-      // console.log(`${key}: ${value.value}`);
+      console.log(`${key}: ${value.value}`);
     }
 
-    const s = row['?s'];
-    const p = row['?p'];
-    const o = row['?o'];
-    console.log(`s: ${s.value}, p: ${p.value}, o: ${o.value}`);
-
-    rowCount++;
+    // const s = row['?s'];
+    // const p = row['?p'];
+    // const o = row['?o'];
+    // if (o.value === 'http://purl.obolibrary.org/obo/ENVO_01000608') {
+    //   console.log(`Found a ship! s: ${s.value}, p: ${p.value}, o: ${o.value}`);
+    // }
   }
+
+  const iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
+
+  console.log('as NamedNode:', g_triple_store.statementsMatching(undefined, undefined, $rdf.sym(iri)).length);
+
+  console.log('as Literal:', g_triple_store.statementsMatching(undefined, undefined, $rdf.literal(iri)).length);
 
   g_triple_store.query(queryObj, onRow);
   console.log('End of runQuery()');

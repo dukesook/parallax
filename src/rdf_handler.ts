@@ -104,7 +104,7 @@ function initTermRegistry(): void {
 async function initStore(): Promise<void> {
   const bfo = await Fetcher.fetchBFO();
   const bfoGraphIRI = TermRegistry.getIRI('bfoGraph');
-  RDFLibWrapper.add.rdfToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
+  // RDFLibWrapper.add.rdfToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
   const geoSparqlGraphIRI = TermRegistry.getIRI('geoSparqlGraph');
@@ -116,7 +116,7 @@ async function initStore(): Promise<void> {
 
   const sosaOntology = await Fetcher.fetchSosa();
   const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');
-  RDFLibWrapper.add.rdfToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
+  // RDFLibWrapper.add.rdfToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
 }
 
 // ================== Debugging Functions ==================

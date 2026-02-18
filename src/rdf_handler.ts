@@ -112,7 +112,7 @@ async function initStore(): Promise<void> {
 
   const envoOntology = await Fetcher.fetchEnvoBasicXml();
   const envoGraphIRI = TermRegistry.getIRI('envoGraph');
-  RDFLibWrapper.add.rdfToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
+  // RDFLibWrapper.add.rdfToStore(envoOntology.rdf, envoOntology.base, envoOntology.mime, envoGraphIRI);
 
   const sosaOntology = await Fetcher.fetchSosa();
   const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');

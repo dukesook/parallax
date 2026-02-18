@@ -231,11 +231,11 @@ export const get = {
     PREFIX obo: <http://purl.obolibrary.org/obo/>
 
     SELECT * WHERE {
-      # ?ship rdf:type obo:ENVO_01000608 .
+      
       ?s ?p ?o .
     }
     `;
-
+    // ?ship rdf:type obo:ENVO_01000608 .
     runQuery(query);
 
     return [];
@@ -281,15 +281,22 @@ function runQuery(queryStr: string) {
   const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
 
   let rowCount = 0;
-  const limit = 1;
+  const limit = 9991;
 
   function onRow(row: Record<string, $rdf.Term>): void {
     if (rowCount >= limit) {
       return;
     }
+    for (const [key, value] of Object.entries(row)) {
+      // console.log(`${key}: ${value.value}`);
+    }
+
+    const s = row['?s'];
+    const p = row['?p'];
+    const o = row['?o'];
+    console.log(`s: ${s.value}, p: ${p.value}, o: ${o.value}`);
+
     rowCount++;
-    console.log('onRow()');
-    console.log(row);
   }
 
   g_triple_store.query(queryObj, onRow);

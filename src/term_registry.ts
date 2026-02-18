@@ -27,12 +27,11 @@ let g_bimap = BiMap.of<Iri, Label>(
     [Term.is_about, 'is_about'],
     [Term.has_latitude, 'latitude'],
     [Term.has_longitude, 'longitude'],
-);
-
-// boat = http://purl.obolibrary.org/obo/ENVO_01000608
-// airplane = http://purl.obolibrary.org/obo/ENVO_03501349
-// car  = http://purl.obolibrary.org/obo/ENVO_01000605
-// harbour = http://purl.obolibrary.org/obo/ENVO_00000463
+    ['http://purl.obolibrary.org/obo/ENVO_01000608', 'boat'],
+    ['http://purl.obolibrary.org/obo/ENVO_03501349', 'airplane'],
+    ['http://purl.obolibrary.org/obo/ENVO_01000605', 'car'],
+    ['http://purl.obolibrary.org/obo/ENVO_00000463', 'harbour'],
+  );
 
 export function addTerm(iri: string, label: string): void {
   const hasIri = g_bimap.hasKey(iri);

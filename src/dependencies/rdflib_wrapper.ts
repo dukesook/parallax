@@ -230,8 +230,9 @@ export const get = {
     PREFIX parallax: <https://parallax.nmsu.edu/ns/>
     PREFIX obo: <http://purl.obolibrary.org/obo/>
 
-    SELECT ?ship WHERE {
-      ?ship rdf:type obo:ENVO_01000608 .
+    SELECT * WHERE {
+      # ?ship rdf:type obo:ENVO_01000608 .
+      ?s ?p ?o .
     }
     `;
 

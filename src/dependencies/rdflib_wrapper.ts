@@ -31,13 +31,16 @@ const has_end_port: NamedNode = $rdf.sym(Term.has_end_port);
 const has_latitude: NamedNode = $rdf.sym(Term.has_latitude);
 const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 
+// Alias for QueryResultRow
+type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row returned by a query.
+
 function init(): void {}
 
 export const add = {
   triple(s: NamedNode, p: NamedNode, o: Node, graph: NamedNode) {
     // subjects: NamedNode
     // predicates: NamedNode
-    // objects: NamedNode, Literal, BlankNode, Collection
+    // objects: NamedNode, or Literal
     g_triple_store.add(s, p, o, graph);
   },
 
@@ -239,12 +242,20 @@ export const get = {
     PREFIX parallax: <https://parallax.nmsu.edu/ns/>
     PREFIX obo: <http://purl.obolibrary.org/obo/>
 
-    SELECT * WHERE {
+    SELECT ?ship ?label WHERE {
       
-      ?s ?p obo:ENVO_01000608 .
+      ?ship ?p obo:ENVO_01000608 .
+      ?ship rdfs:label ?label .
     }
     `;
-    runQuery(query);
+
+    function onRow(row: Record<string, $rdf.Term>): void {
+      const ship: Iri = row['?ship'].value;
+      const label: string = row['?label'].value;
+      console.log('Ship IRI:', ship, '  Label:', label);
+    }
+
+    runQuery(query, onRow);
 
     return [];
   },
@@ -284,22 +295,9 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
   return graphNames;
 }
 
-function runQuery(queryStr: string) {
+function runQuery(queryStr: string, onRow: (row: QueryResultRow) => void) {
   console.log('runQuery()');
   const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
-
-  function onRow(row: Record<string, $rdf.Term>): void {
-    for (const [key, value] of Object.entries(row)) {
-      console.log(`${key}: ${value.value}`);
-    }
-
-    // const s = row['?s'];
-    // const p = row['?p'];
-    // const o = row['?o'];
-    // if (o.value === 'http://purl.obolibrary.org/obo/ENVO_01000608') {
-    //   console.log(`Found a ship! s: ${s.value}, p: ${p.value}, o: ${o.value}`);
-    // }
-  }
 
   const iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
 

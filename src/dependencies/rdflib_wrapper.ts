@@ -34,14 +34,15 @@ const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 function init(): void {}
 
 export const add = {
-  // TODO: ENSURE EVERYONE USES THIS FUNCTION.
-  // DO NOT CALL g_triple_store.add() DIRECTLY.
-  triple(s: NamedNode, p: Node, o: Node, graph: NamedNode) {
+  triple(s: NamedNode, p: NamedNode, o: Node, graph: NamedNode) {
+    // subjects: NamedNode
+    // predicates: NamedNode
+    // objects: NamedNode, Literal, BlankNode, Collection
     g_triple_store.add(s, p, o, graph);
   },
 
   label(subject: Iri, label: string) {
-    g_triple_store.add($rdf.sym(subject), rdfsLabel, $rdf.literal(label), PARALLAX_GRAPH);
+    add.triple($rdf.sym(subject), rdfsLabel, $rdf.literal(label), PARALLAX_GRAPH);
     // read triple back
     const triples = g_triple_store.statementsMatching($rdf.sym(subject), rdfsLabel, undefined, PARALLAX_GRAPH);
     if (triples.length === 0) {
@@ -60,7 +61,7 @@ export const add = {
 
         // Transfer each triple from the temp store into the main store with the desired graph
         tempStore.statements.forEach((statement: Statement) => {
-          g_triple_store.add(statement.subject, statement.predicate, statement.object, graphSym);
+          add.triple(statement.subject, statement.predicate, statement.object, graphSym);
         });
 
         resolve();
@@ -72,15 +73,15 @@ export const add = {
     const observableEntity: NamedNode = PARALLAX_R(uuidv4());
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
-    // g_triple_store.add(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
+    // add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     return observableEntity;
   },
 
   port(port: Port): Iri {
     const the_port: Iri = PARALLAX_R(port.port_id);
     const harbourType: NamedNode = $rdf.sym('http://purl.obolibrary.org/obo/ENVO_00000463'); // harbour
-    g_triple_store.add(the_port, a, harbourType, PARALLAX_GRAPH);
-    g_triple_store.add(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
+    add.triple(the_port, a, harbourType, PARALLAX_GRAPH);
+    add.triple(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
     // const latitude: NamedNode
     // latitude is as literal?
     return the_port;
@@ -94,11 +95,11 @@ export const add = {
     const timeLiteral = $rdf.literal(date.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const resultTime = SOSA('resultTime');
 
-    g_triple_store.add(observation, a, ObservationType, PARALLAX_GRAPH);
-    g_triple_store.add(observation, has_latitude, latitude, PARALLAX_GRAPH);
-    g_triple_store.add(observation, has_longitude, longitude, PARALLAX_GRAPH);
-    g_triple_store.add(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
-    g_triple_store.add(observation, resultTime, timeLiteral, PARALLAX_GRAPH);
+    add.triple(observation, a, ObservationType, PARALLAX_GRAPH);
+    add.triple(observation, has_latitude, latitude, PARALLAX_GRAPH);
+    add.triple(observation, has_longitude, longitude, PARALLAX_GRAPH);
+    add.triple(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
+    add.triple(observation, resultTime, timeLiteral, PARALLAX_GRAPH);
     return observation;
   },
 
@@ -108,12 +109,12 @@ export const add = {
     const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
 
-    g_triple_store.add(voyageIri, a, VoyageType, PARALLAX_GRAPH);
-    g_triple_store.add(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
-    g_triple_store.add(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
-    g_triple_store.add(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
-    g_triple_store.add(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
-    g_triple_store.add(voyageIri, has_end_port, voyage.end_port, PARALLAX_GRAPH);
+    add.triple(voyageIri, a, VoyageType, PARALLAX_GRAPH);
+    add.triple(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
+    add.triple(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
+    add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
+    add.triple(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
+    add.triple(voyageIri, has_end_port, voyage.end_port, PARALLAX_GRAPH);
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;

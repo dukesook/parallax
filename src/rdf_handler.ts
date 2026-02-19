@@ -75,8 +75,8 @@ const get = {
     return coordinate;
   },
 
-  ships(): Iri[] {
-    const ships = RDFLibWrapper.get.ships();
+  async ships(): Iri[] {
+    const ships: = RDFLibWrapper.get.ships();
     return ships;
   },
 

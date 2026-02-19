@@ -235,7 +235,7 @@ export const get = {
     return { latitude: 0, longitude: 0 };
   },
 
-  ships(): Iri[] {
+  ships(): Promise<Iri[]> {
     let query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -249,15 +249,15 @@ export const get = {
     }
     `;
 
-    function onRow(row: Record<string, $rdf.Term>): void {
-      const ship: Iri = row['?ship'].value;
-      const label: string = row['?label'].value;
-      console.log('Ship IRI:', ship, '  Label:', label);
-    }
-
-    runQuery(query, onRow);
-
-    return [];
+    return runQuery(query).then((rows: QueryResultRow[]) => {
+      const ships: Iri[] = [];
+      for (const row of rows) {
+        const ship: Iri = row['?ship'].value;
+        const label: string = row['?label'].value;
+        console.log('Ship IRI:', ship, '  Label:', label);
+      }
+      return ships;
+    });
   },
 };
 
@@ -295,18 +295,23 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
   return graphNames;
 }
 
-function runQuery(queryStr: string, onRow: (row: QueryResultRow) => void) {
-  console.log('runQuery()');
+function runQuery(queryStr: string): Promise<QueryResultRow[]> {
+  const results: QueryResultRow[] = [];
   const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
 
-  const iri = 'http://purl.obolibrary.org/obo/ENVO_01000608';
+  function onRow(row: QueryResultRow): void {
+    results.push(row);
+  }
 
-  console.log('as NamedNode:', g_triple_store.statementsMatching(undefined, undefined, $rdf.sym(iri)).length);
+  function executor(resolve: (value: QueryResultRow[]) => void): void {
+    function onDone(): void {
+      resolve(results);
+    }
 
-  console.log('as Literal:', g_triple_store.statementsMatching(undefined, undefined, $rdf.literal(iri)).length);
+    g_triple_store.query(queryObj, onRow, undefined, onDone);
+  }
 
-  g_triple_store.query(queryObj, onRow);
-  console.log('End of runQuery()');
+  return new Promise(executor);
 }
 
 // =================== Debugging and Logging ===================

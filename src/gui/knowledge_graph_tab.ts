@@ -2,8 +2,14 @@ import { getElement } from './gui';
 import { Triple } from '../aliases';
 import { ObservableEntity } from '../models';
 
+let g_table: HTMLTableElement | null = null;
+let g_messageDiv: HTMLDivElement | null = null;
+
 // graph.ts
-export async function init() {}
+export async function init() {
+  g_table = getElement('knowledge-graph-table') as HTMLTableElement;
+  g_messageDiv = getElement('graph-message') as HTMLDivElement;
+}
 
 export const On = {
   listInstanceData(callback: () => void): void {
@@ -33,10 +39,7 @@ export const On = {
 };
 
 export function displayTriples(triples: Triple[]): void {
-  const table = document.getElementById('knowledge-graph-table') as HTMLTableElement;
-  if (!table) {
-    throw new Error('Table element not found');
-  }
+  const table = get_table();
 
   if (triples.length === 0) {
     table.innerHTML = '<tr><td colspan="3">No triples found.</td></tr>';
@@ -76,24 +79,24 @@ export function displayTriples(triples: Triple[]): void {
 }
 
 export function displayList(items: string[]): void {
-  const table = document.getElementById('knowledge-graph-table') as HTMLTableElement;
+  const table = get_table();
+  const messageDiv = get_messageDiv();
   table.innerHTML = '';
-  const outputDiv = getElement('graph-output') as HTMLDivElement;
-  outputDiv.innerHTML = '';
+  messageDiv.innerHTML = '';
   items.forEach((item) => {
     const p = document.createElement('p');
     p.textContent = item;
-    outputDiv.appendChild(p);
+    messageDiv.appendChild(p);
   });
 }
 
 export function displayGraphs(graphs: string[]): void {
-  const outputDiv = getElement('graph-output') as HTMLDivElement;
-  outputDiv.innerHTML = '';
+  const messageDiv = get_messageDiv();
+  messageDiv.innerHTML = '';
   graphs.forEach((graph) => {
     const p = document.createElement('p');
     p.textContent = graph;
-    outputDiv.appendChild(p);
+    messageDiv.appendChild(p);
 
     p.addEventListener('click', () => {
       console.log('Graph clicked:', graph);
@@ -102,6 +105,46 @@ export function displayGraphs(graphs: string[]): void {
 }
 
 export function displayObservableEntities(entities: ObservableEntity[]) {
+  const table = get_table();
+  table.innerHTML = '';
+
+  if (entities.length === 0) {
+    table.innerHTML = '<tr><td>No observable entities found.</td></tr>';
+    return;
+  }
+
+  // Create table header
+  const headerRow = table.insertRow();
+  const nameHeader = document.createElement('th');
+  nameHeader.textContent = 'Name';
+  const typeHeader = document.createElement('th');
+  typeHeader.textContent = 'Type';
+  headerRow.appendChild(nameHeader);
+  headerRow.appendChild(typeHeader);
+
+  entities.forEach((entity) => {
+    const row = table.insertRow();
+    const nameCell = row.insertCell();
+    const typeCell = row.insertCell();
+
+    nameCell.textContent = entity.label;
+    typeCell.textContent = entity.type;
+
+    table.appendChild(row);
+  });
   console.log(entities);
-  //
+}
+
+function get_messageDiv(): HTMLDivElement {
+  if (!g_messageDiv) {
+    throw new Error('Message div element not found');
+  }
+  return g_messageDiv;
+}
+
+function get_table(): HTMLTableElement {
+  if (!g_table) {
+    throw new Error('Table element not found');
+  }
+  return g_table;
 }

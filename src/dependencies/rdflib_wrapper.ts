@@ -1,7 +1,7 @@
 import * as $rdf from 'rdflib';
 import { IndexedFormula, Query, Statement, NamedNode } from 'rdflib';
 import { Iri, Label, Triple } from '../aliases';
-import { Voyage } from '../models';
+import { Voyage, ObservableEntity } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
@@ -235,7 +235,7 @@ export const get = {
     return { latitude: 0, longitude: 0 };
   },
 
-  ships(): Promise<Iri[]> {
+  ships(): Promise<ObservableEntity[]> {
     let query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -250,11 +250,12 @@ export const get = {
     `;
 
     return runQuery(query).then((rows: QueryResultRow[]) => {
-      const ships: Iri[] = [];
+      const ships: ObservableEntity[] = [];
       for (const row of rows) {
-        const ship: Iri = row['?ship'].value;
+        const id: Iri = row['?ship'].value;
         const label: string = row['?label'].value;
-        console.log('Ship IRI:', ship, '  Label:', label);
+        const ship: ObservableEntity = { id, type: 'boat', label };
+        ships.push(ship);
       }
       return ships;
     });

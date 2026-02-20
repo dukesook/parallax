@@ -1,5 +1,6 @@
 import { getElement } from './gui';
 import { Triple } from '../aliases';
+import { ObservableEntity } from '../models';
 
 // graph.ts
 export async function init() {}
@@ -98,4 +99,9 @@ export function displayGraphs(graphs: string[]): void {
       console.log('Graph clicked:', graph);
     });
   });
+}
+
+export function displayObservableEntities(entities: ObservableEntity[]) {
+  console.log(entities);
+  //
 }

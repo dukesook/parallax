@@ -40,3 +40,9 @@ export interface FabricatorOptions {
   n_vehicles: number;
   n_trips_per_vehicle: number;
 }
+
+export interface ObservableEntity {
+  id: Iri;
+  type: string;
+  label: string;
+}

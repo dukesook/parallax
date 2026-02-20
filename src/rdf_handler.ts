@@ -2,7 +2,7 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port, Voyage, Coordinate } from './models';
+import { Port, Voyage, Coordinate, ObservableEntity } from './models';
 
 async function init(): Promise<void> {
   initStore()
@@ -75,9 +75,10 @@ const get = {
     return coordinate;
   },
 
-  async ships(): Iri[] {
-    const ships: = RDFLibWrapper.get.ships();
-    return ships;
+  async ships(): Promise<ObservableEntity[]> {
+    return RDFLibWrapper.get.ships().then((ships) => {
+      return ships;
+    });
   },
 
   voyages(): Voyage[] {

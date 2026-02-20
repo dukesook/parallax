@@ -97,8 +97,9 @@ function showInstanceData(): void {
 }
 
 function showShips(): void {
-  // const ships: Triple[] = RdfHandler.get.ships();
-  RdfHandler.get.ships();
+  RdfHandler.get.ships().then((ships) => {
+    GraphTab.displayObservableEntities(ships);
+  });
 }
 
 function scanKGraph(): void {

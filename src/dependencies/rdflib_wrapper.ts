@@ -271,6 +271,7 @@ export const get = {
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX parallax: <https://parallax.nmsu.edu/ns/>
     PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX cco: <https://www.commoncoreontologies.org/>
 
     SELECT ?voyage WHERE {
       
@@ -281,13 +282,9 @@ export const get = {
 
     return runQuery(query).then((rows: QueryResultRow[]) => {
       const voyages: Iri[] = [];
-      if (rows.length === 0) {
-        console.log('No voyages found in the knowledge graph.');
-        return voyages;
-      }
-      console.log('Voyage query results:', rows);
       for (const row of rows) {
         const voyageIri: Iri = row['?voyage'].value;
+        console.log('Found voyage IRI:', voyageIri);
         voyages.push(voyageIri);
       }
       return voyages;
@@ -299,8 +296,7 @@ export const get = {
     const query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX parallax: <https://parallax.nmsu.edu/ns/>
-    PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX cco: <https://www.commoncoreontologies.org/>
 
     SELECT ?voyage WHERE {
       

@@ -110,7 +110,8 @@ function showShips(): void {
 }
 
 function showVoyages() {
-  console.log('showVoyages()');
+  console.log('index.ts - showVoyages()');
+  RdfHandler.get.allVoyages();
 }
 
 function scanKGraph(): void {

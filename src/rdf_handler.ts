@@ -18,7 +18,7 @@ async function init(): Promise<void> {
 const add = {
   observableEntity(entityTypeString: string): Iri {
     let entityType: Iri = TermRegistry.getIRI(entityTypeString);
-    const entity = RDFLibWrapper.add.observableEntity(entityType) as Iri;
+    const entity: Iri = RDFLibWrapper.add.observableEntity(entityType) as Iri;
     return entity;
   },
 
@@ -78,6 +78,13 @@ const get = {
   async ships(): Promise<ObservableEntity[]> {
     return RDFLibWrapper.get.ships().then((ships) => {
       return ships;
+    });
+  },
+
+  async allVoyages() {
+    // allVoyages(): Promise<Voyage[]> {
+    return RDFLibWrapper.get.allVoyages().then((voyages) => {
+      return voyages;
     });
   },
 

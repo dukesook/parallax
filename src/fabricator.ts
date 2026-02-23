@@ -39,7 +39,7 @@ function generateShips(desiredCount: number = 6): Iri[] {
 
   for (let i = 0; i < desiredCount; i++) {
     const shipName = fabricateShipName();
-    const iri = RdfHandler.add.observableEntity(BOAT);
+    const iri: Iri = RdfHandler.add.observableEntity(BOAT);
     RdfHandler.add.label(iri, 'ship - ' + shipName);
     ships.push(iri);
   }

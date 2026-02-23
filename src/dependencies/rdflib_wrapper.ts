@@ -81,7 +81,7 @@ export const add = {
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     // add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
-    return observableEntity;
+    return observableEntity.value;
   },
 
   port(port: Port): Iri {
@@ -117,7 +117,6 @@ export const add = {
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
 
     add.triple(voyageIri, a, ActOfTravel, PARALLAX_GRAPH);
-    console.log(typeof voyage.ship, voyage.ship);
     add.triple(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
     add.triple(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
     add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
@@ -263,6 +262,35 @@ export const get = {
         ships.push(ship);
       }
       return ships;
+    });
+  },
+
+  async allVoyages(): Promise<Iri[]> {
+    const query = `
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX parallax: <https://parallax.nmsu.edu/ns/>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+    SELECT ?voyage WHERE {
+      
+      ?voyage a cco:ont00000890 .
+      
+    }
+    `;
+
+    return runQuery(query).then((rows: QueryResultRow[]) => {
+      const voyages: Iri[] = [];
+      if (rows.length === 0) {
+        console.log('No voyages found in the knowledge graph.');
+        return voyages;
+      }
+      console.log('Voyage query results:', rows);
+      for (const row of rows) {
+        const voyageIri: Iri = row['?voyage'].value;
+        voyages.push(voyageIri);
+      }
+      return voyages;
     });
   },
 

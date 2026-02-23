@@ -5,7 +5,7 @@ import * as GraphTab from './gui/knowledge_graph_tab';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import * as Fetcher from './fetcher';
-import { FabricatorOptions as FabricatorOptions } from './models';
+import { FabricatorOptions as FabricatorOptions, ObservableEntity } from './models';
 import Scanner from './scanner';
 
 const debugButton = document.getElementById('debug-button');
@@ -97,8 +97,8 @@ function showInstanceData(): void {
 }
 
 function showShips(): void {
-  function onClickShip() {
-    console.log('Ship clicked');
+  function onClickShip(entity: ObservableEntity) {
+    console.log(entity.label + ' clicked!');
   }
 
   RdfHandler.get.ships().then((ships) => {

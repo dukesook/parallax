@@ -97,8 +97,12 @@ function showInstanceData(): void {
 }
 
 function showShips(): void {
+  function onClickShip() {
+    console.log('Ship clicked');
+  }
+
   RdfHandler.get.ships().then((ships) => {
-    GraphTab.displayObservableEntities(ships);
+    GraphTab.displayObservableEntities(ships, onClickShip);
   });
 }
 

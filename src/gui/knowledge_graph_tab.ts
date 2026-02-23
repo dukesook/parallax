@@ -104,7 +104,7 @@ export function displayGraphs(graphs: string[]): void {
   });
 }
 
-export function displayObservableEntities(entities: ObservableEntity[]) {
+export function displayObservableEntities(entities: ObservableEntity[], onClick: () => void): void {
   const table = get_table();
   table.innerHTML = '';
 
@@ -129,6 +129,8 @@ export function displayObservableEntities(entities: ObservableEntity[]) {
 
     nameCell.textContent = entity.label;
     typeCell.textContent = entity.type;
+
+    row.addEventListener('click', onClick);
 
     table.appendChild(row);
   });

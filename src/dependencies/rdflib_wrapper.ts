@@ -117,11 +117,11 @@ export const add = {
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
 
     add.triple(voyageIri, a, ActOfTravel, PARALLAX_GRAPH);
-    add.triple(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
+    add.triple(voyageIri, is_about, $rdf.sym(voyage.ship), PARALLAX_GRAPH);
     add.triple(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
     add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
-    add.triple(voyageIri, has_start_port, voyage.start_port, PARALLAX_GRAPH);
-    add.triple(voyageIri, has_end_port, voyage.end_port, PARALLAX_GRAPH);
+    add.triple(voyageIri, has_start_port, $rdf.sym(voyage.start_port), PARALLAX_GRAPH);
+    add.triple(voyageIri, has_end_port, $rdf.sym(voyage.end_port), PARALLAX_GRAPH);
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;

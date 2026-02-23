@@ -67,12 +67,9 @@ function generatePorts(): Iri[] {
 function generateVoyages(desiredCount: number, ships: Iri[], ports: Iri[]): Iri[] {
   let voyages: Iri[] = [];
   for (let i = 0; i < desiredCount; i++) {
-    const voyage = fabricateVoyage(ships, ports);
+    const voyage: Voyage = fabricateVoyage(ships, ports);
     const voyageIri: Iri = RdfHandler.add.voyage(voyage);
     voyages.push(voyageIri);
-
-    // const observation_start: Observation = {
-    // }
 
     const coordinate: Coordinate = rdf_handler.get.coordinate(voyage.start_port);
     const lat_start: number = 0; // Placeholder

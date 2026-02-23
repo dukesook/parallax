@@ -98,7 +98,9 @@ function showInstanceData(): void {
 
 function showShips(): void {
   function onClickShip(entity: ObservableEntity) {
-    console.log(entity.label + ' clicked!');
+    RdfHandler.get.voyages(entity.id).then((voyages) => {
+      console.log(voyages);
+    });
   }
 
   RdfHandler.get.ships().then((ships) => {

@@ -81,8 +81,9 @@ const get = {
     });
   },
 
-  voyages(): Voyage[] {
-    const voyages = RDFLibWrapper.get.voyages();
+  // Rename to all voyages
+  voyages(ship: Iri): Promise<Voyage[]> {
+    const voyages = RDFLibWrapper.get.voyages(ship);
     return voyages;
   },
 };

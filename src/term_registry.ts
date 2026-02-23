@@ -18,7 +18,7 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://github.com/opengeospatial/ogc-geosparql', 'geoSparqlGraph'],
     ['https://www.w3.org/ns/sosa/', 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
-    ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
+    // ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
     [Term.has_start_time, 'start_time'],
     [Term.has_end_time, 'end_time'],
     [Term.has_start_port, 'start_port'],

@@ -1,5 +1,5 @@
 import * as $rdf from 'rdflib';
-import { IndexedFormula, Query, Statement, NamedNode } from 'rdflib';
+import { IndexedFormula, Query, Statement, NamedNode, Literal } from 'rdflib';
 import { Iri, Label, Triple } from '../aliases';
 import { Voyage, ObservableEntity } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
@@ -37,10 +37,14 @@ type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row retu
 function init(): void {}
 
 export const add = {
-  triple(s: NamedNode, p: NamedNode, o: Node, graph: NamedNode) {
-    // subjects: NamedNode
-    // predicates: NamedNode
-    // objects: NamedNode, or Literal
+  triple(s: NamedNode, p: NamedNode, o: NamedNode, graph: NamedNode | Literal) {
+    if (!(s instanceof NamedNode)) {
+      throw new Error(`Subject must be a NamedNode. Received: ${s}`);
+    } else if (!(p instanceof NamedNode)) {
+      throw new Error(`Predicate must be a NamedNode. Received: ${p}`);
+    } else if (!(o instanceof NamedNode || o instanceof Literal)) {
+      throw new Error(`Object must be a NamedNode or Literal. Received: ${o}`);
+    }
     g_triple_store.add(s, p, o, graph);
   },
 
@@ -108,11 +112,12 @@ export const add = {
 
   voyage(voyage: Voyage): Iri {
     const voyageIri: Iri = PARALLAX_R(uuidv4());
-    const VoyageType = TermRegistry.getIRI('ActOfTravel');
+    const ActOfTravel: NamedNode = $rdf.sym(TermRegistry.getIRI('ActOfTravel'));
     const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
 
-    add.triple(voyageIri, a, VoyageType, PARALLAX_GRAPH);
+    add.triple(voyageIri, a, ActOfTravel, PARALLAX_GRAPH);
+    console.log(typeof voyage.ship, voyage.ship);
     add.triple(voyageIri, is_about, voyage.ship, PARALLAX_GRAPH);
     add.triple(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
     add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
@@ -235,7 +240,7 @@ export const get = {
     return { latitude: 0, longitude: 0 };
   },
 
-  ships(): Promise<ObservableEntity[]> {
+  async ships(): Promise<ObservableEntity[]> {
     let query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -258,6 +263,31 @@ export const get = {
         ships.push(ship);
       }
       return ships;
+    });
+  },
+
+  async voyages(ship: Iri): Promise<Voyage[]> {
+    // ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
+    const query = `
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX parallax: <https://parallax.nmsu.edu/ns/>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+    SELECT ?voyage WHERE {
+      
+      ?voyage a cco:ont00000890 .
+      
+    }
+    `;
+
+    return runQuery(query).then((rows: QueryResultRow[]) => {
+      console.log('Voyage query results:', rows);
+      const voyages: Voyage[] = [];
+      for (const row of rows) {
+        console.log(row);
+      }
+      return voyages;
     });
   },
 };

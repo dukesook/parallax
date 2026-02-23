@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       GraphTab.On.listGraphsButton(showGraphs);
       GraphTab.On.listInstanceData(showInstanceData);
       GraphTab.On.listShipsButton(showShips);
+      GraphTab.On.listVoyagesButton(showVoyages);
       GraphTab.On.scan(scanKGraph);
     });
 
@@ -106,6 +107,10 @@ function showShips(): void {
   RdfHandler.get.ships().then((ships) => {
     GraphTab.displayObservableEntities(ships, onClickShip);
   });
+}
+
+function showVoyages() {
+  console.log('showVoyages()');
 }
 
 function scanKGraph(): void {

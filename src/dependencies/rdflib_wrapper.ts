@@ -337,10 +337,16 @@ export const get = {
     `;
 
     return runQuery(query).then((rows: QueryResultRow[]) => {
-      console.log('Voyage query results:', rows);
       const voyages: Voyage[] = [];
       for (const row of rows) {
-        console.log(row);
+        const voyage: Voyage = {
+          ship: row['?ship'].value,
+          start_time: new Date(row['?start_time'].value),
+          end_time: new Date(row['?end_time'].value),
+          start_port: row['?start_port'].value,
+          end_port: row['?end_port'].value,
+        };
+        voyages.push(voyage);
       }
       return voyages;
     });

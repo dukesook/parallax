@@ -81,8 +81,7 @@ const get = {
     });
   },
 
-  async allVoyages() {
-    // allVoyages(): Promise<Voyage[]> {
+  async allVoyages(): Promise<Voyage[]> {
     return RDFLibWrapper.get.allVoyages().then((voyages) => {
       return voyages;
     });

@@ -265,27 +265,49 @@ export const get = {
     });
   },
 
-  async allVoyages(): Promise<Iri[]> {
-    const query = `
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX parallax: <https://parallax.nmsu.edu/ns/>
-    PREFIX obo: <http://purl.obolibrary.org/obo/>
-    PREFIX cco: <https://www.commoncoreontologies.org/>
+  async allVoyages(): Promise<Voyage[]> {
+    // add.triple(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
+    // add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
+    // add.triple(voyageIri, has_start_port, $rdf.sym(voyage.start_port), PARALLAX_GRAPH);
+    // add.triple(voyageIri, has_end_port, $rdf.sym(voyage.end_port), PARALLAX_GRAPH);
 
-    SELECT ?voyage WHERE {
+    const query = `
+    PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
+    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+    PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
+    PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
+    PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
+    PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
+
+    SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
       
-      ?voyage a cco:ont00000890 .
-      
+      ?voyage a ActOfTravel: .
+      ?voyage is_about: ?ship .
+      ?voyage has_start_time: ?start_time .
+      ?voyage has_end_time: ?end_time .
+      ?voyage has_start_port: ?start_port .
+      ?voyage has_end_port: ?end_port .
     }
     `;
 
     return runQuery(query).then((rows: QueryResultRow[]) => {
-      const voyages: Iri[] = [];
+      const voyages: Voyage[] = [];
       for (const row of rows) {
+        console.log(row);
         const voyageIri: Iri = row['?voyage'].value;
-        console.log('Found voyage IRI:', voyageIri);
-        voyages.push(voyageIri);
+        const ship: Iri = row['?ship'].value;
+        const start_time: Date = row['?start_time'].value;
+        const end_time: Date = row['?end_time'].value;
+        const start_port: Iri = row['?start_port'].value;
+        const end_port: Iri = row['?end_port'].value;
+        const voyage: Voyage = {
+          ship,
+          start_time: new Date(start_time),
+          end_time: new Date(end_time),
+          start_port,
+          end_port,
+        };
+        voyages.push(voyage);
       }
       return voyages;
     });
@@ -296,11 +318,12 @@ export const get = {
     const query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX cco: <https://www.commoncoreontologies.org/>
+    PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
 
-    SELECT ?voyage WHERE {
+    SELECT ?voyage ?ship WHERE {
       
-      ?voyage a cco:ont00000890 .
+      ?voyage a ActOfTravel: .
+      ?voyage
       
     }
     `;

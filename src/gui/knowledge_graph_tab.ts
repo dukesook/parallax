@@ -144,6 +144,30 @@ export function displayObservableEntities(entities: ObservableEntity[], onClick:
   console.log(entities);
 }
 
+export function displayObjects(objects: object[]): void {
+  const table = get_table() as HTMLTableElement;
+  const messageDiv = get_messageDiv() as HTMLDivElement;
+  table.innerHTML = '';
+  messageDiv.innerHTML = '';
+
+  // Create table header
+  const headerRow = table.insertRow();
+  const keys = Object.keys(objects[0]);
+  keys.forEach((key) => {
+    const headerCell = document.createElement('th');
+    headerCell.textContent = key;
+    headerRow.appendChild(headerCell);
+  });
+
+  for (const obj of objects) {
+    const row = table.insertRow();
+    keys.forEach((key) => {
+      const cell = row.insertCell();
+      cell.textContent = obj[key];
+    });
+  }
+}
+
 function get_messageDiv(): HTMLDivElement {
   if (!g_messageDiv) {
     throw new Error('Message div element not found');

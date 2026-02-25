@@ -111,7 +111,9 @@ function showShips(): void {
 
 function showVoyages() {
   console.log('index.ts - showVoyages()');
-  RdfHandler.get.allVoyages();
+  RdfHandler.get.allVoyages().then((voyages) => {
+    GraphTab.displayObjects(voyages);
+  });
 }
 
 function scanKGraph(): void {

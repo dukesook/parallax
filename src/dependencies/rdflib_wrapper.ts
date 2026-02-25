@@ -316,15 +316,23 @@ export const get = {
   async voyages(ship: Iri): Promise<Voyage[]> {
     // ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
     const query = `
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
-
-    SELECT ?voyage ?ship WHERE {
+    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+    PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
+    PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
+    PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
+    PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
+    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+    
+    SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
       
+      ?voyage is_about: <${ship}> .
       ?voyage a ActOfTravel: .
-      ?voyage
-      
+      ?voyage is_about: ?ship .
+      ?voyage has_start_time: ?start_time .
+      ?voyage has_end_time: ?end_time .
+      ?voyage has_start_port: ?start_port .
+      ?voyage has_end_port: ?end_port .
     }
     `;
 

@@ -3,11 +3,13 @@ import { Triple } from '../aliases';
 import { ObservableEntity } from '../models';
 
 let g_table: HTMLTableElement | null = null;
+let g_secondaryTable: HTMLTableElement | null = null;
 let g_messageDiv: HTMLDivElement | null = null;
 
 // graph.ts
 export async function init() {
   g_table = getElement('knowledge-graph-table') as HTMLTableElement;
+  g_secondaryTable = getElement('knowledge-graph-secondary-table') as HTMLTableElement;
   g_messageDiv = getElement('graph-message') as HTMLDivElement;
 }
 

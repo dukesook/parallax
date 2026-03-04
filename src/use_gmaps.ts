@@ -64,25 +64,37 @@ export function loadGoogleMapsScript(googleMapElement: HTMLElement): void {
 }
 
 export function debug() {
-  drawLine();
+  Example.drawLine();
 }
 
-function drawLine() {
-  if (!map) return;
+const Example = {
+  drawPolyLine() {
+    if (!map) return;
 
-  const path: google.maps.LatLngLiteral[] = [
-    { lat: 34.0522, lng: -118.2437 },
-    { lat: 36.1699, lng: -115.1398 },
-    { lat: 37.7749, lng: -122.4194 },
-  ];
+    const path: google.maps.LatLngLiteral[] = [
+      { lat: 34.0522, lng: -118.2437 },
+      { lat: 36.1699, lng: -115.1398 },
+      { lat: 37.7749, lng: -122.4194 },
+    ];
 
-  const line = new google.maps.Polyline({
-    path: path,
-    geodesic: true,
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-  });
+    const line = new google.maps.Polyline({
+      path: path,
+      geodesic: true,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2,
+    });
 
-  line.setMap(map);
-}
+    line.setMap(map);
+  },
+
+  drawLine() {
+    const line = new google.maps.Polyline({
+      path: [
+        { lat: 40.7128, lng: -74.006 },
+        { lat: 34.0522, lng: -118.2437 },
+      ],
+      map: map,
+    });
+  },
+};

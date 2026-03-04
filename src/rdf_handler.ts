@@ -81,6 +81,12 @@ const get = {
     });
   },
 
+  async allPorts(): Promise<Port[]> {
+    return RDFLibWrapper.get.allPorts().then((ports) => {
+      return ports;
+    });
+  },
+
   async allVoyages(): Promise<Voyage[]> {
     return RDFLibWrapper.get.allVoyages().then((voyages) => {
       return voyages;

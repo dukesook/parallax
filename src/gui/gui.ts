@@ -23,7 +23,7 @@ const knowledgeGraphContent = getElement('knowledge-graph-content') as HTMLEleme
 const termRegistryContent = getElement('term-registry-content') as HTMLElement;
 const fabricatorContent = getElement('fabricator-content') as HTMLElement;
 
-let g_currentTab = fabricatorTab;
+let g_currentTab = knowledgeGraphTab;
 
 document.addEventListener('DOMContentLoaded', () => {
   initGui();

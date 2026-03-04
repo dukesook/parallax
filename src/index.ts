@@ -6,7 +6,7 @@ import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import * as Fetcher from './fetcher';
 import { FabricatorOptions as FabricatorOptions, ObservableEntity } from './models';
-import { Coordinate, Voyage } from './models';
+import { Coordinate, Voyage, Port } from './models';
 import Scanner from './scanner';
 
 const debugButton = document.getElementById('debug-button');
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       GraphTab.On.listInstanceData(showInstanceData);
       GraphTab.On.listShipsButton(showShips);
       GraphTab.On.listVoyagesButton(showVoyages);
+      GraphTab.On.listPortsButton(showPorts);
       GraphTab.On.scan(scanKGraph);
     });
 
@@ -112,6 +113,13 @@ function showVoyages() {
   console.log('index.ts - showVoyages()');
   RdfHandler.get.allVoyages().then((voyages) => {
     GraphTab.displayObjects(voyages);
+  });
+}
+
+function showPorts() {
+  console.log('index.ts - showPorts()');
+  RdfHandler.get.allPorts().then((ports) => {
+    GraphTab.displayObjects(ports);
   });
 }
 

@@ -39,6 +39,11 @@ export const On = {
     listVoyagesButton.addEventListener('click', callback);
   },
 
+  listPortsButton(callback: () => void): void {
+    const listPortsButton = getElement('list-ports-button') as HTMLButtonElement;
+    listPortsButton.addEventListener('click', callback);
+  },
+
   scan(callback: () => void): void {
     const scanButton = getElement('scan') as HTMLButtonElement;
     scanButton.addEventListener('click', callback);

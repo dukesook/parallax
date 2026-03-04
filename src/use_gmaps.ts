@@ -64,10 +64,10 @@ export function loadGoogleMapsScript(googleMapElement: HTMLElement): void {
 }
 
 export function debug() {
-  Example.drawLine();
+  Examples.drawLine();
 }
 
-const Example = {
+const Examples = {
   drawPolyLine() {
     if (!map) return;
 

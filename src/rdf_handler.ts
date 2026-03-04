@@ -3,6 +3,8 @@ import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
 import { Port, Voyage, Coordinate, ObservableEntity } from './models';
+import { Term } from 'rdflib';
+type QueryResultRow = Record<string, Term>; // Represents a single row returned by a query.
 
 async function init(): Promise<void> {
   initStore()
@@ -82,7 +84,33 @@ const get = {
   },
 
   async allPorts(): Promise<Port[]> {
-    return RDFLibWrapper.get.allPorts().then((ports) => {
+    const query = `
+        PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
+        PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+        PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
+        PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
+        PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
+        PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
+    
+        PREFIX harbour: <http://purl.obolibrary.org/obo/ENVO_00000463>
+    
+        SELECT ?port WHERE {
+          ?port a harbour: .
+        }
+        `;
+    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+      const ports: Port[] = [];
+      for (const row of rows) {
+        console.log(row);
+        const port: Port = {
+          port_id: row['?port'].value,
+          name: 'todo',
+          country: 'todo',
+          latitude: 0,
+          longitude: 0,
+        };
+        ports.push(port);
+      }
       return ports;
     });
   },

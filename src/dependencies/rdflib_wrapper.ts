@@ -346,39 +346,6 @@ export const get = {
       return voyages;
     });
   },
-
-  async allPorts(): Promise<Port[]> {
-    const query = `
-    PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
-    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
-    PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
-    PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
-    PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
-    PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
-
-    PREFIX harbour: <http://purl.obolibrary.org/obo/ENVO_00000463>
-
-    SELECT ?port WHERE {
-      ?port a harbour: .
-    }
-    `;
-
-    return runQuery(query).then((rows: QueryResultRow[]) => {
-      const ports: Port[] = [];
-      for (const row of rows) {
-        console.log(row);
-        const port: Port = {
-          port_id: row['?port'].value,
-          name: 'todo',
-          country: 'todo',
-          latitude: 0,
-          longitude: 0,
-        };
-        ports.push(port);
-      }
-      return ports;
-    });
-  },
 };
 
 // ================== Default Export ==================
@@ -415,7 +382,7 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
   return graphNames;
 }
 
-function runQuery(queryStr: string): Promise<QueryResultRow[]> {
+export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
   const results: QueryResultRow[] = [];
   const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
 

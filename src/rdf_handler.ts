@@ -94,8 +94,9 @@ const get = {
     
         PREFIX harbour: <http://purl.obolibrary.org/obo/ENVO_00000463>
     
-        SELECT ?port WHERE {
+        SELECT ?port ?label WHERE {
           ?port a harbour: .
+          ?port rdfs:label ?label .
         }
         `;
     return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
@@ -104,7 +105,7 @@ const get = {
         console.log(row);
         const port: Port = {
           port_id: row['?port'].value,
-          name: 'todo',
+          name: row['?label'].value,
           country: 'todo',
           latitude: 0,
           longitude: 0,

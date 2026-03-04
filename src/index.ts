@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.On.fabricateData(fabricateData);
     Gui.On.saveButton(onAddObservation);
     Gui.On.writeGraphToFile(writeGraphToFile);
+
+    // Temporary: Fabricate data on load for testing
+    fabricateData();
+    // Temporary: Fabricate data on load for testing
   });
 
   GMaps.addMapListener(onclickMap);

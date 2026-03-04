@@ -6,6 +6,7 @@ import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import * as Fetcher from './fetcher';
 import { FabricatorOptions as FabricatorOptions, ObservableEntity } from './models';
+import { Coordinate, Voyage } from './models';
 import Scanner from './scanner';
 
 const debugButton = document.getElementById('debug-button');
@@ -102,12 +103,6 @@ function showInstanceData(): void {
 }
 
 function showShips(): void {
-  function onClickShip(entity: ObservableEntity) {
-    RdfHandler.get.voyages(entity.id).then((voyages) => {
-      console.log(voyages);
-    });
-  }
-
   RdfHandler.get.ships().then((ships) => {
     GraphTab.displayObservableEntities(ships, onClickShip);
   });
@@ -127,6 +122,18 @@ function scanKGraph(): void {
 function fabricateData(): void {
   const options = Gui.Get.fabricatorUserInput() as FabricatorOptions;
   Fabricator.generateData(options);
+}
+
+function onClickShip(entity: ObservableEntity) {
+  RdfHandler.get.voyages(entity.id).then((voyages) => {
+    const voyage: Voyage = voyages[0];
+    const startPort: Iri = voyage.start_port;
+    const endPort: Iri = voyage.end_port;
+
+    const startCoordinate: Coordinate = RdfHandler.get.coordinate(startPort);
+    const endCoordinate: Coordinate = RdfHandler.get.coordinate(endPort);
+    GMaps.drawLine(startCoordinate, endCoordinate);
+  });
 }
 
 function logStore(): void {

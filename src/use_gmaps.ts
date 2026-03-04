@@ -1,5 +1,7 @@
 /// <reference types="google.maps" />
 
+import { Coordinate } from './models';
+
 let g_googleMapElement: HTMLElement | null = null;
 let map: google.maps.Map | null = null;
 let currentMarker: google.maps.marker.AdvancedMarkerElement | null = null;
@@ -61,6 +63,22 @@ export function loadGoogleMapsScript(googleMapElement: HTMLElement): void {
   script.defer = true;
   script.onload = initMap;
   document.head.appendChild(script);
+}
+
+export function drawLine(c1: Coordinate, c2: Coordinate): void {
+  const path = [
+    { lat: c1.latitude, lng: c1.longitude },
+    { lat: c2.latitude, lng: c2.longitude },
+  ];
+
+  const line = new google.maps.Polyline({
+    path: path,
+    geodesic: true, // follows the curvature of the Earth
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+    map: map,
+  });
 }
 
 export function debug() {

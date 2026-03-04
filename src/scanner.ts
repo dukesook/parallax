@@ -5,6 +5,6 @@ import { Voyage } from './models';
 export default class Scanner {
   static scan(): void {
     // Get Voyages
-    const voyages: Voyage[] = Rdf.get.voyages();
+    const voyages: Voyage[] = Rdf.get.shipVoyages();
   }
 }

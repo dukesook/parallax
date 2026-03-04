@@ -133,7 +133,7 @@ function fabricateData(): void {
 }
 
 function onClickShip(entity: ObservableEntity) {
-  RdfHandler.get.voyages(entity.id).then((voyages) => {
+  RdfHandler.get.shipVoyages(entity.id).then((voyages) => {
     const voyage: Voyage = voyages[0];
     const startPort: Iri = voyage.start_port;
     const endPort: Iri = voyage.end_port;

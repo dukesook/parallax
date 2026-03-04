@@ -66,22 +66,21 @@ function generatePorts(): Iri[] {
 
 function generateVoyages(desiredCount: number, ships: Iri[], ports: Iri[]): Iri[] {
   let voyages: Iri[] = [];
-  for (let i = 0; i < desiredCount; i++) {
-    const voyage: Voyage = fabricateVoyage(ships, ports);
-    const voyageIri: Iri = RdfHandler.add.voyage(voyage);
-    voyages.push(voyageIri);
 
-    const coordinate: Coordinate = rdf_handler.get.coordinate(voyage.start_port);
-    const lat_start: number = 0; // Placeholder
-    const long_start: number = 0; // Placeholder
-    RdfHandler.add.observation(voyage.ship, lat_start, long_start, voyage.start_time);
+  // TODO: vary the number of voyages per ship
+
+  for (const ship of ships) {
+    for (let i = 0; i < desiredCount; i++) {
+      const voyage: Voyage = fabricateVoyage(ship, ports);
+      const voyageIri: Iri = RdfHandler.add.voyage(voyage);
+      voyages.push(voyageIri);
+    }
   }
+
   return voyages;
 }
 
-function fabricateVoyage(ships: Iri[], ports: Iri[]): Voyage {
-  const ship: Iri = getRandomShip(ships);
-
+function fabricateVoyage(ship: Iri, ports: Iri[]): Voyage {
   // Get two different ports
   const start_port: Iri = getRandomPort(ports);
   let end_port: Iri = getRandomPort(ports);

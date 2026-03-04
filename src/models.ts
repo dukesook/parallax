@@ -25,7 +25,7 @@ export interface Observation {
 }
 
 export interface Voyage {
-  ship: string;
+  ship: Iri;
   start_time: Date;
   end_time: Date;
   start_port: Iri;

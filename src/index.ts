@@ -136,6 +136,7 @@ function logStore(): void {
 
 function debug() {
   console.log('debug()');
+  GMaps.debug();
 }
 
 function debug2() {

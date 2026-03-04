@@ -62,3 +62,27 @@ export function loadGoogleMapsScript(googleMapElement: HTMLElement): void {
   script.onload = initMap;
   document.head.appendChild(script);
 }
+
+export function debug() {
+  drawLine();
+}
+
+function drawLine() {
+  if (!map) return;
+
+  const path: google.maps.LatLngLiteral[] = [
+    { lat: 34.0522, lng: -118.2437 },
+    { lat: 36.1699, lng: -115.1398 },
+    { lat: 37.7749, lng: -122.4194 },
+  ];
+
+  const line = new google.maps.Polyline({
+    path: path,
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+  });
+
+  line.setMap(map);
+}

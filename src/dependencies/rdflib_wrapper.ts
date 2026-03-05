@@ -7,22 +7,22 @@ import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
 import { Coordinate, Port } from '../models';
 
-// $rdf.Namespace() returns a function.
-//    This function appends a string to the namespace and returns a NamedNode.
-type NamespaceFn = (localName?: string) => NamedNode;
-const PARALLAX_R: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/id/');
-const PARALLAX_NS: NamespaceFn = $rdf.Namespace('https://parallax.nmsu.edu/ns/');
-const SOSA: NamespaceFn = $rdf.Namespace('http://www.w3.org/ns/sosa/');
-
+// The Triple Store
 const g_triple_store: IndexedFormula = $rdf.graph();
-const PARALLAX_GRAPH = $rdf.sym('https://parallax.nmsu.edu/');
-const a = $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
-const rdfsLabel = $rdf.sym('http://www.w3.org/2000/01/rdf-schema#label');
 
-type SparqlBinding = { [selectVariable: string]: $rdf.Term };
-// A SPARQL binding refers to a row in the query result.
-// A SparqlBinding is an object where each key corresponds to a SELECT SPARQL variable.
+// Types
+type NamespaceFn = (localName?: string) => NamedNode;
+type SparqlBinding = { [selectVariable: string]: $rdf.Term }; // A SPARQL binding refers to a row in the query result. Each key cooresponds to a SPARQL variable
+type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row returned by a query.
 
+// Namespace Functions
+const PARALLAX_FN: NamespaceFn = $rdf.Namespace(Term.parallax_namespace);
+const SOSA_FN: NamespaceFn = $rdf.Namespace(Term.sosa_namespace);
+
+// Named Nodes
+const PARALLAX_GRAPH: NamedNode = $rdf.sym(Term.parallax_namespace);
+const rdfsLabel: NamedNode = $rdf.sym(Term.has_label);
+const a: NamedNode = $rdf.sym(Term.is_a);
 const is_about: NamedNode = $rdf.sym(Term.is_about);
 const has_start_time: NamedNode = $rdf.sym(Term.has_start_time);
 const has_end_time: NamedNode = $rdf.sym(Term.has_end_time);
@@ -30,13 +30,16 @@ const has_start_port: NamedNode = $rdf.sym(Term.has_start_port);
 const has_end_port: NamedNode = $rdf.sym(Term.has_end_port);
 const has_latitude: NamedNode = $rdf.sym(Term.has_latitude);
 const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
-const harbourType: NamedNode = $rdf.sym('http://purl.obolibrary.org/obo/ENVO_00000463'); // harbour
-const decimalType: NamedNode = $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal');
+const harbourType: NamedNode = $rdf.sym(Term.harbour_class);
+const decimalType: NamedNode = $rdf.sym(Term.decimal_class);
+const has_geometry: NamedNode = $rdf.sym(Term.has_geometry);
+const geometry_class: NamedNode = $rdf.sym(Term.geometry_class);
+const has_wkt: NamedNode = $rdf.sym(Term.has_wkt);
+const wkt_literal_datatype: NamedNode = $rdf.sym(Term.wkt_literal_datatype);
 
-// Alias for QueryResultRow
-type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row returned by a query.
-
-function init(): void {}
+function init(): void {
+  //
+}
 
 export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
   const results: QueryResultRow[] = [];
@@ -98,7 +101,7 @@ export const add = {
   },
 
   observableEntity(entityType: Iri): Iri {
-    const observableEntity: NamedNode = PARALLAX_R(uuidv4());
+    const observableEntity: NamedNode = PARALLAX_FN(uuidv4());
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     // add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
@@ -106,7 +109,7 @@ export const add = {
   },
 
   port(port: Port): Iri {
-    const the_port: Iri = PARALLAX_R(port.port_id);
+    const the_port: Iri = PARALLAX_FN(port.port_id);
     add.triple(the_port, a, harbourType, PARALLAX_GRAPH);
     add.triple(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
     // const latitude: NamedNode
@@ -115,12 +118,12 @@ export const add = {
   },
 
   observation(observedThing: Iri, lat: number, lng: number, date: Date): Iri {
-    const observation: Iri = PARALLAX_R(uuidv4());
-    const ObservationType = SOSA('Observation');
+    const observation: Iri = PARALLAX_FN(uuidv4());
+    const ObservationType = SOSA_FN('Observation');
     const latitude = $rdf.literal(lat.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
     const longitude = $rdf.literal(lng.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
     const timeLiteral = $rdf.literal(date.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
-    const resultTime = SOSA('resultTime');
+    const resultTime = SOSA_FN('resultTime');
 
     add.triple(observation, a, ObservationType, PARALLAX_GRAPH);
     add.triple(observation, has_latitude, latitude, PARALLAX_GRAPH);
@@ -131,7 +134,7 @@ export const add = {
   },
 
   voyage(voyage: Voyage): Iri {
-    const voyageIri: Iri = PARALLAX_R(uuidv4());
+    const voyageIri: Iri = PARALLAX_FN(uuidv4());
     const ActOfTravel: NamedNode = $rdf.sym(TermRegistry.getIRI('ActOfTravel'));
     const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
     const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
@@ -147,13 +150,18 @@ export const add = {
     return voyageIri;
   },
 
-  coordinate(iri: Iri, cord: Coordinate): void {
-    const thing: NamedNode = $rdf.sym(iri);
-    const lat: Literal = number_to_literal(cord.latitude);
-    const long: Literal = number_to_literal(cord.longitude);
-    // TODO: create a coordiante node
-    add.triple(thing, has_latitude, lat, PARALLAX_GRAPH);
-    add.triple(thing, has_longitude, long, PARALLAX_GRAPH);
+  coordinate(iri: Iri, cord: Coordinate): Iri {
+    const feature: NamedNode = $rdf.sym(iri);
+    const wktPoint: string = coordinateToWktPoint(cord);
+    const point: Iri = uuidv4();
+    const pointNode: NamedNode = PARALLAX_FN(point);
+    const wktLiteral: Literal = $rdf.literal(wktPoint, wkt_literal_datatype);
+
+    add.triple(feature, has_geometry, pointNode, PARALLAX_GRAPH);
+    add.triple(pointNode, a, geometry_class, PARALLAX_GRAPH);
+    add.triple(pointNode, has_wkt, wktLiteral, PARALLAX_GRAPH);
+
+    return point;
   },
 };
 
@@ -279,6 +287,13 @@ function number_to_literal(x: number): Literal {
   const str: string = x.toString();
   const literal: Literal = $rdf.literal(str, decimalType);
   return literal;
+}
+
+export function coordinateToWktPoint(cord: Coordinate): string {
+  const WGS84_CRS = 'http://www.opengis.net/def/crs/EPSG/0/4326';
+  const { latitude, longitude } = cord;
+
+  return `<${WGS84_CRS}> POINT(${longitude} ${latitude})`;
 }
 
 export function parseWKTPoint(wkt: string): Coordinate {

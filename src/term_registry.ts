@@ -9,6 +9,16 @@ export const Term = {
   has_end_port: 'https://parallax.nmsu.edu/ns/end_port',
   has_latitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
   has_longitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
+  has_geometry: 'http://www.opengis.net/ont/geosparql#hasGeometry',
+  harbour_class: 'http://purl.obolibrary.org/obo/ENVO_00000463',
+  decimal_class: 'http://www.w3.org/2001/XMLSchema#decimal',
+  sosa_namespace: 'https://www.w3.org/ns/sosa/',
+  parallax_namespace: 'https://parallax.nmsu.edu/',
+  is_a: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+  has_label: 'http://www.w3.org/2000/01/rdf-schema#label',
+  geometry_class: 'http://www.opengis.net/ont/geosparql#Geometry',
+  has_wkt: 'http://www.opengis.net/ont/geosparql#asWKT',
+  wkt_literal_datatype: 'http://www.opengis.net/ont/geosparql#wktLiteral',
 };
 
 // prettier-ignore
@@ -16,7 +26,7 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://github.com/BFO-ontology/BFO', 'bfoGraph'],
     ['https://github.com/EnvironmentOntology/envo', 'envoGraph'],
     ['https://github.com/opengeospatial/ogc-geosparql', 'geoSparqlGraph'],
-    ['https://www.w3.org/ns/sosa/', 'sosaGraph'],
+    [Term.sosa_namespace, 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
     // ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
     [Term.has_start_time, 'start_time'],

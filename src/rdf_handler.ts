@@ -78,10 +78,28 @@ const get = {
     return triples;
   },
 
-  coordinate(portIri: Iri): Coordinate {
-    // TODO
-    console.error('rdf_handler.get.coordinate() is not implemented yet');
-    return { latitude: 0, longitude: 0 };
+  async coordinate(feature: Iri): Promise<Coordinate[]> {
+    throw new Error('Not implemented yet');
+    let query = `
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX parallax: <https://parallax.nmsu.edu/ns/>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+    SELECT ?ship ?label WHERE {
+      
+      ?ship ?p obo:ENVO_01000608 .
+      ?ship rdfs:label ?label .
+    }
+    `;
+
+    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+      const cords: Coordinate[] = [];
+      for (const row of rows) {
+        const id: Iri = row['?ship'].value;
+      }
+      return cords;
+    });
   },
 
   async ships(): Promise<ObservableEntity[]> {
@@ -118,24 +136,32 @@ const get = {
         PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
         PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
         PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
-    
-        PREFIX harbour: <http://purl.obolibrary.org/obo/ENVO_00000463>
+        PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+        PREFIX harbour: <${TermRegistry.Term.harbour_class}>
     
         SELECT ?port ?label WHERE {
           ?port a harbour: .
           ?port rdfs:label ?label .
+
+          ?port a geo:Feature . 
+          ?port geo:hasGeometry ?geometry .
+          ?geometry a geo:Geometry .
+          ?geometry geo:asWKT ?wkt .
         }
         `;
     return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
       const ports: Port[] = [];
       for (const row of rows) {
         console.log(row);
+        const wkt: string = row['?wkt'].value;
+        const cord: Coordinate = parseWKTPoint(wkt);
+
         const port: Port = {
           port_id: row['?port'].value,
           name: row['?label'].value,
           country: 'todo',
-          latitude: 0,
-          longitude: 0,
+          latitude: cord.latitude,
+          longitude: cord.longitude,
         };
         ports.push(port);
       }
@@ -255,6 +281,26 @@ async function initStore(): Promise<void> {
   const sosaOntology = await Fetcher.fetchSosa();
   const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');
   // RDFLibWrapper.add.rdfToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
+}
+
+function parseWKTPoint(wkt: string): Coordinate {
+  // Remove CRS prefix if present
+  const idx = wkt.indexOf('POINT');
+  if (idx === -1) {
+    throw new Error('Invalid WKT: POINT not found');
+  }
+  const pointPart = wkt.slice(idx);
+
+  const match = pointPart.match(/POINT\s*\(\s*([^\s]+)\s+([^\s]+)\s*\)/i);
+
+  if (!match) {
+    throw new Error('Invalid WKT POINT');
+  }
+
+  const longitude = parseFloat(match[1]);
+  const latitude = parseFloat(match[2]);
+
+  return { latitude, longitude };
 }
 
 // ================== Debugging Functions ==================

@@ -158,6 +158,7 @@ export const add = {
     const pointNode: NamedNode = PARALLAX_FN(point);
     const wktLiteral: Literal = $rdf.literal(wktPoint, wkt_literal_datatype);
 
+    add.triple(feature, a, feature_class, PARALLAX_GRAPH);
     add.triple(feature, has_geometry, pointNode, PARALLAX_GRAPH);
     add.triple(pointNode, a, geometry_class, PARALLAX_GRAPH);
     add.triple(pointNode, has_wkt, wktLiteral, PARALLAX_GRAPH);
@@ -290,31 +291,11 @@ function number_to_literal(x: number): Literal {
   return literal;
 }
 
-export function coordinateToWktPoint(cord: Coordinate): string {
+function coordinateToWktPoint(cord: Coordinate): string {
   const WGS84_CRS = 'http://www.opengis.net/def/crs/EPSG/0/4326';
   const { latitude, longitude } = cord;
 
   return `<${WGS84_CRS}> POINT(${longitude} ${latitude})`;
-}
-
-export function parseWKTPoint(wkt: string): Coordinate {
-  // Remove CRS prefix if present
-  const idx = wkt.indexOf('POINT');
-  if (idx === -1) {
-    throw new Error('Invalid WKT: POINT not found');
-  }
-  const pointPart = wkt.slice(idx);
-
-  const match = pointPart.match(/POINT\s*\(\s*([^\s]+)\s+([^\s]+)\s*\)/i);
-
-  if (!match) {
-    throw new Error('Invalid WKT POINT');
-  }
-
-  const longitude = parseFloat(match[1]);
-  const latitude = parseFloat(match[2]);
-
-  return { latitude, longitude };
 }
 
 function containsBlankNode(statement: Statement): boolean {

@@ -31,11 +31,31 @@ const has_end_port: NamedNode = $rdf.sym(Term.has_end_port);
 const has_latitude: NamedNode = $rdf.sym(Term.has_latitude);
 const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 const harbourType: NamedNode = $rdf.sym('http://purl.obolibrary.org/obo/ENVO_00000463'); // harbour
+const decimalType: NamedNode = $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal');
 
 // Alias for QueryResultRow
 type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row returned by a query.
 
 function init(): void {}
+
+export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
+  const results: QueryResultRow[] = [];
+  const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
+
+  function onRow(row: QueryResultRow): void {
+    results.push(row);
+  }
+
+  function executor(resolve: (value: QueryResultRow[]) => void): void {
+    function onDone(): void {
+      resolve(results);
+    }
+
+    g_triple_store.query(queryObj, onRow, undefined, onDone);
+  }
+
+  return new Promise(executor);
+}
 
 export const add = {
   triple(s: NamedNode, p: NamedNode, o: NamedNode, graph: NamedNode | Literal) {
@@ -125,6 +145,15 @@ export const add = {
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;
+  },
+
+  coordinate(iri: Iri, cord: Coordinate): void {
+    const thing: NamedNode = $rdf.sym(iri);
+    const lat: Literal = number_to_literal(cord.latitude);
+    const long: Literal = number_to_literal(cord.longitude);
+    // TODO: create a coordiante node
+    add.triple(thing, has_latitude, lat, PARALLAX_GRAPH);
+    add.triple(thing, has_longitude, long, PARALLAX_GRAPH);
   },
 };
 
@@ -246,6 +275,32 @@ export default {
 
 // =================== Private Functions ===================
 
+function number_to_literal(x: number): Literal {
+  const str: string = x.toString();
+  const literal: Literal = $rdf.literal(str, decimalType);
+  return literal;
+}
+
+export function parseWKTPoint(wkt: string): Coordinate {
+  // Remove CRS prefix if present
+  const idx = wkt.indexOf('POINT');
+  if (idx === -1) {
+    throw new Error('Invalid WKT: POINT not found');
+  }
+  const pointPart = wkt.slice(idx);
+
+  const match = pointPart.match(/POINT\s*\(\s*([^\s]+)\s+([^\s]+)\s*\)/i);
+
+  if (!match) {
+    throw new Error('Invalid WKT POINT');
+  }
+
+  const longitude = parseFloat(match[1]);
+  const latitude = parseFloat(match[2]);
+
+  return { latitude, longitude };
+}
+
 function containsBlankNode(statement: Statement): boolean {
   //prettier-ignore
   if (statement.subject.termType === 'BlankNode' ||
@@ -268,25 +323,6 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
   }
 
   return graphNames;
-}
-
-export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
-  const results: QueryResultRow[] = [];
-  const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
-
-  function onRow(row: QueryResultRow): void {
-    results.push(row);
-  }
-
-  function executor(resolve: (value: QueryResultRow[]) => void): void {
-    function onDone(): void {
-      resolve(results);
-    }
-
-    g_triple_store.query(queryObj, onRow, undefined, onDone);
-  }
-
-  return new Promise(executor);
 }
 
 // =================== Debugging and Logging ===================

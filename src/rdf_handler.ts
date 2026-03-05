@@ -31,6 +31,12 @@ const add = {
   port(port: Port): Iri {
     const harbour: Iri = add.observableEntity('harbour');
     RDFLibWrapper.add.label(harbour, port.name);
+
+    const cord: Coordinate = { latitude: port.latitude, longitude: port.longitude };
+
+    RDFLibWrapper.add.coordinate(harbour, cord);
+    // TODO: port.country
+
     return harbour;
   },
 

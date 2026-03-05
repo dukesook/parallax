@@ -78,27 +78,35 @@ const get = {
     return triples;
   },
 
-  async coordinate(feature: Iri): Promise<Coordinate[]> {
-    throw new Error('Not implemented yet');
+  async coordinate(feature: Iri): Promise<Coordinate> {
     let query = `
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX parallax: <https://parallax.nmsu.edu/ns/>
     PREFIX obo: <http://purl.obolibrary.org/obo/>
+    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 
-    SELECT ?ship ?label WHERE {
+    SELECT ?label ?wkt WHERE {
       
-      ?ship ?p obo:ENVO_01000608 .
-      ?ship rdfs:label ?label .
+      <${feature}> a geo:Feature .
+      <${feature}> rdfs:label ?label .
+      <${feature}> geo:hasGeometry ?geometry .
+      ?geometry a geo:Geometry .
+      ?geometry geo:asWKT ?wkt .
     }
     `;
 
     return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
       const cords: Coordinate[] = [];
-      for (const row of rows) {
-        const id: Iri = row['?ship'].value;
+      if (rows.length != 1) {
+        console.warn('Expected exactly one result for coordinate query, got ' + rows.length);
       }
-      return cords;
+      const row = rows[0];
+      console.log('Coordinate query result row:', row);
+      const label: string = row['?label'].value;
+      const wkt: string = row['?wkt'].value;
+      const cord: Coordinate = parseWKTPoint(wkt);
+      return cord;
     });
   },
 

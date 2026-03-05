@@ -134,13 +134,17 @@ function fabricateData(): void {
 
 function onClickShip(entity: ObservableEntity) {
   RdfHandler.get.shipVoyages(entity.id).then((voyages) => {
+    // Display First Voyage
     const voyage: Voyage = voyages[0];
     const startPort: Iri = voyage.start_port;
     const endPort: Iri = voyage.end_port;
 
-    const startCoordinate: Coordinate = RdfHandler.get.coordinate(startPort);
-    const endCoordinate: Coordinate = RdfHandler.get.coordinate(endPort);
-    GMaps.drawLine(startCoordinate, endCoordinate);
+    RdfHandler.get.coordinate(startPort).then((startCoordinate: Coordinate) => {
+      console.log('Start Coordinate:', startCoordinate);
+    });
+    // const startCoordinate: Coordinate = RdfHandler.get.coordinate(startPort);
+    // const endCoordinate: Coordinate = RdfHandler.get.coordinate(endPort);
+    // GMaps.drawLine(startCoordinate, endCoordinate);
   });
 }
 

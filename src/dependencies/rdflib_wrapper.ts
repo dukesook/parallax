@@ -34,6 +34,7 @@ const harbourType: NamedNode = $rdf.sym(Term.harbour_class);
 const decimalType: NamedNode = $rdf.sym(Term.decimal_class);
 const has_geometry: NamedNode = $rdf.sym(Term.has_geometry);
 const geometry_class: NamedNode = $rdf.sym(Term.geometry_class);
+const feature_class: NamedNode = $rdf.sym(Term.feature_class);
 const has_wkt: NamedNode = $rdf.sym(Term.has_wkt);
 const wkt_literal_datatype: NamedNode = $rdf.sym(Term.wkt_literal_datatype);
 
@@ -104,7 +105,7 @@ export const add = {
     const observableEntity: NamedNode = PARALLAX_FN(uuidv4());
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
-    // add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
+    add.triple(observableEntity, a, feature_class, PARALLAX_GRAPH);
     return observableEntity.value;
   },
 

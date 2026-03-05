@@ -19,6 +19,7 @@ export const Term = {
   geometry_class: 'http://www.opengis.net/ont/geosparql#Geometry',
   has_wkt: 'http://www.opengis.net/ont/geosparql#asWKT',
   wkt_literal_datatype: 'http://www.opengis.net/ont/geosparql#wktLiteral',
+  feature_class: 'http://www.opengis.net/ont/geosparql#Feature',
 };
 
 // prettier-ignore

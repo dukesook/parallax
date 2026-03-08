@@ -1,7 +1,7 @@
 import { Triple } from '../aliases';
 import * as GraphTab from './knowledge_graph_tab';
 import * as TermRegistryGui from './term_registry_tab';
-import { FabricatorOptions } from '../models';
+import { FabricatorOptions, ObservableEntity } from '../models';
 
 /*
 ******************* gui.ts *******************
@@ -31,23 +31,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Public Functions
 
-export function displayLatLng(lat: number, lng: number): void {
+export function displayLatLng(lat: number, lng: number) {
   const latInput = getElement('lat') as HTMLInputElement;
   const lngInput = getElement('lng') as HTMLInputElement;
   latInput.value = lat.toFixed(6);
   lngInput.value = lng.toFixed(6);
 }
 
-export function displayMessage(message: string): void {
+export function displayMessage(message: string) {
   messageDiv.innerHTML = message;
 }
 
-export function displayTriples(triples: Triple[]): void {
+export function displayTriples(triples: Triple[]) {
   GraphTab.displayTriples(triples);
 }
 
-export function displayTermRegistry(terms: string[]): void {
+export function displayTermRegistry(terms: string[]) {
   TermRegistryGui.displayTerms(terms);
+}
+
+export function displayObservableEntities(targets: ObservableEntity[]) {
+  const entityMenu = getElement('entity-menu') as HTMLDivElement;
+  entityMenu.innerHTML = ''; // Clear previous content
+
+  targets.forEach((entity: ObservableEntity) => {
+    const entityDiv = document.createElement('div');
+    entityDiv.innerHTML = entity.id;
+    entityMenu.appendChild(entityDiv);
+  });
+
+  //
 }
 
 export function onDisplayTermRegistryButton(callback: () => void) {
@@ -183,7 +196,7 @@ export async function initGui(): Promise<void> {
   await loadHTMLIntoElement('/parallax/src/html/fabricator.html', fabricatorContent);
 }
 
-function activateTab(tab: HTMLElement): void {
+function activateTab(tab: HTMLElement) {
   // Previous Tab
   g_currentTab.classList.remove('active');
   const oldContentId = g_currentTab.getAttribute('content-id')!;

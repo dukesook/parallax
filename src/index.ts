@@ -130,7 +130,7 @@ function scanKGraph() {
 
 function showTargets() {
   RdfHandler.get.allFeatures().then((features: ObservableEntity[]) => {
-    console.log('Features:', features);
+    Gui.displayObservableEntities(features);
   });
 }
 

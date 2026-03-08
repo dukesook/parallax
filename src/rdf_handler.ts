@@ -228,6 +228,9 @@ const get = {
     `;
     return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
       const features: ObservableEntity[] = [];
+      if (rows.length === 0) {
+        console.warn('No features found in allFeatures query');
+      }
       for (const row of rows) {
         const featureIri: Iri = row['?feature'].value;
         const feature: ObservableEntity = {
@@ -237,6 +240,7 @@ const get = {
         };
         features.push(feature);
       }
+
       return features;
     });
   },

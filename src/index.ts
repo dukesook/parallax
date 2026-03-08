@@ -133,7 +133,7 @@ function fabricateData(): void {
 }
 
 async function onClickShip(entity: ObservableEntity) {
-  RdfHandler.get.shipVoyages(entity.id).then((voyages) => {
+  RdfHandler.get.shipVoyages(entity.id).then(async (voyages) => {
     // Display First Voyage
     const voyage: Voyage = voyages[0];
     const startPort: Iri = voyage.start_port;
@@ -142,13 +142,11 @@ async function onClickShip(entity: ObservableEntity) {
     // TODO: Refactor voyages to have a list of coordinates
     // TODO: Get all the coordinates for a voyage
 
-    RdfHandler.get.coordinate(startPort).then((startCoordinate: Coordinate) => {
-      console.log('Start Coordinate:', startCoordinate);
-    });
+    const startCoordinate: Coordinate = await RdfHandler.get.coordinate(startPort);
+    const endCoordinate: Coordinate = await RdfHandler.get.coordinate(endPort);
+    console.log('c Coordinate:', startCoordinate);
 
-    // const startCoordinate: Coordinate = RdfHandler.get.coordinate(startPort);
-    // const endCoordinate: Coordinate = RdfHandler.get.coordinate(endPort);
-    // GMaps.drawLine(startCoordinate, endCoordinate);
+    GMaps.drawLine(startCoordinate, endCoordinate);
   });
 }
 

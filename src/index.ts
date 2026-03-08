@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.On.fabricateData(fabricateData);
     Gui.On.saveButton(onAddObservation);
     Gui.On.writeGraphToFile(writeGraphToFile);
+    Gui.On.showTargetsButton(showTargets);
 
     // Temporary: Fabricate data on load for testing
     fabricateData();
@@ -104,7 +105,7 @@ function showInstanceData(): void {
 }
 
 function showShips(): void {
-  RdfHandler.get.ships().then((ships) => {
+  RdfHandler.get.ships().then((ships: ObservableEntity[]) => {
     GraphTab.displayObservableEntities(ships, onClickShip);
   });
 }
@@ -123,11 +124,17 @@ function showPorts() {
   });
 }
 
-function scanKGraph(): void {
+function scanKGraph() {
   Scanner.scan();
 }
 
-function fabricateData(): void {
+function showTargets() {
+  RdfHandler.get.allFeatures().then((features: ObservableEntity[]) => {
+    console.log('Features:', features);
+  });
+}
+
+function fabricateData() {
   const options = Gui.Get.fabricatorUserInput() as FabricatorOptions;
   Fabricator.generateData(options);
 }

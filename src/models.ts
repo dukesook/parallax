@@ -24,14 +24,6 @@ export interface Observation {
   Entities: string[];
 }
 
-export interface Voyage {
-  ship: Iri;
-  start_time: Date;
-  end_time: Date;
-  start_port: Iri;
-  end_port: Iri;
-}
-
 export interface FabricatorOptions {
   n_boats: number;
   n_trips_per_boat: number;
@@ -45,4 +37,12 @@ export interface ObservableEntity {
   id: Iri;
   type: string;
   label: string;
+}
+
+export interface Voyage {
+  ship: Iri;
+  start_time: Date;
+  end_time: Date;
+  start_port: Iri;
+  end_port: Iri;
 }

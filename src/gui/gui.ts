@@ -97,6 +97,11 @@ export const On = {
     const fabricateDataButton = getElement('fabricate-data-button') as HTMLButtonElement;
     fabricateDataButton.addEventListener('click', callback);
   },
+
+  showTargetsButton(callback: () => void) {
+    const showTargetsButton = getElement('show-targets') as HTMLButtonElement;
+    showTargetsButton.addEventListener('click', callback);
+  },
 };
 
 // TODO: move all getters here

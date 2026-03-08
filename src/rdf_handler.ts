@@ -2,7 +2,7 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port, Voyage, Coordinate, ObservableEntity } from './models';
+import { Port, Voyage, ObservableEntity, Coordinate } from './models';
 import { Term } from 'rdflib';
 type QueryResultRow = Record<string, Term>; // Represents a single row returned by a query.
 
@@ -216,6 +216,28 @@ const get = {
         voyages.push(voyage);
       }
       return voyages;
+    });
+  },
+
+  async allFeatures(): Promise<ObservableEntity[]> {
+    const query = `  
+      PREFIX geo: <http://www.opengis.net/ont/geosparql#> 
+      SELECT ?feature WHERE {
+        ?feature a geo:Feature .
+      }
+    `;
+    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+      const features: ObservableEntity[] = [];
+      for (const row of rows) {
+        const featureIri: Iri = row['?feature'].value;
+        const feature: ObservableEntity = {
+          id: featureIri,
+          type: 'todo',
+          label: 'todo',
+        };
+        features.push(feature);
+      }
+      return features;
     });
   },
 

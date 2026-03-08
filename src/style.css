@@ -27,3 +27,14 @@
 .tab-content.active {
   display: block;
 }
+
+#map-container {
+  display: flex;
+  gap: 20px;
+}
+
+#entity-menu {
+  width: 400px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}

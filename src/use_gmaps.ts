@@ -3,10 +3,10 @@
 import { Coordinate } from './models';
 
 let g_googleMapElement: HTMLElement | null = null;
+const g_lines: google.maps.Polyline[] = [];
 let map: google.maps.Map | null = null;
 let currentMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 const newYorkLocation = { lat: 40.7128, lng: -74.006 };
-export const startingLocation = newYorkLocation;
 type MapMouseEvent = google.maps.MapMouseEvent;
 
 const mapListeners: Function[] = [];
@@ -79,6 +79,14 @@ export function drawLine(c1: Coordinate, c2: Coordinate): void {
     strokeWeight: 2,
     map: map,
   });
+  g_lines.push(line);
+}
+
+export function clearLines(): void {
+  for (const line of g_lines) {
+    line.setMap(null);
+  }
+  g_lines.length = 0; // Clear the array
 }
 
 export function debug() {

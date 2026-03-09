@@ -128,13 +128,13 @@ function scanKGraph() {
   Scanner.scan();
 }
 
-function showTargets() {
-  function onClick(entity: ObservableEntity) {
-    console.log('Clicked on entity: ' + entity.id);
-  }
+function onClickObservableEntity(entity: ObservableEntity) {
+  console.log('Clicked on entity: ' + entity.id);
+}
 
+function showTargets() {
   RdfHandler.get.allFeatures().then((features: ObservableEntity[]) => {
-    Gui.displayObservableEntities(features, onClick);
+    Gui.displayObservableEntities(features, onClickObservableEntity);
   });
 }
 

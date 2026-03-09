@@ -36,6 +36,7 @@ export function initMap(): void {
 export function moveCurrentMarker(location: google.maps.LatLngLiteral): void {
   if (currentMarker) {
     // currentMarker.position = location;
+
     currentMarker.map = null; // Remove from current map
   }
 
@@ -44,6 +45,13 @@ export function moveCurrentMarker(location: google.maps.LatLngLiteral): void {
     map: map,
     title: 'New Marker',
   });
+}
+
+export function centerMap(cord: Coordinate): void {
+  if (map) {
+    const latLng = new google.maps.LatLng(cord.latitude, cord.longitude);
+    map.setCenter(latLng);
+  }
 }
 
 export function addMapListener(listener: Function): void {

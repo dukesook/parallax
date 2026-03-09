@@ -131,10 +131,20 @@ function scanKGraph() {
   Scanner.scan();
 }
 
+function onClickHarbour(harbourIri: Iri) {
+  console.log('Clicked on Harbour: ' + harbourIri);
+  RdfHandler.get.coordinate(harbourIri).then((coordinate) => {
+    console.log('Harbour Coordinate:', coordinate);
+    GMaps.centerMap(coordinate);
+  });
+}
+
 function onClickObservableEntity(entity: ObservableEntity) {
   if (entity.type === 'boat') {
     console.log('Clicked on Ship: ' + entity.id);
     onClickShip(entity);
+  } else if (entity.type === 'harbour') {
+    onClickHarbour(entity.id);
   } else {
     console.log('No click handler for entity type: ' + entity.type);
   }

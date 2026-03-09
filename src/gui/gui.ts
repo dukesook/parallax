@@ -55,13 +55,26 @@ export function displayObservableEntities(targets: ObservableEntity[]) {
   const entityMenu = getElement('entity-menu') as HTMLDivElement;
   entityMenu.innerHTML = ''; // Clear previous content
 
-  targets.forEach((entity: ObservableEntity) => {
-    const entityDiv = document.createElement('div');
-    entityDiv.innerHTML = entity.id;
-    entityMenu.appendChild(entityDiv);
+  const table = document.createElement('table');
+  const headerRow = document.createElement('tr');
+  ['ID', 'Type', 'Label'].forEach((headerText) => {
+    const th = document.createElement('th');
+    th.textContent = headerText;
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+
+  targets.forEach((entity) => {
+    const row = document.createElement('tr');
+    [entity.id, entity.type, entity.label].forEach((cellText) => {
+      const td = document.createElement('td');
+      td.textContent = cellText;
+      row.appendChild(td);
+    });
+    table.appendChild(row);
   });
 
-  //
+  entityMenu.appendChild(table);
 }
 
 export function onDisplayTermRegistryButton(callback: () => void) {

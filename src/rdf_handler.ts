@@ -222,8 +222,12 @@ const get = {
   async allFeatures(): Promise<ObservableEntity[]> {
     const query = `  
       PREFIX geo: <http://www.opengis.net/ont/geosparql#> 
-      SELECT ?feature WHERE {
+      SELECT * WHERE {
         ?feature a geo:Feature .
+        ?feature a ?type .
+        ?feature rdfs:label ?label .
+        FILTER(!sameTerm(?type, geo:Feature))
+        FILTER(?type != geo:Feature)
       }
     `;
     return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
@@ -233,10 +237,20 @@ const get = {
       }
       for (const row of rows) {
         const featureIri: Iri = row['?feature'].value;
+        const typeIri: Iri = row['?type'].value;
+        if (typeIri === 'http://www.opengis.net/ont/geosparql#Feature') {
+          // geo:Features have 2 rdf:types: 1. geoFeature and 2: EVNO:something (boat, plane, car, etc.)
+          // ?feature is the geo:Feature, ?type is the other type that we're searching for.
+          // FILTER() is supposed to account for this, but it's not working.
+          continue;
+        }
+        console.log('typeIri: ' + typeIri);
+        const typeLabel: string = TermRegistry.getLabel(typeIri);
+        const label: string = row['?label'].value;
         const feature: ObservableEntity = {
           id: featureIri,
-          type: 'todo',
-          label: 'todo',
+          type: typeLabel,
+          label: label,
         };
         features.push(feature);
       }

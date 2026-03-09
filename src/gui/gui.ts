@@ -23,7 +23,8 @@ const knowledgeGraphContent = getElement('knowledge-graph-content') as HTMLEleme
 const termRegistryContent = getElement('term-registry-content') as HTMLElement;
 const fabricatorContent = getElement('fabricator-content') as HTMLElement;
 
-let g_currentTab = knowledgeGraphTab;
+// Change Defualt Tab: 1. here 2. index.html tab-buttons  3. index.html tab-content
+let g_currentTab = googleMapsTab;
 
 document.addEventListener('DOMContentLoaded', () => {
   initGui();

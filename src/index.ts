@@ -129,7 +129,12 @@ function scanKGraph() {
 }
 
 function onClickObservableEntity(entity: ObservableEntity) {
-  console.log('Clicked on entity: ' + entity.id);
+  if (entity.type === 'boat') {
+    console.log('Clicked on Ship: ' + entity.id);
+    onClickShip(entity);
+  } else {
+    console.log('No click handler for entity type: ' + entity.type);
+  }
 }
 
 function showTargets() {

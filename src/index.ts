@@ -9,6 +9,9 @@ import { FabricatorOptions as FabricatorOptions, ObservableEntity } from './mode
 import { Coordinate, Voyage, Port } from './models';
 import Scanner from './scanner';
 
+// Options
+const FABRICATE_ON_LOAD = false;
+
 const debugButton = document.getElementById('debug-button');
 const debug2Button = document.getElementById('debug2-button');
 const logStoreButton = document.getElementById('log-store-button');
@@ -42,9 +45,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.On.writeGraphToFile(writeGraphToFile);
     Gui.On.showTargetsButton(showTargets);
 
-    // Temporary: Fabricate data on load for testing
-    fabricateData();
-    // Temporary: Fabricate data on load for testing
+    if (FABRICATE_ON_LOAD) {
+      fabricateData();
+    }
   });
 
   GMaps.addMapListener(onclickMap);

@@ -51,7 +51,7 @@ export function displayTermRegistry(terms: string[]) {
   TermRegistryGui.displayTerms(terms);
 }
 
-export function displayObservableEntities(targets: ObservableEntity[]) {
+export function displayObservableEntities(targets: ObservableEntity[], onclick: (entity: ObservableEntity) => void) {
   const entityMenu = getElement('entity-menu') as HTMLDivElement;
   entityMenu.innerHTML = ''; // Clear previous content
 
@@ -72,6 +72,7 @@ export function displayObservableEntities(targets: ObservableEntity[]) {
       row.appendChild(td);
     });
     table.appendChild(row);
+    row.addEventListener('click', () => onclick(entity));
   });
 
   entityMenu.appendChild(table);

@@ -129,8 +129,12 @@ function scanKGraph() {
 }
 
 function showTargets() {
+  function onClick(entity: ObservableEntity) {
+    console.log('Clicked on entity: ' + entity.id);
+  }
+
   RdfHandler.get.allFeatures().then((features: ObservableEntity[]) => {
-    Gui.displayObservableEntities(features);
+    Gui.displayObservableEntities(features, onClick);
   });
 }
 

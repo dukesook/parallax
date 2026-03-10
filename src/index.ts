@@ -10,7 +10,7 @@ import { Coordinate, Voyage, Port } from './models';
 import Scanner from './scanner';
 
 // Options
-const FABRICATE_ON_LOAD = false;
+const FABRICATE_ON_LOAD = true;
 
 const debugButton = document.getElementById('debug-button');
 const debug2Button = document.getElementById('debug2-button');
@@ -70,14 +70,14 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
 }
 
 async function onAddObservation(): Promise<void> {
+  // Adding new Entity
   const selectedObject = Gui.getSelectedObject();
   const { lat, lng } = Gui.getLatLng();
-  console.log(`Saving data for object: ${selectedObject}, lat: ${lat}, lng: ${lng}`);
 
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  const objectIri = await RdfHandler.add.observableEntity(selectedObject);
+  const objectIri = RdfHandler.add.observableEntity(selectedObject);
   const timestamp = new Date();
   RdfHandler.add.observation(objectIri, lat, lng, timestamp);
 }

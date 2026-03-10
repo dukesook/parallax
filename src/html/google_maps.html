@@ -1,31 +1,48 @@
 <div>
-  <h2>Google Map</h2>
-  <label for="lat">Latitude:</label>
-  <input type="number" id="lat" name="lat" step="any" />
-  <br />
+  <div>
+    <h2>Add New Target</h2>
+    <label for="lat">Latitude:</label>
+    <input type="number" id="lat" name="lat" step="any" />
+    <br />
 
-  <label for="lng">Longitude:</label>
-  <input type="number" id="lng" name="lng" step="any" />
-  <br />
+    <label for="lng">Longitude:</label>
+    <input type="number" id="lng" name="lng" step="any" />
+    <br />
 
-  <label for="datetime">Date & Time:</label>
-  <input type="datetime-local" id="datetime" name="datetime" />
-  <br />
-  <br />
+    <label for="datetime">Date & Time:</label>
+    <input type="datetime-local" id="datetime" name="datetime" />
+    <br />
+    <br />
+  </div>
 
-  <label for="object-select">Choose an option:</label>
-  <select id="object-select" name="object-select">
-    <option value="boat">Boat</option>
-    <option value="car">Car</option>
-    <option value="plane">Plane</option>
-  </select>
-  <br />
-  <br />
+  <div>
+    <h3>Add New Entity</h3>
+    <label for="object-select">Add New Entity:</label>
+    <select id="object-select" name="object-select">
+      <option value="boat">Boat</option>
+      <option value="car">Car</option>
+      <option value="plane">Plane</option>
+    </select>
+    <br />
+    <br />
 
-  <!-- <button id="save-button">Save to Knowledge Graph</button> -->
-  <button id="add-observation-button">Add Observation</button>
-  <br />
-  <br />
+    <!-- <button id="save-button">Save to Knowledge Graph</button> -->
+    <button id="add-observation-button">Add Observation</button>
+    <br />
+    <br />
+  </div>
+
+  <div>
+    <h3>Add Observation</h3>
+    <label>ID: </label>
+    <input id="id-input" />
+    <label>Type: </label>
+    <input id="entity-type-input" />
+    <label>Label: </label>
+    <input id="label-type-input" />
+    <br />
+    <br />
+  </div>
 
   <button id="show-targets">Show Targets</button>
 

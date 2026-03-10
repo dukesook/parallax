@@ -78,6 +78,16 @@ export function displayObservableEntities(targets: ObservableEntity[], onclick: 
   entityMenu.appendChild(table);
 }
 
+export function populateObservationFields(entity: ObservableEntity) {
+  const idInput = getElement('add-obs-id-input') as HTMLInputElement;
+  const typeInput = getElement('add-obs-type-input') as HTMLInputElement;
+  const labelInput = getElement('add-obs-label-input') as HTMLInputElement;
+
+  idInput.value = entity.id;
+  typeInput.value = entity.type;
+  labelInput.value = entity.label;
+}
+
 export function onDisplayTermRegistryButton(callback: () => void) {
   TermRegistryGui.onShowTermRegistryButton(callback);
 }

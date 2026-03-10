@@ -148,6 +148,9 @@ function onClickObservableEntity(entity: ObservableEntity) {
   } else {
     console.log('No click handler for entity type: ' + entity.type);
   }
+
+  // Populate "Add Obervation" fields
+  Gui.populateObservationFields(entity);
 }
 
 function showTargets() {

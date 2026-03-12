@@ -301,7 +301,11 @@ const get = {
 
   async allObservations(): Promise<Observation[]> {
     const query = `
-    TODO
+    PREFIX sosa: <https://www.w3.org/ns/sosa/>
+    PREFIX parallax: <https://parallax.nmsu.edu/>
+    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+    SELECT ?obs ?lat ?long ?time WHERE {
     `;
     return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
       const observations: Observation[] = [];

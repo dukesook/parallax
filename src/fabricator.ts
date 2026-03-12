@@ -12,7 +12,7 @@ export async function generateData(options: FabricatorOptions): Promise<void> {
   const ships: Iri[] = generateShips(n_ships);
   const ports = generatePorts();
   const voyages: Voyage[] = generateVoyages(n_trips_per_boat, ships, ports);
-  const observations: Iri[] = generateObservations(voyages, n_valid_observations_per_trip);
+  const observations: Observation[] = generateObservations(voyages, n_valid_observations_per_trip);
   console.log('Data fabrication complete.');
 }
 

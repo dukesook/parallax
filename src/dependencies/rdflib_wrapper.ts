@@ -31,7 +31,6 @@ const has_end_port: NamedNode = $rdf.sym(Term.has_end_port);
 const has_latitude: NamedNode = $rdf.sym(Term.has_latitude);
 const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 const harbourType: NamedNode = $rdf.sym(Term.harbour_class);
-const decimalType: NamedNode = $rdf.sym(Term.decimal_class);
 const has_geometry: NamedNode = $rdf.sym(Term.has_geometry);
 const geometry_class: NamedNode = $rdf.sym(Term.geometry_class);
 const feature_class: NamedNode = $rdf.sym(Term.feature_class);
@@ -41,8 +40,8 @@ const decimal_literal_datatype: NamedNode = $rdf.sym(Term.decimal_literal_dataty
 const dateTime_literal_datatype: NamedNode = $rdf.sym(Term.dateTime_literal_datatype);
 
 // TODO wtf are these?
-const ObservationType: NamedNode = SOSA_FN('Observation');
-const resultTime: NamedNode = SOSA_FN('resultTime');
+const SosaObservationClass: NamedNode = SOSA_FN('Observation');
+const SosaResultTimeClass: NamedNode = SOSA_FN('resultTime');
 
 function init(): void {
   //
@@ -137,13 +136,13 @@ export const add = {
     const longitude: Literal = $rdf.literal(long, decimal_literal_datatype);
     const timeLiteral: Literal = $rdf.literal(date, dateTime_literal_datatype);
 
-    add.triple(observationIri, a, ObservationType, PARALLAX_GRAPH);
+    add.triple(observationIri, a, SosaObservationClass, PARALLAX_GRAPH);
     add.triple(observationIri, has_latitude, latitude, PARALLAX_GRAPH);
     add.triple(observationIri, has_longitude, longitude, PARALLAX_GRAPH);
     for (const entity of obs.entities) {
       add.triple(observationIri, is_about, $rdf.sym(entity), PARALLAX_GRAPH);
     }
-    add.triple(observationIri, resultTime, timeLiteral, PARALLAX_GRAPH);
+    add.triple(observationIri, SosaResultTimeClass, timeLiteral, PARALLAX_GRAPH);
   },
 
   voyage(voyage: Voyage): Iri {
@@ -299,7 +298,7 @@ export default {
 
 function number_to_literal(x: number): Literal {
   const str: string = x.toString();
-  const literal: Literal = $rdf.literal(str, decimalType);
+  const literal: Literal = $rdf.literal(str, decimal_literal_datatype);
   return literal;
 }
 

@@ -151,6 +151,7 @@ export const Get = {
 
     const n_boats = data.get('n_boats') as string;
     const n_trips_per_boat = data.get('n_trips_per_boat') as string;
+    const n_valid_observations_per_trip = data.get('n_valid_observations_per_trip') as string;
     const n_airplanes = data.get('n_airplanes') as string;
     const n_trips_per_plane = data.get('n_trips_per_plane') as string;
     const n_vehicles = data.get('n_vehicles') as string;
@@ -159,6 +160,7 @@ export const Get = {
     const userInput: FabricatorOptions = {
       n_boats: parseInt(n_boats),
       n_trips_per_boat: parseInt(n_trips_per_boat),
+      n_valid_observations_per_trip: parseInt(n_valid_observations_per_trip),
       n_airplanes: parseInt(n_airplanes),
       n_trips_per_plane: parseInt(n_trips_per_plane),
       n_vehicles: parseInt(n_vehicles),

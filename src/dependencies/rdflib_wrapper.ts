@@ -1,7 +1,7 @@
 import * as $rdf from 'rdflib';
 import { IndexedFormula, Query, Statement, NamedNode, Literal } from 'rdflib';
 import { Iri, Label, Triple } from '../aliases';
-import { Voyage, ObservableEntity } from '../models';
+import { Voyage, ObservableEntity, Observation } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
@@ -37,9 +37,19 @@ const geometry_class: NamedNode = $rdf.sym(Term.geometry_class);
 const feature_class: NamedNode = $rdf.sym(Term.feature_class);
 const has_wkt: NamedNode = $rdf.sym(Term.has_wkt);
 const wkt_literal_datatype: NamedNode = $rdf.sym(Term.wkt_literal_datatype);
+const decimal_literal_datatype: NamedNode = $rdf.sym(Term.decimal_literal_datatype);
+const dateTime_literal_datatype: NamedNode = $rdf.sym(Term.dateTime_literal_datatype);
+
+// TODO wtf are these?
+const ObservationType: NamedNode = SOSA_FN('Observation');
+const resultTime: NamedNode = SOSA_FN('resultTime');
 
 function init(): void {
   //
+}
+
+export function generate_iri(): Iri {
+  return PARALLAX_FN(uuidv4()).value;
 }
 
 export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
@@ -118,27 +128,29 @@ export const add = {
     return the_port;
   },
 
-  observation(observedThing: Iri, lat: number, lng: number, date: Date): Iri {
-    const observation: Iri = PARALLAX_FN(uuidv4());
-    const ObservationType = SOSA_FN('Observation');
-    const latitude = $rdf.literal(lat.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
-    const longitude = $rdf.literal(lng.toString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#decimal'));
-    const timeLiteral = $rdf.literal(date.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
-    const resultTime = SOSA_FN('resultTime');
+  observation(obs: Observation) {
+    const observationIri: NamedNode = $rdf.sym(obs.id);
+    const lat: string = obs.location.latitude.toString();
+    const long: string = obs.location.longitude.toString();
+    const date: string = obs.time.toISOString();
+    const latitude: Literal = $rdf.literal(lat, decimal_literal_datatype);
+    const longitude: Literal = $rdf.literal(long, decimal_literal_datatype);
+    const timeLiteral: Literal = $rdf.literal(date, dateTime_literal_datatype);
 
-    add.triple(observation, a, ObservationType, PARALLAX_GRAPH);
-    add.triple(observation, has_latitude, latitude, PARALLAX_GRAPH);
-    add.triple(observation, has_longitude, longitude, PARALLAX_GRAPH);
-    add.triple(observation, is_about, $rdf.sym(observedThing), PARALLAX_GRAPH);
-    add.triple(observation, resultTime, timeLiteral, PARALLAX_GRAPH);
-    return observation;
+    add.triple(observationIri, a, ObservationType, PARALLAX_GRAPH);
+    add.triple(observationIri, has_latitude, latitude, PARALLAX_GRAPH);
+    add.triple(observationIri, has_longitude, longitude, PARALLAX_GRAPH);
+    for (const entity of obs.entities) {
+      add.triple(observationIri, is_about, $rdf.sym(entity), PARALLAX_GRAPH);
+    }
+    add.triple(observationIri, resultTime, timeLiteral, PARALLAX_GRAPH);
   },
 
   voyage(voyage: Voyage): Iri {
-    const voyageIri: Iri = PARALLAX_FN(uuidv4());
+    const voyageIri: NamedNode = $rdf.sym(voyage.id);
     const ActOfTravel: NamedNode = $rdf.sym(TermRegistry.getIRI('ActOfTravel'));
-    const start_time = $rdf.literal(voyage.start_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
-    const end_time = $rdf.literal(voyage.end_time.toISOString(), $rdf.sym('http://www.w3.org/2001/XMLSchema#dateTime'));
+    const start_time: Literal = $rdf.literal(voyage.start_time.toISOString(), dateTime_literal_datatype);
+    const end_time: Literal = $rdf.literal(voyage.end_time.toISOString(), dateTime_literal_datatype);
 
     add.triple(voyageIri, a, ActOfTravel, PARALLAX_GRAPH);
     add.triple(voyageIri, is_about, $rdf.sym(voyage.ship), PARALLAX_GRAPH);

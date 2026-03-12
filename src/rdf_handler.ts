@@ -2,7 +2,7 @@ import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port, Voyage, ObservableEntity, Coordinate } from './models';
+import { Port, Voyage, ObservableEntity, Coordinate, Observation } from './models';
 import { Term } from 'rdflib';
 type QueryResultRow = Record<string, Term>; // Represents a single row returned by a query.
 
@@ -17,6 +17,10 @@ async function init(): Promise<void> {
     .then(initTermRegistry);
 }
 
+export function generateIri(): Iri {
+  return RDFLibWrapper.generate_iri();
+}
+
 const add = {
   observableEntity(entityTypeString: string): Iri {
     let entityType: Iri = TermRegistry.getIRI(entityTypeString);
@@ -24,8 +28,8 @@ const add = {
     return entity;
   },
 
-  observation(observedThing: Iri, lat: number, long: number, date: Date): void {
-    RDFLibWrapper.add.observation(observedThing, lat, long, date);
+  observation(obs: Observation): void {
+    RDFLibWrapper.add.observation(obs);
   },
 
   port(port: Port): Iri {
@@ -40,9 +44,8 @@ const add = {
     return harbour;
   },
 
-  voyage(voyage: Voyage): Iri {
-    const voyageIri: Iri = RDFLibWrapper.add.voyage(voyage);
-    return voyageIri;
+  voyage(voyage: Voyage) {
+    RDFLibWrapper.add.voyage(voyage);
   },
 
   label(iri: Iri, label: string): void {
@@ -102,7 +105,6 @@ const get = {
         console.warn('Expected exactly one result for coordinate query, got ' + rows.length);
       }
       const row = rows[0];
-      console.log('Coordinate query result row:', row);
       const label: string = row['?label'].value;
       const wkt: string = row['?wkt'].value;
       const cord: Coordinate = parseWKTPoint(wkt);
@@ -296,6 +298,19 @@ const get = {
       return voyages;
     });
   },
+
+  async allObservations(): Promise<Observation[]> {
+    const query = `
+    TODO
+    `;
+    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+      const observations: Observation[] = [];
+      for (const row of rows) {
+        //
+      }
+      return observations;
+    });
+  },
 };
 
 // ================== Private Functions ==================
@@ -365,6 +380,7 @@ export function debug(): void {
 // ================== Default Export ==================
 
 export default {
+  generateIri,
   init,
   add,
   get,

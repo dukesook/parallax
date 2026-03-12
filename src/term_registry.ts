@@ -18,8 +18,12 @@ export const Term = {
   has_label: 'http://www.w3.org/2000/01/rdf-schema#label',
   geometry_class: 'http://www.opengis.net/ont/geosparql#Geometry',
   has_wkt: 'http://www.opengis.net/ont/geosparql#asWKT',
-  wkt_literal_datatype: 'http://www.opengis.net/ont/geosparql#wktLiteral',
   feature_class: 'http://www.opengis.net/ont/geosparql#Feature',
+
+  // Literals
+  wkt_literal_datatype: 'http://www.opengis.net/ont/geosparql#wktLiteral',
+  decimal_literal_datatype: 'http://www.w3.org/2001/XMLSchema#decimal',
+  dateTime_literal_datatype: 'http://www.w3.org/2001/XMLSchema#dateTime',
 };
 
 // prettier-ignore

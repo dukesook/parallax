@@ -5,7 +5,7 @@ import * as GraphTab from './gui/knowledge_graph_tab';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import * as Fetcher from './fetcher';
-import { FabricatorOptions as FabricatorOptions, ObservableEntity } from './models';
+import { FabricatorOptions as FabricatorOptions, ObservableEntity, Observation } from './models';
 import { Coordinate, Voyage, Port } from './models';
 import Scanner from './scanner';
 
@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       GraphTab.On.listShipsButton(showShips);
       GraphTab.On.listVoyagesButton(showVoyages);
       GraphTab.On.listPortsButton(showPorts);
+      GraphTab.On.listObservationsButton(showObservations);
       GraphTab.On.scan(scanKGraph);
     });
 
@@ -79,7 +80,13 @@ async function onAddObservation(): Promise<void> {
 
   const objectIri = RdfHandler.add.observableEntity(selectedObject);
   const timestamp = new Date();
-  RdfHandler.add.observation(objectIri, lat, lng, timestamp);
+  const obs: Observation = {
+    id: objectIri,
+    location: { latitude: lat, longitude: lng },
+    time: timestamp,
+    entities: [objectIri],
+  };
+  RdfHandler.add.observation(obs);
 }
 
 function writeGraphToFile(): void {
@@ -121,9 +128,15 @@ function showVoyages() {
 }
 
 function showPorts() {
-  console.log('index.ts - showPorts()');
   RdfHandler.get.allPorts().then((ports) => {
     GraphTab.displayObjects(ports);
+  });
+}
+
+function showObservations() {
+  console.log('index.ts - showObservations()');
+  RdfHandler.get.allObservations().then((observations) => {
+    GraphTab.displayObjects(observations);
   });
 }
 

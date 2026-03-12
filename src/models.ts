@@ -19,14 +19,16 @@ export interface Coordinate {
 }
 
 export interface Observation {
+  id: Iri;
   location: Coordinate;
   time: Date;
-  Entities: string[];
+  entities: string[];
 }
 
 export interface FabricatorOptions {
   n_boats: number;
   n_trips_per_boat: number;
+  n_valid_observations_per_trip: number;
   n_airplanes: number;
   n_trips_per_plane: number;
   n_vehicles: number;
@@ -40,6 +42,7 @@ export interface ObservableEntity {
 }
 
 export interface Voyage {
+  id: Iri;
   ship: Iri;
   start_time: Date;
   end_time: Date;

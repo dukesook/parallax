@@ -8,9 +8,11 @@ import { FabricatorOptions } from './models';
 export async function generateData(options: FabricatorOptions): Promise<void> {
   const n_ships = options.n_boats;
   const n_trips_per_boat = options.n_trips_per_boat;
+  const n_valid_observations_per_trip = options.n_valid_observations_per_trip;
   const ships: Iri[] = generateShips(n_ships);
   const ports = generatePorts();
-  const voyages: Iri[] = generateVoyages(n_trips_per_boat, ships, ports);
+  const voyages: Voyage[] = generateVoyages(n_trips_per_boat, ships, ports);
+  const observations: Iri[] = generateObservations(voyages, n_valid_observations_per_trip);
   console.log('Data fabrication complete.');
 }
 
@@ -64,20 +66,40 @@ function generatePorts(): Iri[] {
   return ports;
 }
 
-function generateVoyages(desiredCount: number, ships: Iri[], ports: Iri[]): Iri[] {
-  let voyages: Iri[] = [];
+function generateVoyages(desiredCount: number, ships: Iri[], ports: Iri[]): Voyage[] {
+  let voyages: Voyage[] = [];
 
   // TODO: vary the number of voyages per ship
 
   for (const ship of ships) {
     for (let i = 0; i < desiredCount; i++) {
       const voyage: Voyage = fabricateVoyage(ship, ports);
-      const voyageIri: Iri = RdfHandler.add.voyage(voyage);
-      voyages.push(voyageIri);
+      RdfHandler.add.voyage(voyage);
+      voyages.push(voyage);
     }
   }
 
   return voyages;
+}
+
+async function generateObservations(voyages: Voyage[], n_valid_observations_per_trip: number): Observation[] {
+  let observations: Observation[] = [];
+
+  for (const voyage of voyages) {
+    for (let i = 0; i < n_valid_observations_per_trip; i++) {
+      const cord: Coordinate = await fabricateCoordinateBetweenPorts(voyage.start_port, voyage.end_port);
+      const date: Date = getRandomDateBetween(voyage.start_time, voyage.end_time);
+      const obs: Observation = {
+        id: RdfHandler.generateIri(),
+        location: cord,
+        time: date,
+        entities: [voyage.ship],
+      };
+      RdfHandler.add.observation(obs);
+      observations.push(obs);
+    }
+  }
+  return observations;
 }
 
 function fabricateVoyage(ship: Iri, ports: Iri[]): Voyage {
@@ -95,6 +117,7 @@ function fabricateVoyage(ship: Iri, ports: Iri[]): Voyage {
   end_time.setDate(start_time.getDate() + durationDays);
 
   const voyage: Voyage = {
+    id: RdfHandler.generateIri(),
     ship: ship,
     start_port: start_port,
     end_port: end_port,
@@ -138,4 +161,21 @@ function getRandomDate(): Date {
 
 function generateTrips() {
   console.log('generateTrips()');
+}
+
+async function fabricateCoordinateBetweenPorts(start_port: Iri, end_port: Iri): Promise<Coordinate> {
+  const start_cord: Coordinate = await RdfHandler.get.coordinate(start_port);
+  const end_cord: Coordinate = await RdfHandler.get.coordinate(end_port);
+  const lat = getRandomInRange(start_cord.latitude, end_cord.latitude);
+  const lng = getRandomInRange(start_cord.longitude, end_cord.longitude);
+  return { latitude: lat, longitude: lng };
+}
+
+function getRandomInRange(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
+}
+
+function getRandomDateBetween(start: Date, end: Date): Date {
+  const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
+  return new Date(randomTime);
 }

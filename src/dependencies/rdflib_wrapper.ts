@@ -15,9 +15,8 @@ type NamespaceFn = (localName?: string) => NamedNode;
 type SparqlBinding = { [selectVariable: string]: $rdf.Term }; // A SPARQL binding refers to a row in the query result. Each key cooresponds to a SPARQL variable
 type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row returned by a query.
 
-// Namespace Functions
+// Namespace Function - used to generate IRIs in the parallax namespace
 const PARALLAX_FN: NamespaceFn = $rdf.Namespace(Term.parallax_namespace);
-const SOSA_FN: NamespaceFn = $rdf.Namespace(Term.sosa_namespace);
 
 // Named Nodes
 const PARALLAX_GRAPH: NamedNode = $rdf.sym(Term.parallax_namespace);
@@ -38,10 +37,8 @@ const has_wkt: NamedNode = $rdf.sym(Term.has_wkt);
 const wkt_literal_datatype: NamedNode = $rdf.sym(Term.wkt_literal_datatype);
 const decimal_literal_datatype: NamedNode = $rdf.sym(Term.decimal_literal_datatype);
 const dateTime_literal_datatype: NamedNode = $rdf.sym(Term.dateTime_literal_datatype);
-
-// TODO wtf are these?
-const SosaObservationClass: NamedNode = SOSA_FN('Observation');
-const SosaResultTimeClass: NamedNode = SOSA_FN('resultTime');
+const SosaObservationClass: NamedNode = $rdf.sym(Term.observation_sosa_class);
+const SosaResultTimeClass: NamedNode = $rdf.sym(Term.result_time_sosa_class);
 
 function init(): void {
   //

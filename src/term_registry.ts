@@ -19,6 +19,8 @@ export const Term = {
   harbour_class: 'http://purl.obolibrary.org/obo/ENVO_00000463',
   geometry_class: 'http://www.opengis.net/ont/geosparql#Geometry',
   feature_class: 'http://www.opengis.net/ont/geosparql#Feature',
+  observation_sosa_class: 'http://www.w3.org/ns/sosa/Observation',
+  result_time_sosa_class: 'http://www.w3.org/ns/sosa/resultTime',
 
   // Literals
   wkt_literal_datatype: 'http://www.opengis.net/ont/geosparql#wktLiteral',

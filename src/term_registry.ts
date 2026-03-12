@@ -2,25 +2,35 @@ import { BiMap } from '@rimbu/bimap';
 import { Iri, Label } from './aliases';
 
 export const Term = {
+  // CCO
   is_about: 'https://www.commoncoreontologies.org/ont00001808',
+
+  // Parallax
   has_start_time: 'https://parallax.nmsu.edu/ns/start_time',
   has_end_time: 'https://parallax.nmsu.edu/ns/end_time',
   has_start_port: 'https://parallax.nmsu.edu/ns/start_port',
   has_end_port: 'https://parallax.nmsu.edu/ns/end_port',
+  parallax_namespace: 'https://parallax.nmsu.edu/',
+
+  // GeoSPARQL
   has_latitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
   has_longitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
   has_geometry: 'http://www.opengis.net/ont/geosparql#hasGeometry',
-  sosa_namespace: 'https://www.w3.org/ns/sosa/',
-  parallax_namespace: 'https://parallax.nmsu.edu/',
-  is_a: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
-  has_label: 'http://www.w3.org/2000/01/rdf-schema#label',
   has_wkt: 'http://www.opengis.net/ont/geosparql#asWKT',
-
-  harbour_class: 'http://purl.obolibrary.org/obo/ENVO_00000463',
   geometry_class: 'http://www.opengis.net/ont/geosparql#Geometry',
   feature_class: 'http://www.opengis.net/ont/geosparql#Feature',
+
+  // SOSA
   observation_sosa_class: 'http://www.w3.org/ns/sosa/Observation',
-  result_time_sosa_class: 'http://www.w3.org/ns/sosa/resultTime',
+  resultTime_sosa_class: 'http://www.w3.org/ns/sosa/resultTime',
+  sosa_namespace: 'https://www.w3.org/ns/sosa/',
+
+  // RDF and RDFS
+  is_a: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+  has_label: 'http://www.w3.org/2000/01/rdf-schema#label',
+
+  // ENVO
+  harbour_class: 'http://purl.obolibrary.org/obo/ENVO_00000463',
 
   // Literals
   wkt_literal_datatype: 'http://www.opengis.net/ont/geosparql#wktLiteral',

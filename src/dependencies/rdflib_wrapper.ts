@@ -38,7 +38,7 @@ const wkt_literal_datatype: NamedNode = $rdf.sym(Term.wkt_literal_datatype);
 const decimal_literal_datatype: NamedNode = $rdf.sym(Term.decimal_literal_datatype);
 const dateTime_literal_datatype: NamedNode = $rdf.sym(Term.dateTime_literal_datatype);
 const SosaObservationClass: NamedNode = $rdf.sym(Term.observation_sosa_class);
-const SosaResultTimeClass: NamedNode = $rdf.sym(Term.result_time_sosa_class);
+const SosaResultTimeClass: NamedNode = $rdf.sym(Term.resultTime_sosa_class);
 
 function init(): void {
   //

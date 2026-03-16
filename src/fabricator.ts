@@ -166,9 +166,20 @@ function generateTrips() {
 async function fabricateCoordinateBetweenPorts(start_port: Iri, end_port: Iri): Promise<Coordinate> {
   const start_cord: Coordinate = await RdfHandler.get.coordinate(start_port);
   const end_cord: Coordinate = await RdfHandler.get.coordinate(end_port);
-  const lat = getRandomInRange(start_cord.latitude, end_cord.latitude);
-  const lng = getRandomInRange(start_cord.longitude, end_cord.longitude);
-  return { latitude: lat, longitude: lng };
+
+  // y = mx + b
+  // Ystart - Yend = m(Xstart - Xend)
+  const yStart: number = start_cord.latitude;
+  const yEnd: number = end_cord.latitude;
+  const xStart: number = start_cord.longitude;
+  const xEnd: number = end_cord.longitude;
+  const m = (yStart - yEnd) / (xStart - xEnd);
+  const b = yStart - m * xStart;
+
+  const long = getRandomInRange(start_cord.longitude, end_cord.longitude);
+  // const lat = getRandomInRange(start_cord.latitude, end_cord.latitude);
+  const lat = m * long + b;
+  return { latitude: lat, longitude: long };
 }
 
 function getRandomInRange(min: number, max: number): number {

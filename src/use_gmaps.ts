@@ -83,7 +83,7 @@ export function drawLine(c1: Coordinate, c2: Coordinate): void {
 
   const line = new google.maps.Polyline({
     path: path,
-    geodesic: true, // follows the curvature of the Earth
+    geodesic: false, // follows the curvature of the Earth
     strokeColor: '#FF0000',
     strokeOpacity: 1.0,
     strokeWeight: 2,

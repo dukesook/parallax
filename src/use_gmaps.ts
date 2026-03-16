@@ -4,6 +4,7 @@ import { Coordinate } from './models';
 
 let g_googleMapElement: HTMLElement | null = null;
 const g_lines: google.maps.Polyline[] = [];
+const g_points: google.maps.Marker[] = [];
 let map: google.maps.Map | null = null;
 let currentMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 const newYorkLocation = { lat: 40.7128, lng: -74.006 };
@@ -88,6 +89,21 @@ export function drawLine(c1: Coordinate, c2: Coordinate): void {
     map: map,
   });
   g_lines.push(line);
+}
+
+export function clearPoints(): void {
+  for (const point of g_points) {
+    point.setMap(null);
+  }
+  g_points.length = 0; // Clear the array
+}
+
+export function addPoint(cord: Coordinate): void {
+  const marker = new google.maps.Marker({
+    position: { lat: cord.latitude, lng: cord.longitude },
+    map: map,
+  });
+  g_points.push(marker);
 }
 
 export function clearLines(): void {

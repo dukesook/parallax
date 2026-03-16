@@ -315,23 +315,29 @@ const get = {
     }
     `;
 
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
-      const observations: Observation[] = [];
-      console.log('allObservations query returned ' + rows.length + ' rows');
-      for (const row of rows) {
-        const obs: Observation = {
-          id: row['?obs'].value,
-          location: {
-            latitude: parseFloat(row['?lat'].value),
-            longitude: parseFloat(row['?long'].value),
-          },
-          time: new Date(row['?time'].value),
-          entities: [row['?entity'].value],
-        };
-        observations.push(obs);
+    return RDFLibWrapper.runQuery(query).then(resultsToObservations);
+  },
+
+  async observations(entity: Iri): Promise<Observation[]> {
+    const query = `
+    PREFIX sosa: <http://www.w3.org/ns/sosa/>
+    PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+    PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+
+    SELECT * WHERE {
+      ?obs a sosa:Observation .
+      ?obs has_latitude: ?lat .
+      ?obs has_longitude: ?long .
+      ?obs sosa:resultTime ?time .
+      ?obs is_about: <${entity}> .
+      ?obs is_about: ?entity .
       }
-      return observations;
-    });
+      `;
+    // Setting the ?entity variable enables reuse of the resultsToObservations function
+    // Warning! This may not work with multiple entities per observation
+
+    return RDFLibWrapper.runQuery(query).then(resultsToObservations);
   },
 };
 
@@ -366,6 +372,23 @@ async function initStore(): Promise<void> {
   const sosaOntology = await Fetcher.fetchSosa();
   const sosaGraphIRI = TermRegistry.getIRI('sosaGraph');
   // RDFLibWrapper.add.rdfToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
+}
+
+function resultsToObservations(rows: QueryResultRow[]): Observation[] {
+  const observations: Observation[] = [];
+  for (const row of rows) {
+    const obs: Observation = {
+      id: row['?obs'].value,
+      location: {
+        latitude: parseFloat(row['?lat'].value),
+        longitude: parseFloat(row['?long'].value),
+      },
+      time: new Date(row['?time'].value),
+      entities: [row['?entity'].value],
+    };
+    observations.push(obs);
+  }
+  return observations;
 }
 
 function parseWKTPoint(wkt: string): Coordinate {

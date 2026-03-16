@@ -191,6 +191,10 @@ async function onClickShip(entity: ObservableEntity) {
       GMaps.drawLine(startCoordinate, endCoordinate);
     }
   });
+
+  RdfHandler.get.observations(entity.id).then((observations) => {
+    console.log('Observations for ship:', observations);
+  });
 }
 
 function logStore(): void {

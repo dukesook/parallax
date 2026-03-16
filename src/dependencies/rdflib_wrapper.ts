@@ -52,6 +52,10 @@ export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
   const results: QueryResultRow[] = [];
   const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
 
+  if (!queryObj) {
+    throw new Error('Failed to parse SPARQL query');
+  }
+
   function onRow(row: QueryResultRow): void {
     results.push(row);
   }

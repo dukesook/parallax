@@ -165,12 +165,14 @@ export function displayObjects(objects: object[]): void {
   // Create table header
   const headerRow = table.insertRow();
   const keys = Object.keys(objects[0]);
+  // Header
   keys.forEach((key) => {
     const headerCell = document.createElement('th');
     headerCell.textContent = key;
     headerRow.appendChild(headerCell);
   });
 
+  // Rows
   for (const obj of objects) {
     const row = table.insertRow();
     keys.forEach((key) => {

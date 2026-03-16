@@ -4,10 +4,11 @@ import { Coordinate } from './models';
 
 let g_googleMapElement: HTMLElement | null = null;
 const g_lines: google.maps.Polyline[] = [];
-const g_points: google.maps.Marker[] = [];
+const g_markers: google.maps.marker.AdvancedMarkerElement[] = [];
 let map: google.maps.Map | null = null;
 let currentMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 const newYorkLocation = { lat: 40.7128, lng: -74.006 };
+const sanFranciscoLocation = { lat: 37.7749, lng: -122.4194 };
 type MapMouseEvent = google.maps.MapMouseEvent;
 
 const mapListeners: Function[] = [];
@@ -91,19 +92,14 @@ export function drawLine(c1: Coordinate, c2: Coordinate): void {
   g_lines.push(line);
 }
 
-export function clearPoints(): void {
-  for (const point of g_points) {
-    point.setMap(null);
-  }
-  g_points.length = 0; // Clear the array
-}
+export function clearMarkers(): void {}
 
-export function addPoint(cord: Coordinate): void {
-  const marker = new google.maps.Marker({
+export function addMarkers(cord: Coordinate): void {
+  const marker = new google.maps.marker.AdvancedMarkerElement({
     position: { lat: cord.latitude, lng: cord.longitude },
     map: map,
   });
-  g_points.push(marker);
+  g_markers.push(marker);
 }
 
 export function clearLines(): void {
@@ -114,7 +110,7 @@ export function clearLines(): void {
 }
 
 export function debug() {
-  Examples.drawLine();
+  Examples.drawMarker();
 }
 
 const Examples = {
@@ -144,6 +140,15 @@ const Examples = {
         { lat: 40.7128, lng: -74.006 },
         { lat: 34.0522, lng: -118.2437 },
       ],
+      map: map,
+    });
+  },
+
+  drawMarker() {
+    if (!map) return;
+
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+      position: sanFranciscoLocation,
       map: map,
     });
   },

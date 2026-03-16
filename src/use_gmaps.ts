@@ -92,7 +92,13 @@ export function drawLine(c1: Coordinate, c2: Coordinate): void {
   g_lines.push(line);
 }
 
-export function clearMarkers(): void {}
+export function clearMarkers(): void {
+  for (const marker of g_markers) {
+    marker.map = null;
+  }
+
+  g_markers.length = 0;
+}
 
 export function addMarkers(cord: Coordinate): void {
   const marker = new google.maps.marker.AdvancedMarkerElement({

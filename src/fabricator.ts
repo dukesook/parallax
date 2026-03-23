@@ -53,6 +53,8 @@ function generatePorts(): Iri[] {
   let ports: Iri[] = [];
   const port_objects: Port[] = [
     { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
+    // { port_id: 'P002', name: 'Port of Foo', country: 'USA', latitude: 31.7361, longitude: -181.2631 },
+
     { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
     { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },
     { port_id: 'P004', name: 'Port of Singapore', country: 'Singapore', latitude: 1.2644, longitude: 103.82 },
@@ -176,7 +178,10 @@ async function fabricateCoordinateBetweenPorts(start_port: Iri, end_port: Iri): 
   const m = (yStart - yEnd) / (xStart - xEnd);
   const b = yStart - m * xStart;
 
-  const long = getRandomInRange(start_cord.longitude, end_cord.longitude);
+  const min_long = Math.min(start_cord.longitude, end_cord.longitude);
+  const max_long = Math.max(start_cord.longitude, end_cord.longitude);
+  const long = getRandomInRange(min_long, max_long);
+  // const long = getRandomInRange(start_cord.longitude, end_cord.longitude);
   // const lat = getRandomInRange(start_cord.latitude, end_cord.latitude);
   const lat = m * long + b;
   return { latitude: lat, longitude: long };

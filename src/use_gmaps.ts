@@ -33,6 +33,20 @@ export function initMap(): void {
     map: map,
     title: 'Hello San Francisco!',
   });
+
+  if (false) {
+    const special_lines: google.maps.Polyline[] = [];
+
+    // Draw Line on the Equator
+    drawLine({ latitude: 0, longitude: -128.2631 }, { latitude: 0, longitude: 128.2631 }, special_lines);
+    drawLine({ latitude: 0, longitude: -58.2631 }, { latitude: 0, longitude: 58.2631 }, special_lines);
+
+    // Draw Line on Prime Meridian
+    drawLine({ latitude: -90, longitude: 0 }, { latitude: 90, longitude: 0 }, special_lines);
+
+    // Draw the Antimeridian
+    drawLine({ latitude: -90, longitude: 180 }, { latitude: 90, longitude: 180 }, special_lines);
+  }
 }
 
 export function moveCurrentMarker(location: google.maps.LatLngLiteral): void {
@@ -75,7 +89,7 @@ export function loadGoogleMapsScript(googleMapElement: HTMLElement): void {
   document.head.appendChild(script);
 }
 
-export function drawLine(c1: Coordinate, c2: Coordinate): void {
+export function drawLine(c1: Coordinate, c2: Coordinate, container: google.maps.Polyline[] = g_lines): void {
   const path = [
     { lat: c1.latitude, lng: c1.longitude },
     { lat: c2.latitude, lng: c2.longitude },
@@ -89,7 +103,7 @@ export function drawLine(c1: Coordinate, c2: Coordinate): void {
     strokeWeight: 2,
     map: map,
   });
-  g_lines.push(line);
+  container.push(line);
 }
 
 export function clearMarkers(): void {

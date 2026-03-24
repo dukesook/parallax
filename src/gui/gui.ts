@@ -1,4 +1,4 @@
-import { Triple } from '../aliases';
+import { Iri, Triple } from '../aliases';
 import * as GraphTab from './knowledge_graph_tab';
 import * as TermRegistryGui from './term_registry_tab';
 import { FabricatorOptions, ObservableEntity } from '../models';
@@ -112,6 +112,15 @@ export function getSelectedObject(): string {
   return selectedObject;
 }
 
+export function getAddObservationTargetIri(): Iri {
+  const objectIriInput = getElement('add-obs-id-input') as HTMLInputElement;
+  const objectIri = objectIriInput.value as Iri;
+  if (!objectIri) {
+    throw new Error('No object IRI provided');
+  }
+  return objectIri;
+}
+
 export const On = {
   writeGraphToFile(callback: () => void) {
     const graphToFileButton = getElement('graph-to-file-button') as HTMLButtonElement;
@@ -126,7 +135,7 @@ export const On = {
     });
   },
 
-  saveButton(callback: () => void) {
+  addObservation(callback: () => void) {
     const addObservationButton = getElement('add-observation-button') as HTMLButtonElement;
     addObservationButton.addEventListener('click', callback);
   },

@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Listeners
     Gui.On.fabricateData(fabricateData);
-    Gui.On.saveButton(onAddObservation);
+    Gui.On.addObservation(onAddObservation);
     Gui.On.writeGraphToFile(writeGraphToFile);
     Gui.On.showTargetsButton(showTargets);
 
@@ -78,7 +78,9 @@ async function onAddObservation(): Promise<void> {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  const objectIri = RdfHandler.add.observableEntity(selectedObject);
+  const objectIri = Gui.getAddObservationTargetIri();
+
+  // const objectIri = RdfHandler.add.observableEntity(selectedObject);
   const timestamp = new Date();
   const obs: Observation = {
     id: objectIri,

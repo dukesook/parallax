@@ -34,7 +34,7 @@ export function initMap(): void {
     title: 'Hello San Francisco!',
   });
 
-  if (false) {
+  if (1) {
     const special_lines: google.maps.Polyline[] = [];
 
     // Draw Line on the Equator

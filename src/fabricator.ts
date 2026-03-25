@@ -52,13 +52,16 @@ function generateShips(desiredCount: number = 6): Iri[] {
 function generatePorts(): Iri[] {
   let ports: Iri[] = [];
   const port_objects: Port[] = [
-    { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
-    // { port_id: 'P002', name: 'Port of Foo', country: 'USA', latitude: 31.7361, longitude: -181.2631 },
+    { port_id: 'P001', name: 'Point 1', country: 'USA', latitude: 33.7361, longitude: -175.2 },
+    { port_id: 'P001', name: 'Point 2', country: 'USA', latitude: 33.7361, longitude: 175.1 },
 
-    { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
-    { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },
-    { port_id: 'P004', name: 'Port of Singapore', country: 'Singapore', latitude: 1.2644, longitude: 103.82 },
-    { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
+    // { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
+    // { port_id: 'P004', name: 'Port of Singapore', country: 'Singapore', latitude: 1.2644, longitude: 103.82 },
+    // { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
+    // { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },
+    // { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
+    // { port_id: 'P006', name: 'Port of Rio de Janeiro', country: 'Brazil', latitude: -22.9068, longitude: -43.1729 },
+    // { port_id: 'P007', name: 'Port of Cape Town', country: 'South Africa', latitude: -33.9249, longitude: 18.4241 },
   ];
 
   for (const port of port_objects) {
@@ -178,20 +181,61 @@ async function fabricateCoordinateBetweenPorts(start_port: Iri, end_port: Iri): 
   const m = (yStart - yEnd) / (xStart - xEnd);
   const b = yStart - m * xStart;
 
-  const min_long = Math.min(start_cord.longitude, end_cord.longitude);
-  const max_long = Math.max(start_cord.longitude, end_cord.longitude);
-  const long = getRandomInRange(min_long, max_long);
-  // const long = getRandomInRange(start_cord.longitude, end_cord.longitude);
-  // const lat = getRandomInRange(start_cord.latitude, end_cord.latitude);
+  const long = interpolateRandomLongitude(start_cord.longitude, end_cord.longitude);
   const lat = m * long + b;
   return { latitude: lat, longitude: long };
 }
 
-function getRandomInRange(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
+function interpolateRandomLongitude(longitude1: number, longitude2: number): number {
+  const normalize = (lon: number): number => {
+    return ((((lon + 180) % 360) + 360) % 360) - 180;
+  };
+
+  let delta = longitude2 - longitude1;
+
+  // Wrap delta to [-180, 180]
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+
+  const t = Math.random(); // 0 → 1
+  const result = longitude1 + t * delta;
+
+  return normalize(result);
 }
 
 function getRandomDateBetween(start: Date, end: Date): Date {
   const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
   return new Date(randomTime);
+}
+
+function to360(longitude: number): number {
+  return longitude < 0 ? longitude + 360 : longitude;
+}
+
+function to180(longitude: number): number {
+  return longitude > 180 ? longitude - 360 : longitude;
+}
+
+function shortestWrappedLongitude(a: number, b: number): [number, number] {
+  let a360 = to360(a);
+  let b360 = to360(b);
+
+  const direct = Math.abs(a360 - b360);
+  if (direct <= 180) {
+    return [a360, b360];
+  }
+
+  if (a360 < b360) {
+    a360 += 360;
+  } else {
+    b360 += 360;
+  }
+
+  return [a360, b360];
+}
+
+function randomWrappedLongitude(start: number, end: number): number {
+  const [a, b] = shortestWrappedLongitude(start, end);
+  const value = interpolateRandomLongitude(Math.min(a, b), Math.max(a, b));
+  return to180(value % 360);
 }

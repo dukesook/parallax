@@ -1,5 +1,6 @@
 import * as Fetcher from './fetcher';
 import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
+import * as GraphDB from './dependencies/graphdb';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
 import { Port, Voyage, ObservableEntity, Coordinate, Observation } from './models';
@@ -15,6 +16,8 @@ async function init(): Promise<void> {
       console.error('rdf_handler: initStore() failed', err);
     })
     .then(initTermRegistry);
+
+  GraphDB.init();
 }
 
 export function generateIri(): Iri {

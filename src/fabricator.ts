@@ -52,16 +52,16 @@ function generateShips(desiredCount: number = 6): Iri[] {
 function generatePorts(): Iri[] {
   let ports: Iri[] = [];
   const port_objects: Port[] = [
-    { port_id: 'P001', name: 'Point 1', country: 'USA', latitude: 33.7361, longitude: -175.2 },
-    { port_id: 'P001', name: 'Point 2', country: 'USA', latitude: 33.7361, longitude: 175.1 },
+    // { port_id: 'P001', name: 'Point 1', country: 'USA', latitude: 33.7361, longitude: -175.2 },
+    // { port_id: 'P001', name: 'Point 2', country: 'USA', latitude: 33.7361, longitude: 175.1 },
 
-    // { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
-    // { port_id: 'P004', name: 'Port of Singapore', country: 'Singapore', latitude: 1.2644, longitude: 103.82 },
-    // { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
-    // { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },
-    // { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
-    // { port_id: 'P006', name: 'Port of Rio de Janeiro', country: 'Brazil', latitude: -22.9068, longitude: -43.1729 },
-    // { port_id: 'P007', name: 'Port of Cape Town', country: 'South Africa', latitude: -33.9249, longitude: 18.4241 },
+    { port_id: 'P001', name: 'Port of Los Angeles', country: 'USA', latitude: 33.7361, longitude: -118.2631 },
+    { port_id: 'P004', name: 'Port of Singapore', country: 'Singapore', latitude: 1.2644, longitude: 103.82 },
+    { port_id: 'P002', name: 'Port of Shanghai', country: 'China', latitude: 31.2304, longitude: 121.4737 },
+    { port_id: 'P003', name: 'Port of Rotterdam', country: 'Netherlands', latitude: 51.948, longitude: 4.1345 },
+    { port_id: 'P005', name: 'Port of Sydney', country: 'Australia', latitude: -33.8523, longitude: 151.2108 },
+    { port_id: 'P006', name: 'Port of Rio de Janeiro', country: 'Brazil', latitude: -22.9068, longitude: -43.1729 },
+    { port_id: 'P007', name: 'Port of Cape Town', country: 'South Africa', latitude: -33.9249, longitude: 18.4241 },
   ];
 
   for (const port of port_objects) {

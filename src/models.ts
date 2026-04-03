@@ -49,4 +49,5 @@ export interface Voyage {
   end_time: Date;
   start_port: Iri;
   end_port: Iri;
+  points: SpatiotemporalCoordinate[];
 }

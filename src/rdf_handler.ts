@@ -26,6 +26,7 @@ export function generateIri(): Iri {
 
 const add = {
   observableEntity(entityTypeString: string): Iri {
+    // eneityTypeString = 'boat'
     let entityType: Iri = TermRegistry.getIRI(entityTypeString);
     const entity: Iri = RDFLibWrapper.add.observableEntity(entityType) as Iri;
     return entity;

@@ -1,7 +1,7 @@
 import * as $rdf from 'rdflib';
 import { IndexedFormula, Query, Statement, NamedNode, Literal } from 'rdflib';
 import { Iri, Label, Triple } from '../aliases';
-import { Voyage, ObservableEntity, Observation } from '../models';
+import { Voyage, ObservableEntity, Observation, SpatiotemporalCoordinate } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
@@ -44,15 +44,22 @@ function init(): void {
   //
 }
 
+let debugCounter = 1;
 export function generate_iri(): Iri {
-  return PARALLAX_FN(uuidv4()).value;
+  const DEBUG = 1;
+  if (DEBUG) {
+    const iri = `${Term.parallax_namespace}debug${debugCounter}`;
+    debugCounter++;
+    return iri as Iri;
+  } else {
+    return (Term.parallax_namespace + uuidv4()) as Iri;
+  }
 }
 
 export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
   const results: QueryResultRow[] = [];
-  const queryObj: Query = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
-
-  if (!queryObj) {
+  const queryObj: Query | false = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
+  if (queryObj === false) {
     throw new Error('Failed to parse SPARQL query');
   }
 
@@ -112,7 +119,7 @@ export const add = {
   },
 
   observableEntity(entityType: Iri): Iri {
-    const observableEntity: NamedNode = PARALLAX_FN(uuidv4());
+    const observableEntity: NamedNode = $rdf.sym(generate_iri());
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     add.triple(observableEntity, a, feature_class, PARALLAX_GRAPH);
@@ -158,6 +165,15 @@ export const add = {
     add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
     add.triple(voyageIri, has_start_port, $rdf.sym(voyage.start_port), PARALLAX_GRAPH);
     add.triple(voyageIri, has_end_port, $rdf.sym(voyage.end_port), PARALLAX_GRAPH);
+
+    for (const point of voyage.points) {
+      const cord: Coordinate = point.Coordinate;
+      const time: Date = point.time;
+      const pointIri: Iri = add.coordinate(generate_iri(), cord);
+      const timeLiteral: Literal = $rdf.literal(time.toISOString(), dateTime_literal_datatype);
+      add.triple(voyageIri, has_geometry, $rdf.sym(pointIri), PARALLAX_GRAPH);
+      add.triple($rdf.sym(pointIri), SosaResultTimeClass, timeLiteral, PARALLAX_GRAPH);
+    }
 
     add.label(voyageIri, 'Voyage');
     return voyageIri;

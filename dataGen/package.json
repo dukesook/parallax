@@ -1,0 +1,17 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx src/gen_rdf.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "tsx": "^4.21.0",
+    "xlsx": "^0.18.5"
+  }
+}

@@ -79,7 +79,7 @@ export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
 }
 
 export const add = {
-  triple(s: NamedNode, p: NamedNode, o: NamedNode, graph: NamedNode | Literal) {
+  triple(s: NamedNode, p: NamedNode, o: NamedNode | Literal, graph: NamedNode) {
     if (!(s instanceof NamedNode)) {
       throw new Error(`Subject must be a NamedNode. Received: ${s}`);
     } else if (!(p instanceof NamedNode)) {

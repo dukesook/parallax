@@ -32,8 +32,7 @@ async function main() {
       points.push({ Coordinate: coordinate, time });
     }
 
-    const ship: Iri = RdfHandler.add.observableEntity('boat');
-    RdfHandler.add.label(ship, 'Boat 1956, my favorite');
+    const ship: Iri = RdfHandler.add.ship('Boat 1956, my favorite');
 
     const voyage: Voyage = {
       id: RdfHandler.generateIri(),

@@ -6,6 +6,9 @@ import { Iri, Label, Triple } from './aliases';
 import { Port, Voyage, ObservableEntity, Coordinate, Observation } from './models';
 import type { Bindings } from 'rdflib/lib/types';
 
+const boatClass: Iri = TermRegistry.getIRI('boat');
+const harbourClass: Iri = TermRegistry.getIRI('harbour');
+
 async function init(): Promise<void> {
   initStore()
     .then(() => {
@@ -24,10 +27,9 @@ export function generateIri(): Iri {
 }
 
 const add = {
-  observableEntity(entityTypeString: string): Iri {
-    // eneityTypeString = 'boat'
-    let entityType: Iri = TermRegistry.getIRI(entityTypeString);
-    const entity: Iri = RDFLibWrapper.add.observableEntity(entityType) as Iri;
+  ship(shipName: string): Iri {
+    const entity: Iri = RDFLibWrapper.add.observableEntity(boatClass) as Iri;
+    addEntity(shipName, boatClass);
     return entity;
   },
 
@@ -36,7 +38,7 @@ const add = {
   },
 
   port(port: Port): Iri {
-    const harbour: Iri = add.observableEntity('harbour');
+    const harbour: Iri = addEntity(port.name, harbourClass);
     RDFLibWrapper.add.label(harbour, port.name);
 
     const cord: Coordinate = { latitude: port.latitude, longitude: port.longitude };
@@ -349,6 +351,12 @@ const get = {
 };
 
 // ================== Private Functions ==================
+
+function addEntity(label: string, entityClass: Iri): Iri {
+  const iri: Iri = RDFLibWrapper.add.observableEntity(entityClass);
+  RDFLibWrapper.add.label(iri, label);
+  return iri;
+}
 
 function initTermRegistry(): void {
   // The term registry manages terms.

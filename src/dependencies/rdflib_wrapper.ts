@@ -122,7 +122,6 @@ export const add = {
     const observableEntity: NamedNode = $rdf.sym(new_iri);
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
-    add.triple(observableEntity, a, feature_class, PARALLAX_GRAPH);
     return new_iri;
   },
 

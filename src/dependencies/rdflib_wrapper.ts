@@ -33,6 +33,7 @@ const has_latitude: NamedNode = $rdf.sym(Term.has_latitude);
 const has_longitude: NamedNode = $rdf.sym(Term.has_longitude);
 const harbourType: NamedNode = $rdf.sym(Term.harbour_class);
 const has_geometry: NamedNode = $rdf.sym(Term.has_geometry);
+const has_observation: NamedNode = $rdf.sym(Term.has_observation);
 const geometry_class: NamedNode = $rdf.sym(Term.geometry_class);
 const feature_class: NamedNode = $rdf.sym(Term.feature_class);
 const has_wkt: NamedNode = $rdf.sym(Term.has_wkt);
@@ -168,10 +169,16 @@ export const add = {
     for (const point of voyage.points) {
       const cord: Coordinate = point.Coordinate;
       const time: Date = point.time;
-      const pointIri: Iri = add.coordinate(generate_iri(), cord);
       const timeLiteral: Literal = $rdf.literal(time.toISOString(), dateTime_literal_datatype);
-      add.triple(voyageNode, has_geometry, $rdf.sym(pointIri), PARALLAX_GRAPH);
-      add.triple($rdf.sym(pointIri), SosaResultTimeClass, timeLiteral, PARALLAX_GRAPH);
+      // add.triple(voyageNode, has_observation, $rdf.sym(pointIri), PARALLAX_GRAPH);
+      // add.triple($rdf.sym(pointIri), SosaResultTimeClass, timeLiteral, PARALLAX_GRAPH);
+      const obs: Observation = {
+        id: generate_iri(),
+        location: cord,
+        time: time,
+        entities: [voyage.ship],
+      };
+      add.observation(obs);
     }
 
     add.label(voyage.id, 'Voyage');

@@ -23,7 +23,7 @@ export interface Observation {
   id: Iri;
   location: Coordinate;
   time: Date;
-  entities: string[];
+  entities: Iri[];
 }
 
 export interface FabricatorOptions {

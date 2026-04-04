@@ -28,9 +28,8 @@ export function generateIri(): Iri {
 
 const add = {
   ship(shipName: string): Iri {
-    const entity: Iri = RDFLibWrapper.add.observableEntity(boatClass) as Iri;
-    addEntity(shipName, boatClass);
-    return entity;
+    const iri: Iri = addEntity(shipName, boatClass);
+    return iri;
   },
 
   observation(obs: Observation): void {

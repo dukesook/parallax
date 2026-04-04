@@ -10,6 +10,7 @@ export const Term = {
   has_end_port: 'https://parallax.nmsu.edu/ns/end_port',
   parallax_namespace: 'https://parallax.nmsu.edu/',
   voyage: 'https://parallax.nmsu.edu/ns/voyage',
+  has_observation: 'https://parallax.nmsu.edu/ns/has_observation',
 
   // GeoSPARQL
   has_latitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
@@ -44,6 +45,7 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://github.com/opengeospatial/ogc-geosparql', 'geoSparqlGraph'],
     [Term.sosa_namespace, 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
+    [Term.has_observation, 'has_observation'],
     [Term.has_start_time, 'start_time'],
     [Term.has_end_time, 'end_time'],
     [Term.has_start_port, 'start_port'],

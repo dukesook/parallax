@@ -155,11 +155,11 @@ export const add = {
   voyage(voyage: Voyage) {
     const voyageIri: Iri = voyage.id;
     const voyageNode: NamedNode = $rdf.sym(voyageIri);
-    const ActOfTravel: NamedNode = $rdf.sym(TermRegistry.getIRI('ActOfTravel'));
+    const VoyageClass: NamedNode = $rdf.sym(TermRegistry.getIRI('Voyage'));
     const start_time: Literal = $rdf.literal(voyage.start_time.toISOString(), dateTime_literal_datatype);
     const end_time: Literal = $rdf.literal(voyage.end_time.toISOString(), dateTime_literal_datatype);
 
-    add.triple(voyageNode, a, ActOfTravel, PARALLAX_GRAPH);
+    add.triple(voyageNode, a, VoyageClass, PARALLAX_GRAPH);
     add.triple(voyageNode, is_about, $rdf.sym(voyage.ship), PARALLAX_GRAPH);
     add.triple(voyageNode, has_start_time, start_time, PARALLAX_GRAPH);
     add.triple(voyageNode, has_end_time, end_time, PARALLAX_GRAPH);

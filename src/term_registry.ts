@@ -2,15 +2,14 @@ import { BiMap } from '@rimbu/bimap';
 import { Iri, Label } from './aliases';
 
 export const Term = {
-  // CCO
-  is_about: 'https://www.commoncoreontologies.org/ont00001808',
-
   // Parallax
+  is_about: 'https://parallax.nmsu.edu/ns/is_about',
   has_start_time: 'https://parallax.nmsu.edu/ns/start_time',
   has_end_time: 'https://parallax.nmsu.edu/ns/end_time',
   has_start_port: 'https://parallax.nmsu.edu/ns/start_port',
   has_end_port: 'https://parallax.nmsu.edu/ns/end_port',
   parallax_namespace: 'https://parallax.nmsu.edu/',
+  voyage: 'https://parallax.nmsu.edu/ns/voyage',
 
   // GeoSPARQL
   has_latitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
@@ -45,12 +44,11 @@ let g_bimap = BiMap.of<Iri, Label>(
     ['https://github.com/opengeospatial/ogc-geosparql', 'geoSparqlGraph'],
     [Term.sosa_namespace, 'sosaGraph'],
     ['https://parallax.nmsu.edu/', 'parallaxGraph'],
-    // ['https://parallax.nmsu.edu/ns/voyage', 'voyage'],
     [Term.has_start_time, 'start_time'],
     [Term.has_end_time, 'end_time'],
     [Term.has_start_port, 'start_port'],
     [Term.has_end_port, 'end_port'],
-    ['https://www.commoncoreontologies.org/ont00000890', 'ActOfTravel'], // Voyage
+    [Term.voyage, 'Voyage'], // Voyage
     [Term.is_about, 'is_about'],
     [Term.has_latitude, 'latitude'],
     [Term.has_longitude, 'longitude'],

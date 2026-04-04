@@ -14,8 +14,6 @@ type Ushant = {
 // Confirm File Exists
 
 async function main() {
-  const boat: Iri = RdfHandler.add.observableEntity('boat');
-
   const filePath: string = 'ushant_ais/csv/traj_1956.csv';
   try {
     const workbook: XLSX.WorkBook = XLSX.readFile(filePath);
@@ -35,6 +33,8 @@ async function main() {
     }
 
     const ship: Iri = RdfHandler.add.observableEntity('boat');
+    RdfHandler.add.label(ship, 'Boat 1956, my favorite');
+
     const voyage: Voyage = {
       id: RdfHandler.generateIri(),
       ship: ship,

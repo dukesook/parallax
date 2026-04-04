@@ -144,7 +144,6 @@ const get = {
 
   async allPorts(): Promise<Port[]> {
     const query = `
-        PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
         PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
         PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
         PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
@@ -185,7 +184,7 @@ const get = {
 
   async allVoyages(): Promise<Voyage[]> {
     const query = `
-        PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
+        PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
         PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
         PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
         PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
@@ -194,7 +193,7 @@ const get = {
     
         SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
           
-          ?voyage a ActOfTravel: .
+          ?voyage a Voyage: .
           ?voyage is_about: ?ship .
           ?voyage has_start_time: ?start_time .
           ?voyage has_end_time: ?end_time .
@@ -269,7 +268,7 @@ const get = {
 
   async shipVoyages(ship: Iri): Promise<Voyage[]> {
     const query = `
-    PREFIX ActOfTravel: <https://www.commoncoreontologies.org/ont00000890>
+    PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
     PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
     PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
     PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
@@ -280,7 +279,7 @@ const get = {
     SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
       
       ?voyage is_about: <${ship}> .
-      ?voyage a ActOfTravel: .
+      ?voyage a Voyage: .
       ?voyage is_about: ?ship .
       ?voyage has_start_time: ?start_time .
       ?voyage has_end_time: ?end_time .

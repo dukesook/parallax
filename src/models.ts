@@ -37,6 +37,7 @@ export interface FabricatorOptions {
 }
 
 export interface ObservableEntity {
+  // Every Entity is observable
   id: Iri;
   type: string;
   label: string;

@@ -32,6 +32,7 @@ async function main() {
       const time: Date = new Date(seconds * 1000); // Convert seconds to milliseconds
       points.push({ Coordinate: coordinate, time });
     }
+    console.log(points);
     const ship: Iri = RdfHandler.add.observableEntity('boat');
     const voyage: Voyage = {
       id: RdfHandler.generateIri(),

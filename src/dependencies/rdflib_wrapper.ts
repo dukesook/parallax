@@ -176,7 +176,7 @@ export const add = {
         id: generate_iri(),
         location: cord,
         time: time,
-        entities: [voyage.ship],
+        entities: [voyage.id],
       };
       add.observation(obs);
     }

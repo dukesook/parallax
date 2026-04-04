@@ -4,8 +4,7 @@ import * as GraphDB from './dependencies/graphdb';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
 import { Port, Voyage, ObservableEntity, Coordinate, Observation } from './models';
-import { Term } from 'rdflib';
-type QueryResultRow = Record<string, Term>; // Represents a single row returned by a query.
+import type { Bindings } from 'rdflib/lib/types';
 
 async function init(): Promise<void> {
   initStore()
@@ -48,7 +47,7 @@ const add = {
     return harbour;
   },
 
-  voyage(voyage: Voyage) {
+  voyage(voyage: Voyage): void {
     RDFLibWrapper.add.voyage(voyage);
   },
 
@@ -76,7 +75,8 @@ const get = {
 
     for (const triple of triples) {
       try {
-        const subjectLabel = TermRegistry.getLabel(triple.subject);
+        const s: Iri = triple.subject as Iri;
+        const subjectLabel = TermRegistry.getLabel(s);
         triple.subject = subjectLabel;
         console.log('Replaced IRI:', triple.subject, 'with label:', subjectLabel);
       } catch (error) {}
@@ -103,7 +103,7 @@ const get = {
     }
     `;
 
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
       const cords: Coordinate[] = [];
       if (rows.length != 1) {
         console.warn('Expected exactly one result for coordinate query, got ' + rows.length);
@@ -130,10 +130,10 @@ const get = {
     }
     `;
 
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
       const ships: ObservableEntity[] = [];
       for (const row of rows) {
-        const id: Iri = row['?ship'].value;
+        const id: Iri = row['?ship'].value as Iri;
         const label: string = row['?label'].value;
         const ship: ObservableEntity = { id, type: 'boat', label };
         ships.push(ship);
@@ -163,7 +163,7 @@ const get = {
           ?geometry geo:asWKT ?wkt .
         }
         `;
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
       const ports: Port[] = [];
       for (const row of rows) {
         console.log(row);
@@ -171,7 +171,7 @@ const get = {
         const cord: Coordinate = parseWKTPoint(wkt);
 
         const port: Port = {
-          port_id: row['?port'].value,
+          port_id: row['?port'].value as Iri,
           name: row['?label'].value,
           country: 'todo',
           latitude: cord.latitude,
@@ -202,22 +202,24 @@ const get = {
           ?voyage has_end_port: ?end_port .
         }
         `;
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
       const voyages: Voyage[] = [];
       for (const row of rows) {
         console.log(row);
-        const voyageIri: Iri = row['?voyage'].value;
-        const ship: Iri = row['?ship'].value;
-        const start_time: Date = row['?start_time'].value;
-        const end_time: Date = row['?end_time'].value;
-        const start_port: Iri = row['?start_port'].value;
-        const end_port: Iri = row['?end_port'].value;
+        const voyageIri: Iri = row['?voyage'].value as Iri;
+        const ship: Iri = row['?ship'].value as Iri;
+        const start_time: string = row['?start_time'].value;
+        const end_time: string = row['?end_time'].value;
+        const start_port: Iri = row['?start_port'].value as Iri;
+        const end_port: Iri = row['?end_port'].value as Iri;
         const voyage: Voyage = {
+          id: 'todo, query for voyage Iri' as Iri,
           ship,
           start_time: new Date(start_time),
           end_time: new Date(end_time),
           start_port,
           end_port,
+          points: [], // TODO: query for points
         };
         voyages.push(voyage);
       }
@@ -236,14 +238,14 @@ const get = {
         FILTER(?type != geo:Feature)
       }
     `;
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
       const features: ObservableEntity[] = [];
       if (rows.length === 0) {
         console.warn('No features found in allFeatures query');
       }
       for (const row of rows) {
-        const featureIri: Iri = row['?feature'].value;
-        const typeIri: Iri = row['?type'].value;
+        const featureIri: Iri = row['?feature'].value as Iri;
+        const typeIri: Iri = row['?type'].value as Iri;
         if (typeIri === 'http://www.opengis.net/ont/geosparql#Feature') {
           // geo:Features have 2 rdf:types: 1. geoFeature and 2: EVNO:something (boat, plane, car, etc.)
           // ?feature is the geo:Feature, ?type is the other type that we're searching for.
@@ -287,15 +289,17 @@ const get = {
     }
     `;
 
-    return RDFLibWrapper.runQuery(query).then((rows: QueryResultRow[]) => {
+    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
       const voyages: Voyage[] = [];
       for (const row of rows) {
         const voyage: Voyage = {
-          ship: row['?ship'].value,
+          id: 'todo, query for voyage Iri (shipVoyages)' as Iri,
+          ship: row['?ship'].value as Iri,
           start_time: new Date(row['?start_time'].value),
           end_time: new Date(row['?end_time'].value),
-          start_port: row['?start_port'].value,
-          end_port: row['?end_port'].value,
+          start_port: row['?start_port'].value as Iri,
+          end_port: row['?end_port'].value as Iri,
+          points: [], // TODO: query for points
         };
         voyages.push(voyage);
       }
@@ -378,11 +382,11 @@ async function initStore(): Promise<void> {
   // RDFLibWrapper.add.rdfToStore(sosaOntology.rdf, sosaOntology.base, sosaOntology.mime, sosaGraphIRI);
 }
 
-function resultsToObservations(rows: QueryResultRow[]): Observation[] {
+function resultsToObservations(rows: Bindings[]): Observation[] {
   const observations: Observation[] = [];
   for (const row of rows) {
     const obs: Observation = {
-      id: row['?obs'].value,
+      id: row['?obs'].value as Iri,
       location: {
         latitude: parseFloat(row['?lat'].value),
         longitude: parseFloat(row['?long'].value),

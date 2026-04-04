@@ -1,22 +1,24 @@
 import * as $rdf from 'rdflib';
-import { IndexedFormula, Query, Statement, NamedNode, Literal } from 'rdflib';
+import { Coordinate, Port, Voyage, ObservableEntity, Observation, SpatiotemporalCoordinate } from '../models';
 import { Iri, Label, Triple } from '../aliases';
-import { Voyage, ObservableEntity, Observation, SpatiotemporalCoordinate } from '../models';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
 import * as TermRegistry from '../term_registry';
-import { Coordinate, Port } from '../models';
+import { IndexedFormula, Query, Statement, NamedNode, Literal } from 'rdflib';
+import type { Term as RdfTerm } from '@rdfjs/types';
+import type { Bindings } from 'rdflib/lib/types';
+
+type Subject = $rdf.Statement['subject'];
+type Predicate = $rdf.Statement['predicate'];
+type Object = $rdf.Statement['object'];
+type Graph = $rdf.Statement['graph'];
 
 // The Triple Store
 const g_triple_store: IndexedFormula = $rdf.graph();
 
 // Types
 type NamespaceFn = (localName?: string) => NamedNode;
-type SparqlBinding = { [selectVariable: string]: $rdf.Term }; // A SPARQL binding refers to a row in the query result. Each key cooresponds to a SPARQL variable
-type QueryResultRow = Record<string, $rdf.Term>; // Represents a single row returned by a query.
-
-// Namespace Function - used to generate IRIs in the parallax namespace
-const PARALLAX_FN: NamespaceFn = $rdf.Namespace(Term.parallax_namespace);
+type SparqlBinding = { [selectVariable: string]: RdfTerm }; // A SPARQL binding refers to a row in the query result. Each key cooresponds to a SPARQL variable
 
 // Named Nodes
 const PARALLAX_GRAPH: NamedNode = $rdf.sym(Term.parallax_namespace);
@@ -56,22 +58,26 @@ export function generate_iri(): Iri {
   }
 }
 
-export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
-  const results: QueryResultRow[] = [];
+export function runQuery(queryStr: string): Promise<Bindings[]> {
+  const results: Bindings[] = [];
   const queryObj: Query | false = $rdf.SPARQLToQuery(queryStr, false, g_triple_store);
   if (queryObj === false) {
     throw new Error('Failed to parse SPARQL query');
   }
 
-  function onRow(row: QueryResultRow): void {
-    results.push(row);
+  // function onRow(row: QueryResultRow): void {
+  function onRow(bindings: Bindings): void {
+    results.push(bindings);
   }
 
-  function executor(resolve: (value: QueryResultRow[]) => void): void {
+  function executor(resolve: (value: Bindings[]) => void): void {
     function onDone(): void {
       resolve(results);
     }
 
+    if (queryObj === false) {
+      throw new Error('Failed to parse SPARQL query');
+    }
     g_triple_store.query(queryObj, onRow, undefined, onDone);
   }
 
@@ -79,15 +85,8 @@ export function runQuery(queryStr: string): Promise<QueryResultRow[]> {
 }
 
 export const add = {
-  triple(s: NamedNode, p: NamedNode, o: NamedNode | Literal, graph: NamedNode) {
-    if (!(s instanceof NamedNode)) {
-      throw new Error(`Subject must be a NamedNode. Received: ${s}`);
-    } else if (!(p instanceof NamedNode)) {
-      throw new Error(`Predicate must be a NamedNode. Received: ${p}`);
-    } else if (!(o instanceof NamedNode || o instanceof Literal)) {
-      throw new Error(`Object must be a NamedNode or Literal. Received: ${o}`);
-    }
-    g_triple_store.add(s, p, o, graph);
+  triple(s: Subject, p: Predicate, o: Object, g: Graph) {
+    g_triple_store.add(s, p, o, g);
   },
 
   label(subject: Iri, label: string) {
@@ -119,21 +118,21 @@ export const add = {
   },
 
   observableEntity(entityType: Iri): Iri {
-    const observableEntity: NamedNode = $rdf.sym(generate_iri());
+    const new_iri: Iri = generate_iri();
+    const observableEntity: NamedNode = $rdf.sym(new_iri);
     const entityTypeNode: NamedNode = $rdf.sym(entityType);
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     add.triple(observableEntity, a, feature_class, PARALLAX_GRAPH);
-    return observableEntity.value;
+    return new_iri;
   },
 
-  port(port: Port): Iri {
-    const the_port: Iri = PARALLAX_FN(port.port_id);
-    add.triple(the_port, a, harbourType, PARALLAX_GRAPH);
-    add.triple(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
-    // const latitude: NamedNode
-    // latitude is as literal?
-    return the_port;
-  },
+  // port(port: Port) {
+  //   const the_port: NamedNode = $rdf.sym(port.port_id);
+  //   add.triple(the_port, a, harbourType, PARALLAX_GRAPH);
+  //   add.triple(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
+  //   // const latitude: NamedNode
+  //   // latitude is as literal?
+  // },
 
   observation(obs: Observation) {
     const observationIri: NamedNode = $rdf.sym(obs.id);
@@ -153,37 +152,37 @@ export const add = {
     add.triple(observationIri, SosaResultTimeClass, timeLiteral, PARALLAX_GRAPH);
   },
 
-  voyage(voyage: Voyage): Iri {
-    const voyageIri: NamedNode = $rdf.sym(voyage.id);
+  voyage(voyage: Voyage) {
+    const voyageIri: Iri = voyage.id;
+    const voyageNode: NamedNode = $rdf.sym(voyageIri);
     const ActOfTravel: NamedNode = $rdf.sym(TermRegistry.getIRI('ActOfTravel'));
     const start_time: Literal = $rdf.literal(voyage.start_time.toISOString(), dateTime_literal_datatype);
     const end_time: Literal = $rdf.literal(voyage.end_time.toISOString(), dateTime_literal_datatype);
 
-    add.triple(voyageIri, a, ActOfTravel, PARALLAX_GRAPH);
-    add.triple(voyageIri, is_about, $rdf.sym(voyage.ship), PARALLAX_GRAPH);
-    add.triple(voyageIri, has_start_time, start_time, PARALLAX_GRAPH);
-    add.triple(voyageIri, has_end_time, end_time, PARALLAX_GRAPH);
-    add.triple(voyageIri, has_start_port, $rdf.sym(voyage.start_port), PARALLAX_GRAPH);
-    add.triple(voyageIri, has_end_port, $rdf.sym(voyage.end_port), PARALLAX_GRAPH);
+    add.triple(voyageNode, a, ActOfTravel, PARALLAX_GRAPH);
+    add.triple(voyageNode, is_about, $rdf.sym(voyage.ship), PARALLAX_GRAPH);
+    add.triple(voyageNode, has_start_time, start_time, PARALLAX_GRAPH);
+    add.triple(voyageNode, has_end_time, end_time, PARALLAX_GRAPH);
+    add.triple(voyageNode, has_start_port, $rdf.sym(voyage.start_port), PARALLAX_GRAPH);
+    add.triple(voyageNode, has_end_port, $rdf.sym(voyage.end_port), PARALLAX_GRAPH);
 
     for (const point of voyage.points) {
       const cord: Coordinate = point.Coordinate;
       const time: Date = point.time;
       const pointIri: Iri = add.coordinate(generate_iri(), cord);
       const timeLiteral: Literal = $rdf.literal(time.toISOString(), dateTime_literal_datatype);
-      add.triple(voyageIri, has_geometry, $rdf.sym(pointIri), PARALLAX_GRAPH);
+      add.triple(voyageNode, has_geometry, $rdf.sym(pointIri), PARALLAX_GRAPH);
       add.triple($rdf.sym(pointIri), SosaResultTimeClass, timeLiteral, PARALLAX_GRAPH);
     }
 
-    add.label(voyageIri, 'Voyage');
-    return voyageIri;
+    add.label(voyage.id, 'Voyage');
   },
 
   coordinate(iri: Iri, cord: Coordinate): Iri {
     const feature: NamedNode = $rdf.sym(iri);
     const wktPoint: string = coordinateToWktPoint(cord);
-    const point: Iri = uuidv4();
-    const pointNode: NamedNode = PARALLAX_FN(point);
+    const point: Iri = generate_iri();
+    const pointNode: NamedNode = $rdf.sym(point);
     const wktLiteral: Literal = $rdf.literal(wktPoint, wkt_literal_datatype);
 
     add.triple(feature, a, feature_class, PARALLAX_GRAPH);
@@ -262,7 +261,7 @@ export const get = {
       subGraph.add(subject, predicate, object, PARALLAX_GRAPH);
     }
 
-    $rdf.serialize(undefined, subGraph, PARALLAX_GRAPH.value, 'text/turtle', (err: Error, str: string) => {
+    $rdf.serialize(null, subGraph, PARALLAX_GRAPH.value, 'text/turtle', (err: Error | null | undefined, str: string | undefined) => {
       if (err) {
         console.error('Error serializing to Turtle:', err);
       } else {
@@ -282,7 +281,10 @@ export const get = {
     `;
 
     // Prepare the query object
-    const sparqlQuery = $rdf.SPARQLToQuery(query, false, g_triple_store);
+    const sparqlQuery: false | Query = $rdf.SPARQLToQuery(query, false, g_triple_store);
+    if (sparqlQuery === false) {
+      throw new Error('Failed to parse SPARQL query');
+    }
 
     // Execute the query
     const bindings: SparqlBinding[] = g_triple_store.querySync(sparqlQuery);
@@ -329,7 +331,6 @@ function coordinateToWktPoint(cord: Coordinate): string {
 function containsBlankNode(statement: Statement): boolean {
   //prettier-ignore
   if (statement.subject.termType === 'BlankNode' ||
-      statement.predicate.termType === 'BlankNode' ||
       statement.object.termType === 'BlankNode') {
     return true;
   } else {
@@ -341,7 +342,7 @@ function getNamedGraphs(tripleStore: $rdf.IndexedFormula): Set<Iri> {
   const graphNames = new Set<Iri>();
 
   for (const stmt of tripleStore.statementsMatching(undefined, undefined, undefined, undefined)) {
-    const graphIRI = stmt.why?.value;
+    const graphIRI = stmt.why?.value as Iri;
     if (graphIRI) {
       graphNames.add(graphIRI);
     }

@@ -2,7 +2,7 @@ import { Iri } from './aliases';
 
 export interface Port {
   // TODO: Generalize to Place or Location
-  port_id: string; // TODO: Make IRI
+  port_id: Iri;
   name: string;
   country: string; // TODO: deprecate!
   latitude: number;

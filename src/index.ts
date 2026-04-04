@@ -10,7 +10,7 @@ import { Coordinate, Voyage, Port } from './models';
 import Scanner from './scanner';
 
 // Options
-const FABRICATE_ON_LOAD = true;
+const FABRICATE_ON_LOAD = false;
 
 const debugButton = document.getElementById('debug-button');
 const debug2Button = document.getElementById('debug2-button');
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.On.fabricateData(fabricateData);
     Gui.On.addObservation(onAddObservation);
     Gui.On.writeGraphToFile(writeGraphToFile);
+    Gui.On.readRdfFile(readRdfFile);
     Gui.On.showTargetsButton(showTargets);
 
     if (FABRICATE_ON_LOAD) {
@@ -95,6 +96,10 @@ function writeGraphToFile(): void {
   console.log('writeGraphToFile()');
   const rdf = RdfHandler.get.instanceDataTurtle();
   Fetcher.saveFile(rdf, 'graph.ttl');
+}
+
+function readRdfFile(): void {
+  console.log('readRdfFile()');
 }
 
 function showTriples(): void {

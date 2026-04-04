@@ -3,6 +3,7 @@ import RdfHandler from '../../src/rdf_handler';
 import * as XLSX from 'xlsx';
 import { Port, Coordinate, Observation, Voyage, SpatiotemporalCoordinate } from '../../src/models';
 import { Iri } from '../../src/aliases';
+import * as fs from 'fs';
 
 type Ushant = {
   x: number; // longitude
@@ -32,7 +33,7 @@ async function main() {
       const time: Date = new Date(seconds * 1000); // Convert seconds to milliseconds
       points.push({ Coordinate: coordinate, time });
     }
-    console.log(points);
+
     const ship: Iri = RdfHandler.add.observableEntity('boat');
     const voyage: Voyage = {
       id: RdfHandler.generateIri(),
@@ -49,12 +50,16 @@ async function main() {
   }
 
   const ttl: string = RdfHandler.get.instanceDataTurtle();
-  console.log('Generated RDF in Turtle format:\n', ttl);
-  // Load CSV
 
-  // Convert CSV to RDF
-
-  // Save RDF to file
+  // console.log('Generated RDF in Turtle format:\n', ttl);
+  // Write ttl to file:
+  fs.writeFile('out/output.ttl', ttl, (err) => {
+    if (err) {
+      console.error('Error writing Turtle file:', err);
+    } else {
+      console.log('Turtle file has been saved as output.ttl');
+    }
+  });
 }
 
 main();

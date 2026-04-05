@@ -1,5 +1,5 @@
 import * as $rdf from 'rdflib';
-import { Coordinate, Port, Voyage, ObservableEntity, Observation, SpatiotemporalCoordinate } from '../models';
+import { Coordinate, Port, Voyage, ObservableEntity, Observation, Observation } from '../models';
 import { Iri, Label, Triple } from '../aliases';
 import { v4 as uuidv4 } from 'uuid'; //uuidv4() is a function
 import { Term } from '../term_registry';
@@ -150,15 +150,10 @@ export const add = {
     const voyageIri: Iri = voyage.id;
     const voyageNode: NamedNode = $rdf.sym(voyageIri);
     const VoyageClass: NamedNode = $rdf.sym(TermRegistry.getIRI('Voyage'));
-    const start_time: Literal = $rdf.literal(voyage.start_time.toISOString(), dateTime_literal_datatype);
-    const end_time: Literal = $rdf.literal(voyage.end_time.toISOString(), dateTime_literal_datatype);
+    const ship: NamedNode = $rdf.sym(voyage.ship);
 
     add.triple(voyageNode, a, VoyageClass, PARALLAX_GRAPH);
-    add.triple(voyageNode, is_about, $rdf.sym(voyage.ship), PARALLAX_GRAPH);
-    add.triple(voyageNode, has_start_time, start_time, PARALLAX_GRAPH);
-    add.triple(voyageNode, has_end_time, end_time, PARALLAX_GRAPH);
-    add.triple(voyageNode, has_start_port, $rdf.sym(voyage.start_port), PARALLAX_GRAPH);
-    add.triple(voyageNode, has_end_port, $rdf.sym(voyage.end_port), PARALLAX_GRAPH);
+    add.triple(voyageNode, is_about, ship, PARALLAX_GRAPH);
 
     for (const point of voyage.points) {
       const cord: Coordinate = point.Coordinate;

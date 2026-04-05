@@ -9,14 +9,10 @@ export interface Port {
   longitude: number;
 }
 
-export interface SpatiotemporalCoordinate {
-  Coordinate: Coordinate;
-  time: Date;
-}
-
-export interface Coordinate {
-  latitude: number; // Degrees
-  longitude: number; // Degrees
+export interface Voyage {
+  id: Iri;
+  ship: Iri;
+  points: Observation[];
 }
 
 export interface Observation {
@@ -24,6 +20,11 @@ export interface Observation {
   location: Coordinate;
   time: Date;
   entities: Iri[];
+}
+
+export interface Coordinate {
+  latitude: number; // Degrees
+  longitude: number; // Degrees
 }
 
 export interface FabricatorOptions {
@@ -41,14 +42,4 @@ export interface ObservableEntity {
   id: Iri;
   type: string;
   label: string;
-}
-
-export interface Voyage {
-  id: Iri;
-  ship: Iri;
-  start_time: Date;
-  end_time: Date;
-  start_port: Iri;
-  end_port: Iri;
-  points: SpatiotemporalCoordinate[];
 }

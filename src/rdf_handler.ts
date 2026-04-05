@@ -3,7 +3,7 @@ import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as GraphDB from './dependencies/graphdb';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port, Voyage, ObservableEntity, Coordinate, Observation } from './models';
+import { Port, Voyage, ObservableEntity, Coordinate, Observation, Observation } from './models';
 import type { Bindings } from 'rdflib/lib/types';
 
 const boatClass: Iri = TermRegistry.getIRI('boat');
@@ -187,19 +187,18 @@ const get = {
     const query = `
         PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
         PREFIX is_about: <https://parallax.nmsu.edu/ns/is_about>
-        PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
-        PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
-        PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
-        PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
+        PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+        PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+        PREFIX sosa: <http://www.w3.org/ns/sosa/>
     
-        SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
-          
+        SELECT ?voyage ?ship WHERE {
           ?voyage a Voyage: .
           ?voyage is_about: ?ship .
-          ?voyage has_start_time: ?start_time .
-          ?voyage has_end_time: ?end_time .
-          ?voyage has_start_port: ?start_port .
-          ?voyage has_end_port: ?end_port .
+          ?observation a sosa:Observation .
+          ?observation is_about: ?voyage .
+          ?observation has_latitude: ?lat .
+          ?observation has_longitude: ?long .
+          ?observation sosa:resultTime ?time .
         }
         `;
     return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
@@ -208,18 +207,23 @@ const get = {
         console.log(row);
         const voyageIri: Iri = row['?voyage'].value as Iri;
         const ship: Iri = row['?ship'].value as Iri;
-        const start_time: string = row['?start_time'].value;
-        const end_time: string = row['?end_time'].value;
-        const start_port: Iri = row['?start_port'].value as Iri;
-        const end_port: Iri = row['?end_port'].value as Iri;
+        const obs_iri: Iri = row['?observation'].value as Iri;
+        const lat: number = parseFloat(row['?lat'].value);
+        const long: number = parseFloat(row['?long'].value);
+        const cord: Coordinate = { latitude: lat, longitude: long };
+        const date: Date = new Date(row['?time'].value);
+
+        const observation: Observation = {
+          id: obs_iri,
+          location: cord,
+          time: date,
+          entities: [voyageIri],
+        };
+
         const voyage: Voyage = {
-          id: 'todo, query for voyage Iri' as Iri,
+          id: voyageIri as Iri,
           ship,
-          start_time: new Date(start_time),
-          end_time: new Date(end_time),
-          start_port,
-          end_port,
-          points: [], // TODO: query for points
+          points: [observation],
         };
         voyages.push(voyage);
       }

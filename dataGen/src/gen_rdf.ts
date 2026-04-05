@@ -1,7 +1,7 @@
 console.log('Generating RDF data...');
 import RdfHandler from '../../src/rdf_handler';
 import * as XLSX from 'xlsx';
-import { Port, Coordinate, Observation, Voyage, SpatiotemporalCoordinate } from '../../src/models';
+import { Port, Coordinate, Observation, Voyage, Observation } from '../../src/models';
 import { Iri } from '../../src/aliases';
 import * as fs from 'fs';
 
@@ -22,14 +22,14 @@ async function main() {
     const jsonData: Ushant[] = XLSX.utils.sheet_to_json<Ushant>(worksheet);
     // console.log('CSV data loaded successfully:', jsonData);
 
-    const points: SpatiotemporalCoordinate[] = [];
+    const points: Observation[] = [];
     for (const row of jsonData) {
       const longitude: number = row.x;
       const latitude: number = row.y;
       const seconds: number = row.t;
       const coordinate: Coordinate = { latitude, longitude };
       const time: Date = new Date(seconds * 1000); // Convert seconds to milliseconds
-      points.push({ Coordinate: coordinate, time });
+      points.push({ location: coordinate, time });
     }
 
     const ship: Iri = RdfHandler.add.ship('Boat 1956, my favorite');

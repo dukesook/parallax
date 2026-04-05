@@ -184,60 +184,8 @@ const get = {
   },
 
   async allVoyages(): Promise<Voyage[]> {
-    const query = `
-        PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
-        PREFIX is_about: <https://parallax.nmsu.edu/ns/is_about>
-        PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
-        PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
-        PREFIX sosa: <http://www.w3.org/ns/sosa/>
-    
-        SELECT ?voyage ?ship ?lat ?long ?time WHERE {
-          ?voyage a Voyage: .
-          ?voyage is_about: ?ship .
-          ?observation a sosa:Observation .
-          ?observation is_about: ?voyage .
-          ?observation has_latitude: ?lat .
-          ?observation has_longitude: ?long .
-          ?observation sosa:resultTime ?time .
-        }
-        `;
-    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
-      const voyageMap: Map<Iri, Voyage> = new Map();
-
-      for (const row of rows) {
-        console.log(row);
-        const voyageIri: Iri = row['?voyage'].value as Iri;
-        const ship: Iri = row['?ship'].value as Iri;
-        const obs_iri: Iri = row['?observation'].value as Iri;
-        const lat: number = parseFloat(row['?lat'].value);
-        const long: number = parseFloat(row['?long'].value);
-        const cord: Coordinate = { latitude: lat, longitude: long };
-        const date: Date = new Date(row['?time'].value);
-
-        let voyage: Voyage | undefined = voyageMap.get(voyageIri);
-        if (!voyage) {
-          voyage = {
-            id: voyageIri,
-            ship: ship,
-            points: [],
-          };
-          voyageMap.set(voyageIri, voyage);
-        }
-
-        const point: Observation = {
-          id: obs_iri,
-          location: cord,
-          time: date,
-          entities: [voyageIri],
-        };
-        voyage.points.push(point);
-      }
-
-      // Map to List
-      const voyages: Voyage[] = Array.from(voyageMap.values());
-
-      return voyages;
-    });
+    const query = makeVoyageQuery();
+    return RDFLibWrapper.runQuery(query).then(returnVoyages);
   },
 
   async allFeatures(): Promise<ObservableEntity[]> {
@@ -281,42 +229,9 @@ const get = {
   },
 
   async shipVoyages(ship: Iri): Promise<Voyage[]> {
-    const query = `
-    PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
-    PREFIX is_about: <${TermRegistry.Term.is_about}>
-    PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
-    PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
-    PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
-    PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
-    
-    SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
-      
-      ?voyage is_about: <${ship}> .
-      ?voyage a Voyage: .
-      ?voyage is_about: ?ship .
-      ?voyage has_start_time: ?start_time .
-      ?voyage has_end_time: ?end_time .
-      ?voyage has_start_port: ?start_port .
-      ?voyage has_end_port: ?end_port .
-    }
-    `;
+    const query = makeVoyageQuery(ship);
 
-    return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
-      const voyages: Voyage[] = [];
-      for (const row of rows) {
-        const voyage: Voyage = {
-          id: 'todo, query for voyage Iri (shipVoyages)' as Iri,
-          ship: row['?ship'].value as Iri,
-          start_time: new Date(row['?start_time'].value),
-          end_time: new Date(row['?end_time'].value),
-          start_port: row['?start_port'].value as Iri,
-          end_port: row['?end_port'].value as Iri,
-          points: [], // TODO: query for points
-        };
-        voyages.push(voyage);
-      }
-      return voyages;
-    });
+    return RDFLibWrapper.runQuery(query).then(returnVoyages);
   },
 
   async allObservations(): Promise<Observation[]> {
@@ -438,6 +353,70 @@ function parseWKTPoint(wkt: string): Coordinate {
   const latitude = parseFloat(match[2]);
 
   return { latitude, longitude };
+}
+
+function makeVoyageQuery(maybeShip: Iri | null = null): string {
+  let ship: Iri | string = '?ship'; // get all ships
+
+  if (maybeShip) {
+    ship = `<${maybeShip}>`; // get specific ship
+  }
+
+  const query = `
+        PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
+        PREFIX is_about: <https://parallax.nmsu.edu/ns/is_about>
+        PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+        PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+        PREFIX sosa: <http://www.w3.org/ns/sosa/>
+    
+        SELECT ?voyage ?ship ?lat ?long ?time WHERE {
+          ?voyage a Voyage: .
+          ?voyage is_about: ${ship} .
+          ?observation a sosa:Observation .
+          ?observation is_about: ?voyage .
+          ?observation has_latitude: ?lat .
+          ?observation has_longitude: ?long .
+          ?observation sosa:resultTime ?time .
+        }
+        `;
+  return query;
+}
+
+async function returnVoyages(rows: Bindings[]): Promise<Voyage[]> {
+  const voyageMap: Map<Iri, Voyage> = new Map();
+
+  for (const row of rows) {
+    const voyageIri: Iri = row['?voyage'].value as Iri;
+    const ship: Iri = row['?ship'].value as Iri;
+    const obs_iri: Iri = row['?observation'].value as Iri;
+    const lat: number = parseFloat(row['?lat'].value);
+    const long: number = parseFloat(row['?long'].value);
+    const cord: Coordinate = { latitude: lat, longitude: long };
+    const date: Date = new Date(row['?time'].value);
+
+    let voyage: Voyage | undefined = voyageMap.get(voyageIri);
+    if (!voyage) {
+      voyage = {
+        id: voyageIri,
+        ship: ship,
+        points: [],
+      };
+      voyageMap.set(voyageIri, voyage);
+    }
+
+    const point: Observation = {
+      id: obs_iri,
+      location: cord,
+      time: date,
+      entities: [voyageIri],
+    };
+    voyage.points.push(point);
+  }
+
+  // Map to List
+  const voyages: Voyage[] = Array.from(voyageMap.values());
+
+  return voyages;
 }
 
 // ================== Debugging Functions ==================

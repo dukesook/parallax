@@ -38,3 +38,13 @@
   border: 1px solid #ccc;
   padding: 10px;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}

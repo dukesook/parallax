@@ -187,12 +187,15 @@ async function onClickShip(entity: ObservableEntity) {
   RdfHandler.get.shipVoyages(entity.id).then(async (voyages) => {
     // Display First Voyage
     GMaps.clearLines();
+    GMaps.centerMap(voyages[0].points[0].location);
     for (const voyage of voyages) {
-      for (const point of voyage.points) {
-        console.log('Voyage Point:', point);
+      for (let i = 0; i < voyage.points.length - 1; i++) {
+        const start = voyage.points[i];
+        const end = voyage.points[i + 1];
+        const startCoordinate: Coordinate = start.location;
+        const endCoordinate: Coordinate = end.location;
+        GMaps.drawLine(startCoordinate, endCoordinate);
       }
-
-      // GMaps.drawLine(startCoordinate, endCoordinate);
     }
   });
 

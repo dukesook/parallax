@@ -191,7 +191,7 @@ const get = {
         PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
         PREFIX sosa: <http://www.w3.org/ns/sosa/>
     
-        SELECT ?voyage ?ship WHERE {
+        SELECT ?voyage ?ship ?lat ?long ?time WHERE {
           ?voyage a Voyage: .
           ?voyage is_about: ?ship .
           ?observation a sosa:Observation .
@@ -202,7 +202,8 @@ const get = {
         }
         `;
     return RDFLibWrapper.runQuery(query).then((rows: Bindings[]) => {
-      const voyages: Voyage[] = [];
+      const voyageMap: Map<Iri, Voyage> = new Map();
+
       for (const row of rows) {
         console.log(row);
         const voyageIri: Iri = row['?voyage'].value as Iri;
@@ -213,20 +214,28 @@ const get = {
         const cord: Coordinate = { latitude: lat, longitude: long };
         const date: Date = new Date(row['?time'].value);
 
-        const observation: Observation = {
+        let voyage: Voyage | undefined = voyageMap.get(voyageIri);
+        if (!voyage) {
+          voyage = {
+            id: voyageIri,
+            ship: ship,
+            points: [],
+          };
+          voyageMap.set(voyageIri, voyage);
+        }
+
+        const point: Observation = {
           id: obs_iri,
           location: cord,
           time: date,
           entities: [voyageIri],
         };
-
-        const voyage: Voyage = {
-          id: voyageIri as Iri,
-          ship,
-          points: [observation],
-        };
-        voyages.push(voyage);
+        voyage.points.push(point);
       }
+
+      // Map to List
+      const voyages: Voyage[] = Array.from(voyageMap.values());
+
       return voyages;
     });
   },

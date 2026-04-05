@@ -188,13 +188,11 @@ async function onClickShip(entity: ObservableEntity) {
     // Display First Voyage
     GMaps.clearLines();
     for (const voyage of voyages) {
-      const startPort: Iri = voyage.start_port;
-      const endPort: Iri = voyage.end_port;
+      for (const point of voyage.points) {
+        console.log('Voyage Point:', point);
+      }
 
-      const startCoordinate: Coordinate = await RdfHandler.get.coordinate(startPort);
-      const endCoordinate: Coordinate = await RdfHandler.get.coordinate(endPort);
-
-      GMaps.drawLine(startCoordinate, endCoordinate);
+      // GMaps.drawLine(startCoordinate, endCoordinate);
     }
   });
 

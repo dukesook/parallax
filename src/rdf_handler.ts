@@ -355,14 +355,33 @@ function parseWKTPoint(wkt: string): Coordinate {
   return { latitude, longitude };
 }
 
-function makeVoyageQuery(maybeShip: Iri | null = null): string {
-  let ship: Iri | string = '?ship'; // get all ships
+function makeVoyageQuery(ship: Iri | null = null): string {
+  // TODO remove duplication between the two queries.
 
-  if (maybeShip) {
-    ship = `<${maybeShip}>`; // get specific ship
+  // Get Voyages for All Ships
+  if (!ship) {
+    return `
+        PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
+        PREFIX is_about: <https://parallax.nmsu.edu/ns/is_about>
+        PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+        PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+        PREFIX sosa: <http://www.w3.org/ns/sosa/>
+    
+        SELECT ?voyage ?ship ?lat ?long ?time WHERE {
+          
+          ?voyage a Voyage: .
+          ?voyage is_about: ?ship .
+          ?observation a sosa:Observation .
+          ?observation is_about: ?voyage .
+          ?observation has_latitude: ?lat .
+          ?observation has_longitude: ?long .
+          ?observation sosa:resultTime ?time .
+        }
+    `;
   }
 
-  const query = `
+  // Get Voyages for Specific Ship
+  const specificShipQuery = `
         PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
         PREFIX is_about: <https://parallax.nmsu.edu/ns/is_about>
         PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
@@ -371,7 +390,7 @@ function makeVoyageQuery(maybeShip: Iri | null = null): string {
     
         SELECT ?voyage ?ship ?lat ?long ?time WHERE {
           ?voyage a Voyage: .
-          ?voyage is_about: ${ship} .
+          ?voyage is_about: <${ship}> .
           ?observation a sosa:Observation .
           ?observation is_about: ?voyage .
           ?observation has_latitude: ?lat .
@@ -379,7 +398,8 @@ function makeVoyageQuery(maybeShip: Iri | null = null): string {
           ?observation sosa:resultTime ?time .
         }
         `;
-  return query;
+  console.log('Voyage Query:', specificShipQuery);
+  return specificShipQuery;
 }
 
 async function returnVoyages(rows: Bindings[]): Promise<Voyage[]> {
@@ -387,7 +407,12 @@ async function returnVoyages(rows: Bindings[]): Promise<Voyage[]> {
 
   for (const row of rows) {
     const voyageIri: Iri = row['?voyage'].value as Iri;
-    const ship: Iri = row['?ship'].value as Iri;
+
+    let ship: string = 'todo: properly query for ship';
+    if (row['?ship']) {
+      ship = row['?ship'].value ?? 'Unknown Ship';
+    }
+
     const obs_iri: Iri = row['?observation'].value as Iri;
     const lat: number = parseFloat(row['?lat'].value);
     const long: number = parseFloat(row['?long'].value);
@@ -398,7 +423,7 @@ async function returnVoyages(rows: Bindings[]): Promise<Voyage[]> {
     if (!voyage) {
       voyage = {
         id: voyageIri,
-        ship: ship,
+        ship: ship as Iri,
         points: [],
       };
       voyageMap.set(voyageIri, voyage);

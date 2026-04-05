@@ -173,7 +173,7 @@ function onClickObservableEntity(entity: ObservableEntity) {
 }
 
 function showTargets() {
-  RdfHandler.get.allFeatures().then((features: ObservableEntity[]) => {
+  RdfHandler.get.ships().then((features: ObservableEntity[]) => {
     Gui.displayObservableEntities(features, onClickObservableEntity);
   });
 }

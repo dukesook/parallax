@@ -37,10 +37,6 @@ async function main() {
     const voyage: Voyage = {
       id: RdfHandler.generateIri(),
       ship: ship,
-      start_time: new Date(0), // Placeholder, should be set to actual start time
-      end_time: new Date(1000), // Placeholder, should be set to actual end time
-      start_port: RdfHandler.generateIri(), // Placeholder, should be set to actual start port IRI
-      end_port: RdfHandler.generateIri(), // Placeholder, should be set to actual end port IRI
       points: points,
     };
     RdfHandler.add.voyage(voyage);

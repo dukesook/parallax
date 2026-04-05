@@ -52,7 +52,8 @@ async function main() {
 
   // console.log('Generated RDF in Turtle format:\n', ttl);
   // Write ttl to file:
-  fs.writeFile('out/output.ttl', ttl, (err) => {
+  const outputPath: string = '../rdf/test-data.ttl';
+  fs.writeFile(outputPath, ttl, (err) => {
     if (err) {
       console.error('Error writing Turtle file:', err);
     } else {

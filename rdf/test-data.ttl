@@ -1,0 +1,42 @@
+@prefix : </#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix p: <>.
+@prefix sos: <http://www.w3.org/ns/sosa/>.
+@prefix n: </ns/>.
+@prefix obo: <http://purl.obolibrary.org/obo/>.
+
+p:19fdbff0-3b53-464c-b1fa-5201c3bec944
+    a sos:Observation;
+    geo:lat "48.335855";
+    geo:long "-6.00754333333333";
+    sos:resultTime "1970-01-01T03:50:42.000Z";
+    n:is_about p:7c29e95e-e83f-4a9c-9e7c-ef3f2106ac32 .
+p:3e16b247-b93c-4b28-815a-e0003e78635b
+    a sos:Observation;
+    geo:lat "48.3312483333333";
+    geo:long "-5.98664666666667";
+    sos:resultTime "1970-01-01T03:54:40.000Z";
+    n:is_about p:7c29e95e-e83f-4a9c-9e7c-ef3f2106ac32 .
+p:7c29e95e-e83f-4a9c-9e7c-ef3f2106ac32
+    a n:voyage;
+    rdfs:label "Voyage";
+    n:end_port p:33c4ae36-4a3c-42e3-9f8d-774b2a6f321d;
+    n:end_time "1970-01-01T00:00:01.000Z";
+    n:is_about p:84eea834-a3cc-4e9b-b154-fe8d6588c75f;
+    n:start_port p:9bb0a77e-2d7d-45ba-a883-e30f5eab9a60;
+    n:start_time "1970-01-01T00:00:00.000Z".
+p:84eea834-a3cc-4e9b-b154-fe8d6588c75f
+a obo:ENVO_01000608; rdfs:label "Boat 1956, my favorite".
+p:9d1e83d5-5200-44f6-9fb5-f429f7edbb01
+    a sos:Observation;
+    geo:lat "47.5372633333333";
+    geo:long "-6.72738833333333";
+    sos:resultTime "1970-01-01T00:00:00.000Z";
+    n:is_about p:7c29e95e-e83f-4a9c-9e7c-ef3f2106ac32 .
+p:f2d9bb06-dbef-4c6c-b030-546cced21f26
+    a sos:Observation;
+    geo:lat "48.4813016666667";
+    geo:long "-5.88268333333333";
+    sos:resultTime "1970-01-01T04:40:58.000Z";
+    n:is_about p:7c29e95e-e83f-4a9c-9e7c-ef3f2106ac32 .

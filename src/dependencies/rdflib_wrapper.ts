@@ -49,13 +49,15 @@ function init(): void {
 
 let debugCounter = 1;
 export function generate_iri(): Iri {
-  const DEBUG = 1;
+  const DEBUG = 0;
   if (DEBUG) {
     const iri = `${Term.parallax_namespace}debug${debugCounter}`;
     debugCounter++;
     return iri as Iri;
   } else {
-    return (Term.parallax_namespace + uuidv4()) as Iri;
+    const newIri: Iri = `${Term.parallax_namespace}${uuidv4()}` as Iri;
+    console.log('Generated new IRI:', newIri);
+    return newIri;
   }
 }
 
@@ -125,14 +127,6 @@ export const add = {
     add.triple(observableEntity, a, entityTypeNode, PARALLAX_GRAPH);
     return new_iri;
   },
-
-  // port(port: Port) {
-  //   const the_port: NamedNode = $rdf.sym(port.port_id);
-  //   add.triple(the_port, a, harbourType, PARALLAX_GRAPH);
-  //   add.triple(the_port, rdfsLabel, $rdf.literal(port.name), PARALLAX_GRAPH);
-  //   // const latitude: NamedNode
-  //   // latitude is as literal?
-  // },
 
   observation(obs: Observation) {
     const observationIri: NamedNode = $rdf.sym(obs.id);

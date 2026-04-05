@@ -1,5 +1,6 @@
 import { readdir } from 'fs/promises';
 import { join } from 'path';
+import { Term } from './term_registry';
 
 // const bfoPath = '/parallax/rdf/bfo.owl';
 
@@ -60,6 +61,17 @@ export async function fetchEnvoBasicXml(): Promise<RdfFile> {
     mime: 'application/rdf+xml',
   };
   return envoOntology;
+}
+
+export async function fetchTestData(): Promise<RdfFile> {
+  const testDataPath = '/parallax/rdf/test-data.ttl';
+  const testData = {
+    url: 'local test data',
+    rdf: await fetchFile(testDataPath),
+    base: Term.parallax_namespace,
+    mime: 'text/turtle',
+  };
+  return testData;
 }
 
 // Warning - JSON uses ldl instead of rdfs:label

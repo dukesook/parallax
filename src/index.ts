@@ -128,8 +128,7 @@ function showShips(): void {
 }
 
 function showVoyages() {
-  console.log('index.ts - showVoyages()');
-  RdfHandler.get.allVoyages().then((voyages) => {
+  RdfHandler.get.allVoyages().then((voyages: Voyage[]) => {
     GraphTab.displayObjects(voyages);
   });
 }

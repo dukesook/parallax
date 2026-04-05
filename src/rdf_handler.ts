@@ -145,7 +145,7 @@ const get = {
 
   async allPorts(): Promise<Port[]> {
     const query = `
-        PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+        PREFIX is_about: <${TermRegistry.Term.is_about}>
         PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
         PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
         PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
@@ -186,7 +186,7 @@ const get = {
   async allVoyages(): Promise<Voyage[]> {
     const query = `
         PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
-        PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+        PREFIX is_about: <https://parallax.nmsu.edu/ns/is_about>
         PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
         PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
         PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
@@ -270,12 +270,11 @@ const get = {
   async shipVoyages(ship: Iri): Promise<Voyage[]> {
     const query = `
     PREFIX Voyage: <https://parallax.nmsu.edu/ns/voyage>
-    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+    PREFIX is_about: <${TermRegistry.Term.is_about}>
     PREFIX has_start_time: <https://parallax.nmsu.edu/ns/start_time>
     PREFIX has_end_time: <https://parallax.nmsu.edu/ns/end_time>
     PREFIX has_start_port: <https://parallax.nmsu.edu/ns/start_port>
     PREFIX has_end_port: <https://parallax.nmsu.edu/ns/end_port>
-    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
     
     SELECT ?voyage ?ship ?start_time ?end_time ?start_port ?end_port WHERE {
       
@@ -312,7 +311,7 @@ const get = {
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
     PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
     PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
-    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+    PREFIX is_about: <${TermRegistry.Term.is_about}>
 
     SELECT * WHERE {
       ?obs a sosa:Observation .
@@ -331,7 +330,7 @@ const get = {
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
     PREFIX has_latitude: <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
     PREFIX has_longitude: <http://www.w3.org/2003/01/geo/wgs84_pos#long>
-    PREFIX is_about: <https://www.commoncoreontologies.org/ont00001808>
+    PREFIX is_about: <${TermRegistry.Term.is_about}>
 
     SELECT * WHERE {
       ?obs a sosa:Observation .
@@ -371,13 +370,16 @@ function initTermRegistry(): void {
 }
 
 async function initStore(): Promise<void> {
+  const testData = await Fetcher.fetchTestData();
+  RDFLibWrapper.add.rdfToStore(testData.rdf, testData.base, testData.mime, TermRegistry.getIRI('parallaxGraph'));
+
   const bfo = await Fetcher.fetchBFO();
   const bfoGraphIRI = TermRegistry.getIRI('bfoGraph');
   // RDFLibWrapper.add.rdfToStore(bfo.rdf, bfo.base, bfo.mime, bfoGraphIRI);
 
   const geoSparql = await Fetcher.fetchGeoSparql();
   const geoSparqlGraphIRI = TermRegistry.getIRI('geoSparqlGraph');
-  RDFLibWrapper.add.rdfToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparqlGraphIRI);
+  // RDFLibWrapper.add.rdfToStore(geoSparql.rdf, geoSparql.base, geoSparql.mime, geoSparqlGraphIRI);
 
   const envoOntology = await Fetcher.fetchEnvoBasicXml();
   const envoGraphIRI = TermRegistry.getIRI('envoGraph');

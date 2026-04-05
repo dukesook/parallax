@@ -157,6 +157,11 @@ export function displayObservableEntities(entities: ObservableEntity[], onClick:
 }
 
 export function displayObjects(objects: object[]): void {
+  if (objects.length === 0) {
+    const table = get_table();
+    table.innerHTML = '<tr><td>No data found.</td></tr>';
+    return;
+  }
   const table = get_table() as HTMLTableElement;
   const messageDiv = get_messageDiv() as HTMLDivElement;
   table.innerHTML = '';
@@ -177,7 +182,14 @@ export function displayObjects(objects: object[]): void {
     const row = table.insertRow();
     keys.forEach((key) => {
       const cell = row.insertCell();
-      cell.textContent = obj[key];
+      const value: any = obj[key];
+      if (typeof value === 'string') {
+        cell.textContent = value;
+      } else if (typeof value === 'number') {
+        cell.textContent = value.toString();
+      } else if (typeof value === 'object' && value !== null) {
+        cell.textContent = JSON.stringify(value);
+      }
     });
   }
 }

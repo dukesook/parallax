@@ -441,7 +441,13 @@ async function returnVoyages(rows: Bindings[]): Promise<Voyage[]> {
   // Map to List
   const voyages: Voyage[] = Array.from(voyageMap.values());
 
-  return voyages;
+  // Sort by Time
+  const sortedVoyages = voyages.map((voyage) => ({
+    ...voyage,
+    points: [...voyage.points].sort((a, b) => a.time.getTime() - b.time.getTime()),
+  }));
+
+  return sortedVoyages;
 }
 
 // ================== Debugging Functions ==================

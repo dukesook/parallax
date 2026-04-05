@@ -56,7 +56,6 @@ export function generate_iri(): Iri {
     return iri as Iri;
   } else {
     const newIri: Iri = `${Term.parallax_namespace}${uuidv4()}` as Iri;
-    console.log('Generated new IRI:', newIri);
     return newIri;
   }
 }

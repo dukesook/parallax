@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { Coordinate, Observation, Voyage } from '../../src/models';
 import { Iri } from '../../src/aliases';
 import * as fs from 'fs';
+import { readdir } from 'fs/promises';
 
 type Ushant = {
   x: number; // longitude
@@ -14,7 +15,21 @@ type Ushant = {
 // Confirm File Exists
 
 async function main() {
-  const filePath: string = 'ushant_ais/csv/traj_1956.csv';
+  const directoryPath: string = 'ushant_ais/csv';
+  const filenames = await getCsvFilenames(directoryPath);
+
+  for (const filename of filenames) {
+    const path = `${directoryPath}/${filename}`;
+    console.log('Processing file:', path);
+    add_ushant_file(path);
+  }
+
+  export_instance_data();
+}
+
+main();
+
+function add_ushant_file(filePath: string) {
   try {
     const workbook: XLSX.WorkBook = XLSX.readFile(filePath);
     const sheetName: string = workbook.SheetNames[0];
@@ -51,11 +66,11 @@ async function main() {
   } catch (error) {
     console.error('Error loading CSV file:', error);
   }
+}
 
+function export_instance_data() {
   const ttl: string = RdfHandler.get.instanceDataTurtle();
 
-  // console.log('Generated RDF in Turtle format:\n', ttl);
-  // Write ttl to file:
   const outputPath: string = '../rdf/test-data.ttl';
   fs.writeFile(outputPath, ttl, (err) => {
     if (err) {
@@ -66,4 +81,8 @@ async function main() {
   });
 }
 
-main();
+async function getCsvFilenames(directory: string): Promise<string[]> {
+  const files = await readdir(directory);
+
+  return files.filter((f) => f.toLowerCase().endsWith('.csv'));
+}

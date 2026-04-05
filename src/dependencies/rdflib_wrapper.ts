@@ -156,7 +156,7 @@ export const add = {
     add.triple(voyageNode, is_about, ship, PARALLAX_GRAPH);
 
     for (const point of voyage.points) {
-      const cord: Coordinate = point.Coordinate;
+      const cord: Coordinate = point.location;
       const time: Date = point.time;
       const timeLiteral: Literal = $rdf.literal(time.toISOString(), dateTime_literal_datatype);
       // add.triple(voyageNode, has_observation, $rdf.sym(pointIri), PARALLAX_GRAPH);

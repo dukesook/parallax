@@ -1,7 +1,7 @@
 console.log('Generating RDF data...');
 import RdfHandler from '../../src/rdf_handler';
 import * as XLSX from 'xlsx';
-import { Port, Coordinate, Observation, Voyage, Observation } from '../../src/models';
+import { Coordinate, Observation, Voyage } from '../../src/models';
 import { Iri } from '../../src/aliases';
 import * as fs from 'fs';
 
@@ -20,22 +20,30 @@ async function main() {
     const sheetName: string = workbook.SheetNames[0];
     const worksheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const jsonData: Ushant[] = XLSX.utils.sheet_to_json<Ushant>(worksheet);
-    // console.log('CSV data loaded successfully:', jsonData);
 
     const points: Observation[] = [];
+    const voyageId: Iri = RdfHandler.generateIri();
+
     for (const row of jsonData) {
       const longitude: number = row.x;
       const latitude: number = row.y;
       const seconds: number = row.t;
       const coordinate: Coordinate = { latitude, longitude };
       const time: Date = new Date(seconds * 1000); // Convert seconds to milliseconds
-      points.push({ location: coordinate, time });
+      const observationId: Iri = RdfHandler.generateIri();
+      //prettier-ignore
+      points.push({ 
+        id: observationId,
+        location: coordinate,
+        time: time,
+        entities: [voyageId],
+      });
     }
 
     const ship: Iri = RdfHandler.add.ship('Boat 1956, my favorite');
 
     const voyage: Voyage = {
-      id: RdfHandler.generateIri(),
+      id: voyageId,
       ship: ship,
       points: points,
     };

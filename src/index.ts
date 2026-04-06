@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Listeners
     Gui.On.fabricateData(fabricateData);
-    Gui.On.addObservation(onAddObservation);
+    Gui.On.addObservation(addObservation);
     Gui.On.writeGraphToFile(writeGraphToFile);
     Gui.On.readRdfFile(readRdfFile);
     Gui.On.showTargetsButton(showTargets);
@@ -71,7 +71,7 @@ function onclickMap(event: google.maps.MapMouseEvent): void {
   }
 }
 
-async function onAddObservation(): Promise<void> {
+async function addObservation(): Promise<void> {
   // Adding new Entity
   const selectedObject = Gui.getSelectedObject();
   const { lat, lng } = Gui.getLatLng();
@@ -81,10 +81,9 @@ async function onAddObservation(): Promise<void> {
 
   const objectIri = Gui.getAddObservationTargetIri();
 
-  // const objectIri = RdfHandler.add.observableEntity(selectedObject);
   const timestamp = new Date();
   const obs: Observation = {
-    id: objectIri,
+    id: RdfHandler.generateIri(),
     location: { latitude: lat, longitude: lng },
     time: timestamp,
     entities: [objectIri],

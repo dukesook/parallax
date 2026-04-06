@@ -16,7 +16,8 @@ type Ushant = {
 
 async function main() {
   const directoryPath: string = 'ushant_ais/csv';
-  const filenames = await getCsvFilenames(directoryPath);
+  // const filenames = await getCsvFilenames(directoryPath);
+  const filenames = ['traj_1956.csv'];
 
   for (const filename of filenames) {
     const path = `${directoryPath}/${filename}`;

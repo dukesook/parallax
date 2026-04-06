@@ -49,6 +49,28 @@ export function init(): void {
   });
 }
 
+export async function computeDistance(wkt1: string, wkt2: string): Promise<number | null> {
+  const query = `
+    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+    PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+    
+    SELECT ?distance
+    WHERE {
+      BIND (geof:distance("${wkt1}"^^geo:wktLiteral, "${wkt2}"^^geo:wktLiteral) AS ?distance)
+    }
+  `;
+
+  return runSparql(query).then((bindings: SparqlResultRow[]) => {
+    const distance: number | null = extractDistance(bindings);
+    if (distance !== null) {
+      console.log(`Distance between points: ${distance} meters`);
+    } else {
+      console.log('Failed to extract distance from SPARQL results.');
+    }
+    return distance;
+  });
+}
+
 function extractDistance(bindings: SparqlResultRow[]): number | null {
   if (bindings.length === 0) {
     console.log('No results found for the query.');
@@ -84,8 +106,13 @@ function extractDistance(bindings: SparqlResultRow[]): number | null {
   return distanceNumber;
 }
 
-function make_point_wkt(c: Coordinate): string {
+export function make_point_wkt(c: Coordinate): string {
   return `POINT(${c.longitude} ${c.latitude})`;
+}
+
+export function make_linestring_wkt(coordinates: Coordinate[]): string {
+  const pointsWkt = coordinates.map((c) => `${c.longitude} ${c.latitude}`).join(', ');
+  return `LINESTRING(${pointsWkt})`;
 }
 
 async function runSparql(query: string): Promise<SparqlResultRow[]> {

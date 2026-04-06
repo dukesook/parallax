@@ -79,7 +79,7 @@ export function displayObservableEntities(targets: ObservableEntity[], onclick: 
 }
 
 export function populateObservationFields(entity: ObservableEntity) {
-  const idInput = getElement('add-obs-id-input') as HTMLInputElement;
+  const idInput = getElement('current-target-iri') as HTMLInputElement;
   const typeInput = getElement('add-obs-type-input') as HTMLInputElement;
   const labelInput = getElement('add-obs-label-input') as HTMLInputElement;
 
@@ -103,6 +103,15 @@ export function getLatLng(): { lat: number; lng: number } {
   return { lat, lng };
 }
 
+export function getCurrentTargetIri(): Iri {
+  const idInput = getElement('current-target-iri') as HTMLInputElement;
+  const iri = idInput.value as Iri;
+  if (!iri) {
+    throw new Error('No IRI provided');
+  }
+  return iri;
+}
+
 export function getSelectedObject(): string {
   const objectSelect = getElement('object-select') as HTMLSelectElement;
   const selectedObject = objectSelect.value;
@@ -110,15 +119,6 @@ export function getSelectedObject(): string {
     throw new Error('No object selected');
   }
   return selectedObject;
-}
-
-export function getAddObservationTargetIri(): Iri {
-  const objectIriInput = getElement('add-obs-id-input') as HTMLInputElement;
-  const objectIri = objectIriInput.value as Iri;
-  if (!objectIri) {
-    throw new Error('No object IRI provided');
-  }
-  return objectIri;
 }
 
 export const On = {
@@ -153,6 +153,11 @@ export const On = {
   showTargetsButton(callback: () => void) {
     const showTargetsButton = getElement('show-targets') as HTMLButtonElement;
     showTargetsButton.addEventListener('click', callback);
+  },
+
+  scanTargetButton(callback: () => void) {
+    const scanTargetButton = getElement('scan-target') as HTMLButtonElement;
+    scanTargetButton.addEventListener('click', callback);
   },
 };
 

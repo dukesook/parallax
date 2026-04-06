@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     Gui.On.writeGraphToFile(writeGraphToFile);
     Gui.On.readRdfFile(readRdfFile);
     Gui.On.showTargetsButton(showTargets);
+    Gui.On.scanTargetButton(scanTarget);
 
     if (FABRICATE_ON_LOAD) {
       fabricateData();
@@ -79,7 +80,7 @@ async function addObservation(): Promise<void> {
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
-  const objectIri = Gui.getAddObservationTargetIri();
+  const objectIri = Gui.getCurrentTargetIri();
 
   const timestamp = new Date();
   const obs: Observation = {
@@ -143,6 +144,20 @@ function showObservations() {
   RdfHandler.get.allObservations().then((observations) => {
     GraphTab.displayObjects(observations);
   });
+}
+
+async function scanTarget() {
+  const selectedObject: Iri = Gui.getCurrentTargetIri();
+
+  // Get All Voyages for ship
+  const voyages: Voyage[] = await RdfHandler.get.shipVoyages(selectedObject);
+
+  // Get Observations for ship
+  const observations: Observation[] = await RdfHandler.get.observations(selectedObject);
+
+  for (const voyage of voyages) {
+    Scanner.scanVoyage(voyage, observations);
+  }
 }
 
 function scanKGraph() {

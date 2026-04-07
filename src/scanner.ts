@@ -24,7 +24,7 @@ export default class Scanner {
       if (distance == null) {
         console.log('Distance is null for coordinate:', coordinate);
       } else {
-        console.log(`Distance from voyage to observation at ${coordinate.latitude}, ${coordinate.longitude}: ${distance} meters`);
+        console.log(`Distance from voyage to observation: ${distance} meters`);
       }
     }
   }

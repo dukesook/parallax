@@ -30,24 +30,7 @@ type SparqlVariable = {
   datatype?: string; // Optional, only for literals
 };
 
-export function init(): void {
-  console.log('GraphDB module initialized.');
-  const c1: Coordinate = { latitude: 40.7128, longitude: -74.006 };
-  const c2: Coordinate = { latitude: 34.0522, longitude: -118.2437 };
-
-  const query = make_query(c1, c2);
-
-  runSparql(query).then((bindings: SparqlResultRow[]) => {
-    console.log('SPARQL BINDINGS:', bindings);
-
-    const distance: number | null = extractDistance(bindings);
-    if (distance !== null) {
-      console.log(`Distance between points: ${distance} meters`);
-    } else {
-      console.log('Failed to extract distance from SPARQL results.');
-    }
-  });
-}
+export function init(): void {}
 
 export async function computeDistance(wkt1: string, wkt2: string): Promise<number | null> {
   const query = `
@@ -63,11 +46,11 @@ export async function computeDistance(wkt1: string, wkt2: string): Promise<numbe
 
   return runSparql(query).then((bindings: SparqlResultRow[]) => {
     const distance: number | null = extractDistance(bindings);
-    if (distance !== null) {
-      console.log(`Distance between points: ${distance} meters`);
-    } else {
-      console.log('Failed to extract distance from SPARQL results.');
-    }
+    // if (distance !== null) {
+    //   console.log(`Distance between points: ${distance} meters`);
+    // } else {
+    //   console.log('Failed to extract distance from SPARQL results.');
+    // }
     return distance;
   });
 }

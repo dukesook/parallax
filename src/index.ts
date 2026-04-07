@@ -174,7 +174,6 @@ function onClickHarbour(harbourIri: Iri) {
 
 function onClickObservableEntity(entity: ObservableEntity) {
   if (entity.type === 'boat') {
-    console.log('Clicked on Ship: ' + entity.id);
     onClickShip(entity);
   } else if (entity.type === 'harbour') {
     onClickHarbour(entity.id);

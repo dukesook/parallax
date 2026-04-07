@@ -398,7 +398,6 @@ function makeVoyageQuery(ship: Iri | null = null): string {
           ?observation sosa:resultTime ?time .
         }
         `;
-  console.log('Voyage Query:', specificShipQuery);
   return specificShipQuery;
 }
 

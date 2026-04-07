@@ -53,10 +53,11 @@ export async function computeDistance(wkt1: string, wkt2: string): Promise<numbe
   const query = `
     PREFIX geo: <http://www.opengis.net/ont/geosparql#>
     PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+    PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>
     
     SELECT ?distance
     WHERE {
-      BIND (geof:distance("${wkt1}"^^geo:wktLiteral, "${wkt2}"^^geo:wktLiteral) AS ?distance)
+      BIND (geof:distance("${wkt1}"^^geo:wktLiteral, "${wkt2}"^^geo:wktLiteral, uom:metre) AS ?distance)
     }
   `;
 

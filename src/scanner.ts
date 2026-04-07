@@ -9,16 +9,14 @@ export default class Scanner {
   }
 
   static async scanVoyage(voyage: Voyage, obserations: Observation[]): Promise<void> {
-    console.log('Scanning Voyage: ' + voyage.id);
-    console.log('Voyage Ship: ' + voyage.ship);
-    console.log('Voyage Points: ' + voyage.points.length);
+    // console.log('Scanning Voyage: ' + voyage.id);
+    // console.log('Voyage Ship: ' + voyage.ship);
 
     // Extrac Coordinates
     const voyageCords: Coordinate[] = voyage.points.map((obs) => obs.location);
     const observatioCords: Coordinate[] = obserations.map((obs) => obs.location);
 
     const lingstring_wkt = GraphDB.make_linestring_wkt(voyageCords);
-    console.log('LingeString WKT:', lingstring_wkt);
 
     for (const coordinate of observatioCords) {
       const point_wkt = GraphDB.make_point_wkt(coordinate);

@@ -215,7 +215,6 @@ async function onClickShip(entity: ObservableEntity) {
 
   GMaps.clearMarkers();
   RdfHandler.get.observations(entity.id).then((observations) => {
-    console.log('Observations for ship:', observations);
     observations.forEach((obs) => {
       const location: Coordinate = obs.location;
       GMaps.addMarkers(location);

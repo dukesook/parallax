@@ -56,7 +56,9 @@ function add_ushant_file(filePath: string) {
       });
     }
 
-    const ship: Iri = RdfHandler.add.ship('Boat 1956, my favorite');
+    let shipCounter: number = 1;
+    const shipName: string = 'vessel #' + shipCounter;
+    const ship: Iri = RdfHandler.add.ship(shipName);
 
     const voyage: Voyage = {
       id: voyageId,

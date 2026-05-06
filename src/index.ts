@@ -5,7 +5,7 @@ import * as GraphTab from './gui/knowledge_graph_tab';
 import * as Fabricator from './fabricator';
 import { Triple, Iri } from './aliases';
 import * as Fetcher from './fetcher';
-import { FabricatorOptions as FabricatorOptions, ObservableEntity, Observation } from './models';
+import { FabricatorOptions as FabricatorOptions, ObservableEntity, Observation, ObservationWithDistance } from './models';
 import { Coordinate, Voyage, Port } from './models';
 import Scanner from './scanner';
 
@@ -159,8 +159,17 @@ async function scanTarget() {
   const observations: Observation[] = await RdfHandler.get.observations(selectedObject);
 
   // Scan Each Voyage
+  const suspicousObservations: ObservationWithDistance[] = [];
   for (const voyage of voyages) {
-    Scanner.scanVoyage(voyage, observations);
+    const results: ObservationWithDistance[] = await Scanner.scanVoyage(voyage, observations, threshold);
+    suspicousObservations.push(...results);
+  }
+
+  const count: number = suspicousObservations.length;
+  if (count === 0) {
+    Gui.displayMessage('No observations found within ' + threshold + ' meters of the voyages');
+  } else {
+    Gui.displayMessage(count + ' observations found within ' + threshold + ' meters of the voyages');
   }
 }
 

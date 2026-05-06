@@ -22,6 +22,10 @@ export interface Observation {
   entities: Iri[];
 }
 
+export interface ObservationWithDistance extends Observation {
+  distance: number;
+}
+
 export interface Coordinate {
   latitude: number; // Degrees
   longitude: number; // Degrees

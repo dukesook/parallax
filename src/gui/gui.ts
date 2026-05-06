@@ -190,6 +190,15 @@ export const Get = {
 
     // TODO return form data
   },
+
+  distanceThreshold(): number {
+    const distanceThresholdInput = getElement('distanceThreshold') as HTMLInputElement;
+    const threshold: number = parseInt(distanceThresholdInput.value);
+    if (isNaN(threshold)) {
+      throw new Error('Invalid distance threshold');
+    }
+    return threshold;
+  },
 };
 
 export function getGmapElement(): HTMLElement {

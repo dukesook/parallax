@@ -12,7 +12,7 @@ export default class Scanner {
     // console.log('Scanning Voyage: ' + voyage.id);
     // console.log('Voyage Ship: ' + voyage.ship);
 
-    // Extrac Coordinates
+    // Extract Coordinates
     const voyageCords: Coordinate[] = voyage.points.map((obs) => obs.location);
     const observatioCords: Coordinate[] = obserations.map((obs) => obs.location);
 

@@ -148,6 +148,9 @@ function showObservations() {
 
 async function scanTarget() {
   const selectedObject: Iri = Gui.getCurrentTargetIri();
+  const threshold: number = parseInt((document.getElementById('distanceThreshold') as HTMLInputElement).value, 10);
+
+  console.log('threshold:', threshold);
 
   // Get All Voyages for ship
   const voyages: Voyage[] = await RdfHandler.get.shipVoyages(selectedObject);
@@ -155,13 +158,14 @@ async function scanTarget() {
   // Get Observations for ship
   const observations: Observation[] = await RdfHandler.get.observations(selectedObject);
 
+  // Scan Each Voyage
   for (const voyage of voyages) {
     Scanner.scanVoyage(voyage, observations);
   }
 }
 
 function scanKGraph() {
-  Scanner.scan();
+  Scanner.scan(); // TODO
 }
 
 function onClickHarbour(harbourIri: Iri) {

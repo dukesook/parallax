@@ -52,6 +52,16 @@
 
   <button id="show-targets">Show Targets</button>
   <button id="scan-target">Scan Target</button>
+
+  <br />
+
+  <label for="threshold">Threshold (meters):</label>
+  <div style="display: flex; align-items: center; gap: 10px">
+    <input type="range" id="slider" min="100" max="1000000" step="100" value="100" oninput="distanceThreshold.value = this.value" style="width: 300px" />
+
+    <input type="number" id="distanceThreshold" min="100" max="1000000" value="100" oninput="slider.value = this.value" />
+  </div>
+
   <div id="map-container">
     <div id="entity-menu"></div>
     <div id="map" style="width: 75%; height: 600px"></div>

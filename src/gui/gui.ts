@@ -1,7 +1,7 @@
 import { Iri, Triple } from '../aliases';
 import * as GraphTab from './knowledge_graph_tab';
 import * as TermRegistryGui from './term_registry_tab';
-import { FabricatorOptions, ObservableEntity } from '../models';
+import { FabricatorOptions, ObservableEntity, Voyage, Observation } from '../models';
 
 /*
 ******************* gui.ts *******************
@@ -51,6 +51,7 @@ export function displayTermRegistry(terms: string[]) {
   TermRegistryGui.displayTerms(terms);
 }
 
+// TODO: replace with displayVoyages
 export function displayObservableEntities(targets: ObservableEntity[], onclick: (entity: ObservableEntity) => void) {
   const entityMenu = getElement('entity-menu') as HTMLDivElement;
   entityMenu.innerHTML = ''; // Clear previous content
@@ -73,6 +74,36 @@ export function displayObservableEntities(targets: ObservableEntity[], onclick: 
     });
     table.appendChild(row);
     row.addEventListener('click', () => onclick(entity));
+  });
+
+  entityMenu.appendChild(table);
+}
+
+export function displayVoyages(voyages: Voyage[], onclick: (entity: Voyage) => void) {
+  const entityMenu = getElement('entity-menu') as HTMLDivElement;
+  entityMenu.innerHTML = ''; // Clear previous content
+  const table = document.createElement('table');
+  const headerRow = document.createElement('tr');
+  ['Ship ID', 'Voyage ID', 'Start Time', 'End Time'].forEach((headerText) => {
+    const th = document.createElement('th');
+    th.textContent = headerText;
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+
+  voyages.forEach((voyage) => {
+    const firstObservation: Observation = voyage.points[0];
+    const lastObservation: Observation = voyage.points[voyage.points.length - 1];
+    const startTime: string = firstObservation.time.toLocaleString();
+    const endTime: string = lastObservation.time.toLocaleString();
+    const row = document.createElement('tr');
+    [voyage.id, voyage.ship, startTime, endTime].forEach((cellText) => {
+      const td = document.createElement('td');
+      td.textContent = cellText;
+      row.appendChild(td);
+    });
+    table.appendChild(row);
+    row.addEventListener('click', () => onclick(voyage));
   });
 
   entityMenu.appendChild(table);

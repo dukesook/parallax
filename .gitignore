@@ -1,5 +1,7 @@
 # Too big to track
 large/
+large-csv/
+large-original/
 
 # Logs
 logs

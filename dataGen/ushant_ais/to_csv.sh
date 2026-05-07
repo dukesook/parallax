@@ -1,11 +1,16 @@
 # Original Data Found: https://figshare.com/articles/dataset/Ushant_AIS_dataset/8966273?file=16442771
 
-for file in original/*.txt; do
-  echo "Processing $file"
-  output_file="csv/$(basename "${file%.txt}.csv")"
+# for file in original/*.txt; do
+#   echo "Processing $file"
+#   output_file="csv/$(basename "${file%.txt}.csv")"
+#   sed 's/;/,/g' "$file" > "$output_file"
+# done
+  
+# Not tracked by git
 
-  # large/ is not tracked by git
-  # output_file="large/$(basename "${file%.txt}.csv")"
+for file in large-original/*.txt; do
+  echo "Processing $file"
+  output_file="large-csv/$(basename "${file%.txt}.csv")"
   sed 's/;/,/g' "$file" > "$output_file"
 done
   

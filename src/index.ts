@@ -210,6 +210,10 @@ function showTargets() {
   RdfHandler.get.ships().then((features: ObservableEntity[]) => {
     Gui.displayObservableEntities(features, onClickObservableEntity);
   });
+
+  RdfHandler.get.allVoyages().then((voyages: Voyage[]) => {
+    Gui.displayVoyages(voyages, onClickVoyage);
+  });
 }
 
 function fabricateData() {
@@ -245,6 +249,25 @@ async function onClickShip(entity: ObservableEntity) {
       GMaps.addMarkers(location);
     });
   });
+}
+
+async function onClickVoyage(voyage: Voyage) {
+  console.log('Clicked on Voyage: ' + voyage.id);
+
+  GMaps.clearLines();
+
+  for (let i = 0; i < voyage.points.length - 1; i++) {
+    const start = voyage.points[i];
+    const end = voyage.points[i + 1];
+    const startCoordinate: Coordinate = start.location;
+    const endCoordinate: Coordinate = end.location;
+    GMaps.drawLine(startCoordinate, endCoordinate);
+  }
+
+  // Center Map
+  const observtionCount: number = voyage.points.length;
+  const centerObservation: Observation = voyage.points[Math.floor(observtionCount / 2)];
+  GMaps.centerMap(centerObservation.location);
 }
 
 function logStore(): void {

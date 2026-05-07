@@ -15,7 +15,8 @@ type Ushant = {
 // Confirm File Exists
 
 async function main() {
-  const directoryPath: string = 'ushant_ais/csv';
+  // const directoryPath: string = 'ushant_ais/csv';
+  const directoryPath: string = 'ushant_ais/large-csv';
   const filenames = await getCsvFilenames(directoryPath);
   // const filenames = ['traj_1956.csv'];
 
@@ -25,12 +26,10 @@ async function main() {
     add_ushant_file(path);
   }
 
-  const outputPath: string = '../rdf/ushant-10.ttl';
+  // const outputPath: string = '../rdf/ushant-10.ttl';
   // const outputPath: string = '../rdf/ushant-100.ttl';
   // const outputPath: string = '../rdf/large/ushant-1000.ttl';
-  // const outputPath: string = '../rdf/large/ushant-10000.ttl';
-  // const outputPath: string = '../rdf/large/ushant-100000.ttl';
-  // const outputPath: string = '../rdf/large/ushant-1000000.ttl';
+  const outputPath: string = '../rdf/large/ushant-10000.ttl';
 
   console.log('Exporting instance data to Turtle file:', outputPath);
   export_instance_data(outputPath);

@@ -34,7 +34,6 @@
 }
 
 #entity-menu {
-  width: 400px;
   border: 1px solid #ccc;
   padding: 10px;
 }
@@ -50,6 +49,7 @@ td {
 }
 
 #entity-menu {
+  width: 900px;
   height: 600px; /* Or max-height: 80vh; */
   overflow-y: auto; /* Adds vertical scroll only when needed */
   border: 1px solid #ccc;

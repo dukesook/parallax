@@ -207,9 +207,9 @@ function onClickObservableEntity(entity: ObservableEntity) {
 }
 
 function showTargets() {
-  RdfHandler.get.ships().then((features: ObservableEntity[]) => {
-    Gui.displayObservableEntities(features, onClickObservableEntity);
-  });
+  // RdfHandler.get.ships().then((features: ObservableEntity[]) => {
+  //   Gui.displayObservableEntities(features, onClickObservableEntity);
+  // });
 
   RdfHandler.get.allVoyages().then((voyages: Voyage[]) => {
     Gui.displayVoyages(voyages, onClickVoyage);
@@ -268,6 +268,13 @@ async function onClickVoyage(voyage: Voyage) {
   const observtionCount: number = voyage.points.length;
   const centerObservation: Observation = voyage.points[Math.floor(observtionCount / 2)];
   GMaps.centerMap(centerObservation.location);
+
+  const entity: ObservableEntity = {
+    id: voyage.ship,
+    type: 'boat',
+    label: 'Boat ' + voyage.ship,
+  };
+  Gui.populateObservationFields(entity);
 }
 
 function logStore(): void {

@@ -284,6 +284,16 @@ async function onClickVoyage(voyage: Voyage) {
     type: 'boat',
     label: 'Boat ' + voyage.ship,
   };
+
+  // Make Markers
+  GMaps.clearMarkers();
+  RdfHandler.get.observations(entity.id).then((observations) => {
+    observations.forEach((obs) => {
+      const location: Coordinate = obs.location;
+      GMaps.addMarkers(location);
+    });
+  });
+
   Gui.populateObservationFields(entity);
 }
 

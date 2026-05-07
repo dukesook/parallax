@@ -15,13 +15,18 @@ export default class Scanner {
 
     // Extract Coordinates
     const voyageCords: Coordinate[] = voyage.points.map((obs) => obs.location);
-    const observatioCords: Coordinate[] = observations.map((obs) => obs.location);
-
+    const startTime: Date = voyage.points[0].time;
+    const endTime: Date = voyage.points[voyage.points.length - 1].time;
     const lingstring_wkt = GraphDB.make_linestring_wkt(voyageCords);
 
     const results: ObservationWithDistance[] = [];
     for (const observation of observations) {
-      const time: Date = observation.time; // TODO: filter by time
+      const time: Date = observation.time;
+      if (time < startTime || time > endTime) {
+        // Skip observations outside of time window
+        console.log(`Skipping observation ${observation.id} at time ${time.toLocaleString()} outside of voyage time window (${startTime.toLocaleString()} - ${endTime.toLocaleString()})`);
+        continue;
+      }
       const coordinate: Coordinate = observation.location;
       const point_wkt = GraphDB.make_point_wkt(coordinate);
       const distance: number | null = await GraphDB.computeDistance(lingstring_wkt, point_wkt);

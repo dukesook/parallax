@@ -134,6 +134,15 @@ export function getLatLng(): { lat: number; lng: number } {
   return { lat, lng };
 }
 
+export function getTime(): Date {
+  const timeInput = getElement('datetime') as HTMLInputElement;
+  const time = new Date(timeInput.value);
+  if (isNaN(time.getTime())) {
+    throw new Error('Invalid date and time');
+  }
+  return time;
+}
+
 export function getCurrentTargetIri(): Iri {
   const idInput = getElement('current-target-iri') as HTMLInputElement;
   const iri = idInput.value as Iri;

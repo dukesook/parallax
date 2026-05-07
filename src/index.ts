@@ -76,13 +76,13 @@ async function addObservation(): Promise<void> {
   // Adding new Entity
   const selectedObject = Gui.getSelectedObject();
   const { lat, lng } = Gui.getLatLng();
+  const timestamp: Date = Gui.getTime();
 
   const message = 'A ' + selectedObject + ' was observed at ' + lat + ', ' + lng;
   Gui.displayMessage(message);
 
   const objectIri = Gui.getCurrentTargetIri();
 
-  const timestamp = new Date();
   const obs: Observation = {
     id: RdfHandler.generateIri(),
     location: { latitude: lat, longitude: lng },
@@ -175,7 +175,9 @@ async function scanTarget() {
 
   const count: number = suspicousObservations.length;
   const allObservationsCount: number = observations.length;
-  let message: string = 'Scanned through ' + allObservationsCount + ' observations...\n';
+  let message: string = '';
+
+  message = 'Scanned through ' + allObservationsCount + ' observations...\n';
   if (count === 0) {
     message += '  No observations found outside of ' + threshold + ' meters of a voyage';
   } else {

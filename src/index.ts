@@ -98,8 +98,14 @@ function writeGraphToFile(): void {
   Fetcher.saveFile(rdf, 'graph.ttl');
 }
 
-function readRdfFile(): void {
-  console.log('readRdfFile()');
+function readRdfFile(event: Event): void {
+  const target = event.target as HTMLInputElement;
+  const fileList = target.files as FileList;
+  if (fileList.length > 0) {
+    const selectedFile = fileList[0];
+    console.log(`File Name: ${selectedFile.name}`);
+    console.log(`File Size: ${selectedFile.size} bytes`);
+  }
 }
 
 function showTriples(): void {

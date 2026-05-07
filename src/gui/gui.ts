@@ -127,9 +127,9 @@ export const On = {
     graphToFileButton.addEventListener('click', callback);
   },
 
-  readRdfFile(callback: () => void) {
-    const readRdfFileButton = getElement('read-rdf-file-button') as HTMLButtonElement;
-    readRdfFileButton.addEventListener('click', callback);
+  readRdfFile(callback: (event: Event) => void) {
+    const readRdfFileButton = getElement('read-rdf-file-button') as HTMLInputElement;
+    readRdfFileButton.addEventListener('change', callback);
   },
 
   fabricateData(callback: () => void) {

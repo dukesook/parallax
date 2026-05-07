@@ -27,13 +27,14 @@ export default class Scanner {
       const distance: number | null = await GraphDB.computeDistance(lingstring_wkt, point_wkt);
       if (distance === null) {
         throw new Error('Distance is null for coordinate: ' + JSON.stringify(coordinate));
-      } else if (distance <= threshold) {
+      } else if (distance >= threshold) {
         const result: ObservationWithDistance = {
           ...observation,
           distance,
         };
         results.push(result);
-        console.log(`Observation ${observation.id} is within ${distance} meters of the voyage`);
+
+        // console.log(`Observation ${observation.id} is within ${distance} meters of the voyage`);
       }
     }
 

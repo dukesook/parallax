@@ -174,11 +174,15 @@ async function scanTarget() {
   }
 
   const count: number = suspicousObservations.length;
+  const allObservationsCount: number = observations.length;
+  let message: string = 'Scanned through ' + allObservationsCount + ' observations:\n';
   if (count === 0) {
-    Gui.displayMessage('No observations found within ' + threshold + ' meters of the voyages');
+    message += 'No observations found outside of ' + threshold + ' meters of a voyage';
   } else {
-    Gui.displayMessage(count + ' observations found within ' + threshold + ' meters of the voyages');
+    Gui.displayMessage(count + ' observations detected outside ' + threshold + ' meters of the voyages!');
+    message += count + ' observations detected outside of ' + threshold + ' meters of the voyage:\n';
   }
+  Gui.displayMessage(message);
 }
 
 function scanKGraph() {

@@ -54,3 +54,8 @@ td {
   overflow-y: auto; /* Adds vertical scroll only when needed */
   border: 1px solid #ccc;
 }
+
+#message {
+  font-size: 36px;
+  white-space: pre-wrap; /* Respects newlines and wraps text to the next line */
+}

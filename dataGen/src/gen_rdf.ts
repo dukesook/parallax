@@ -25,10 +25,12 @@ async function main() {
     add_ushant_file(path);
   }
 
-  // const outputPath: string = '../rdf/test-data.ttl';
-  const outputPath: string = '../rdf/ushant-100.ttl';
-  // const outputPath: string = '../rdf/ushant-1000.ttl';
-  // const outputPath: string = '../rdf/ushant-ten-thousand.ttl';
+  const outputPath: string = '../rdf/ushant-10.ttl';
+  // const outputPath: string = '../rdf/ushant-100.ttl';
+  // const outputPath: string = '../rdf/large/ushant-1000.ttl';
+  // const outputPath: string = '../rdf/large/ushant-10000.ttl';
+  // const outputPath: string = '../rdf/large/ushant-100000.ttl';
+  // const outputPath: string = '../rdf/large/ushant-1000000.ttl';
 
   console.log('Exporting instance data to Turtle file:', outputPath);
   export_instance_data(outputPath);

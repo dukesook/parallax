@@ -64,8 +64,8 @@ export async function fetchEnvoBasicXml(): Promise<RdfFile> {
 }
 
 export async function fetchTestData(): Promise<RdfFile> {
-  // const testDataPath = '/parallax/rdf/test-data.ttl';
-  const testDataPath = '/parallax/rdf/ushant-100.ttl';
+  const testDataPath = '/parallax/rdf/ushant-10.ttl';
+  // const testDataPath = '/parallax/rdf/ushant-100.ttl';
   // const testDataPath = '/parallax/rdf/large-test-data-1000.ttl';
   const testData = {
     url: 'local test data',

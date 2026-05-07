@@ -48,3 +48,9 @@ th,
 td {
   border: 1px solid black;
 }
+
+#entity-menu {
+  height: 600px; /* Or max-height: 80vh; */
+  overflow-y: auto; /* Adds vertical scroll only when needed */
+  border: 1px solid #ccc;
+}

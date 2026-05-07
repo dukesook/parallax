@@ -21,11 +21,17 @@ async function main() {
 
   for (const filename of filenames) {
     const path = `${directoryPath}/${filename}`;
-    console.log('Processing file:', path);
+    console.log('Adding file to Triple Store:', path);
     add_ushant_file(path);
   }
 
-  export_instance_data();
+  // const outputPath: string = '../rdf/test-data.ttl';
+  const outputPath: string = '../rdf/ushant-100.ttl';
+  // const outputPath: string = '../rdf/ushant-1000.ttl';
+  // const outputPath: string = '../rdf/ushant-ten-thousand.ttl';
+
+  console.log('Exporting instance data to Turtle file:', outputPath);
+  export_instance_data(outputPath);
 }
 
 main();
@@ -73,15 +79,14 @@ function add_ushant_file(filePath: string) {
   }
 }
 
-function export_instance_data() {
+function export_instance_data(outputPath: string) {
   const ttl: string = RdfHandler.get.instanceDataTurtle();
 
-  const outputPath: string = '../rdf/test-data.ttl';
   fs.writeFile(outputPath, ttl, (err) => {
     if (err) {
       console.error('Error writing Turtle file:', err);
     } else {
-      console.log('Turtle file has been saved as output.ttl');
+      console.log('Turtle file has been saved as ', outputPath);
     }
   });
 }

@@ -2,7 +2,7 @@
 
 for file in original/*.txt; do
   echo "Processing $file"
-  output_file="output/$(basename "${file%.txt}.csv")"
+  output_file="csv/$(basename "${file%.txt}.csv")"
   sed 's/;/,/g' "$file" > "$output_file"
 done
   

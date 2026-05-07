@@ -98,13 +98,15 @@ function writeGraphToFile(): void {
   Fetcher.saveFile(rdf, 'graph.ttl');
 }
 
-function readRdfFile(event: Event): void {
+async function readRdfFile(event: Event) {
   const target = event.target as HTMLInputElement;
   const fileList = target.files as FileList;
   if (fileList.length > 0) {
     const selectedFile = fileList[0];
     console.log(`File Name: ${selectedFile.name}`);
     console.log(`File Size: ${selectedFile.size} bytes`);
+    const content: string = await selectedFile.text();
+    RdfHandler.addRdf(content);
   }
 }
 

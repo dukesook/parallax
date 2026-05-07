@@ -3,8 +3,9 @@ import * as RDFLibWrapper from './dependencies/rdflib_wrapper';
 import * as GraphDB from './dependencies/graphdb';
 import * as TermRegistry from './term_registry';
 import { Iri, Label, Triple } from './aliases';
-import { Port, Voyage, ObservableEntity, Coordinate, Observation, Observation } from './models';
+import { Port, Voyage, ObservableEntity, Coordinate, Observation, ObservationWithDistance } from './models';
 import type { Bindings } from 'rdflib/lib/types';
+import { Term } from './term_registry';
 
 const boatClass: Iri = TermRegistry.getIRI('boat');
 const harbourClass: Iri = TermRegistry.getIRI('harbour');
@@ -24,6 +25,13 @@ async function init(): Promise<void> {
 
 export function generateIri(): Iri {
   return RDFLibWrapper.generate_iri();
+}
+
+export function addRdf(rdf: string): void {
+  const base: string = Term.parallax_namespace;
+  const mime: string = 'text/turtle';
+  const graphIri: string = TermRegistry.getIRI('parallaxGraph');
+  RDFLibWrapper.add.rdfToStore(rdf, base, mime, graphIri);
 }
 
 const add = {
@@ -474,4 +482,5 @@ export default {
   add,
   get,
   logStore,
+  addRdf,
 };
